@@ -25,6 +25,8 @@ public class IngameScene implements Screen {
 		
 		App.renderer.renderWorld();
 		App.updater.update();
+		App.timing.gameLoop();
+		
 		ingameInputProcessor.render();
 	}
 

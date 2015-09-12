@@ -21,8 +21,8 @@ public class Entity implements IF_GraphicKey, Serializable {
 	private float x;
 	private float y;
 
-	private byte orientation;
-	private byte activity;
+	private byte orientation = 0;
+	private byte activity = 0;
 	private byte entityType;
 
 	private byte owner;
@@ -37,8 +37,24 @@ public class Entity implements IF_GraphicKey, Serializable {
 		this.owner = owner;
 	}
 
+	public void setWorldX(short x) {
+		if (getDefinition().isMoveable()) {
+			this.x = x * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+		} else {
+			this.x = x;
+		}
+	}
+
+	public void setWorldY(short y) {
+		if (getDefinition().isMoveable()) {
+			this.y = y * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+		} else {
+			this.y = y;
+		}
+	}
+
 	public float getRenderX() {
-		return getWorldX() - getDefinition().getWidth() * Constant.TILE_SIZE / 2;
+		return getWorldX() - getDefinition().getWidth() * Constant.HALF_TILE_SIZE;
 	}
 
 	public float getRenderY() {
@@ -49,7 +65,7 @@ public class Entity implements IF_GraphicKey, Serializable {
 		if (getDefinition().isMoveable()) {
 			return x;
 		} else {
-			return getGridX() * Constant.TILE_SIZE + Constant.TILE_SIZE / 2;
+			return getGridX() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 		}
 	}
 
@@ -93,12 +109,20 @@ public class Entity implements IF_GraphicKey, Serializable {
 		return id;
 	}
 
+	public float getNextWorldX(){
+		return getNextX() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+	}
+	
+	public float getNextWorldY(){
+		return getNextY() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+	}
+	
 	public short getNextX() {
 		return pathXs[nextWaypointPointer];
 	}
 
 	public short getNextY() {
-		return pathXs[nextWaypointPointer];
+		return pathYs[nextWaypointPointer];
 	}
 
 	public void nextWaypoint() {
@@ -125,16 +149,22 @@ public class Entity implements IF_GraphicKey, Serializable {
 		return pathXs;
 	}
 
-	public void setPathXs(short[] pathXs) {
-		this.pathXs = pathXs;
-	}
-
 	public short[] getPathYs() {
 		return pathYs;
 	}
 
-	public void setPathYs(short[] pathYs) {
+	public void setPath(short[] pathXs, short[] pathYs) {
+		this.pathXs = pathXs;
 		this.pathYs = pathYs;
+		nextWaypointPointer = 0;
+	}
+	
+	public E_Orientation getOrientationToNext(){
+		int worldX = (int)getWorldX();
+		int worldY = (int)getWorldY();
+		int nextWorldX = (int)getNextWorldX();
+		int nextWorldY = (int)getNextWorldY();
+		return E_Orientation.orientationTo(worldX, worldY, nextWorldX, nextWorldY);
 	}
 
 	public EntityDefinition getDefinition() {

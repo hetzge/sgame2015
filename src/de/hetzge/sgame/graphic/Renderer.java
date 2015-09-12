@@ -1,5 +1,8 @@
 package de.hetzge.sgame.graphic;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.world.World;
 
@@ -36,6 +40,7 @@ public class Renderer {
 		minY = MathUtils.clamp(minY, (short) 0, (short) (height - 1));
 		maxY = MathUtils.clamp(maxY, (short) 1, height);
 
+		List<Entity> entitiesToRender = new LinkedList<>();
 		for (short x = minX; x < maxX; x++) {
 			for (short y = minY; y < maxY; y++) {
 				short tileId = world.getTileGrid().get(x, y);
@@ -44,10 +49,14 @@ public class Renderer {
 
 				Entity entity = App.game.getEntityGrid().get(x, y);
 				if (entity != null) {
-					renderEntity(entity);
+					entitiesToRender.add(entity);
 				}
 			}
 		}
+		for (Entity entity : entitiesToRender) {
+			renderEntity(entity);
+		}
+		
 		fpsLogger.log();
 	}
 
@@ -57,7 +66,14 @@ public class Renderer {
 		float renderY = entity.getRenderY();
 		Animation animation = App.ressources.getGraphic(entity);
 		TextureRegion keyFrame = animation.getKeyFrame(stateTime, true);
-		getSpriteBatch().draw(keyFrame, renderX, renderY);
+		EntityDefinition definition = entity.getDefinition();
+		int regionWidth = keyFrame.getRegionWidth();
+		int regionHeight = keyFrame.getRegionHeight();
+		int entityWidth = definition.getWidth() * Constant.TILE_SIZE;
+		int entityHeight = definition.getHeight() * Constant.TILE_SIZE;
+		int offsetX = (entityWidth - regionWidth) / 2;
+		int offsetY = (entityHeight - regionHeight) / 2;
+		getSpriteBatch().draw(keyFrame, renderX + offsetX, -renderY - offsetY);
 	}
 
 	private OrthographicCamera getCamera() {

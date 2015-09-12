@@ -16,9 +16,8 @@ public class TileGrid implements IF_Grid, Serializable {
 		tiles = new short[width * height];
 		
 		for (int i = 0; i < tiles.length; i++) {
-			tiles[i] = (short) (Math.random() * 200);
+			tiles[i] = (short) 1;
 		}
-		
 	}
 
 	@Override

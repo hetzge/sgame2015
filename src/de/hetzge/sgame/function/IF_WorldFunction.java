@@ -16,4 +16,6 @@ public interface IF_WorldFunction {
 	
 	GridPosition findEmptyGridPositionAround(E_EntityType entityType, short x, short y);
 	
+	
+	
 }

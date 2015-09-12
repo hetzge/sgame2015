@@ -7,6 +7,9 @@ import org.nustaq.net.TCPObjectSocket;
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.entity.E_Activity;
+import de.hetzge.sgame.entity.E_EntityType;
+import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.frame.IF_FrameEvent;
 import de.hetzge.sgame.game.Players;
 import de.hetzge.sgame.game.event.EventPlayerHandshake;
@@ -30,6 +33,13 @@ public class Function implements IF_Function {
 		App.game.setEntityGrid(new EntityGrid(gameSettings.getWorldSizeX(), gameSettings.getWorldSizeY()));
 		App.game.setSelf(playerSettings);
 		App.game.setPlayers(players);
+
+		App.entityFunction.createEntity(E_EntityType.DUMMY, (short) 1, (short) 0, 1, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.DUMMY, (short) 0, (short) 0, 0, (byte) 0);
+		Entity entity = App.game.getEntityManager().get(0);
+		
+		entity.setPath(new short[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 }, new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
+		entity.setActivity(E_Activity.WALKING);
 	}
 
 	@Override

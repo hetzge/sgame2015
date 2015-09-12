@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class GameSettings implements Serializable {
 
-	private short worldSizeX = 10000;
-	private short worldSizeY = 10000;
+	private short worldSizeX = 100;
+	private short worldSizeY = 100;
 	private short maxPlayers = 4;
 
 	public short getWorldSizeX() {

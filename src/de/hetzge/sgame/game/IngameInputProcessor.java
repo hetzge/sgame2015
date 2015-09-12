@@ -55,11 +55,11 @@ public class IngameInputProcessor implements InputProcessor {
 		float cameraZoomSpeed = App.settings.getSystemSettings().getCameraZoomSpeed();
 		float cameraMoveSpeed = App.settings.getSystemSettings().getCameraMoveSpeed();
 
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			camera.zoom += cameraZoomSpeed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
 			camera.zoom -= cameraZoomSpeed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
+			camera.zoom += cameraZoomSpeed;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			camera.translate(-cameraMoveSpeed, 0, 0);
@@ -72,6 +72,9 @@ public class IngameInputProcessor implements InputProcessor {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			camera.translate(0, cameraMoveSpeed, 0);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_0)){
+			camera.zoom = 1;
 		}
 		
 		camera.position.x = MathUtils.clamp(camera.position.x, 0, App.game.getWorld().getPixelWidth());

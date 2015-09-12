@@ -1,6 +1,7 @@
 package de.hetzge.sgame.world;
 
 import de.hetzge.sgame.misc.Constant;
+import de.hetzge.sgame.misc.E_Orientation;
 
 public class GridPosition implements IF_GridPosition {
 
@@ -39,6 +40,10 @@ public class GridPosition implements IF_GridPosition {
 		setX(x);
 		setY(y);
 		return this;
+	}
+
+	public GridPosition getAround(E_Orientation orientation) {
+		return new GridPosition((short) (getGridX() + orientation.getOffsetX()), (short) (getGridY() + orientation.getOffsetY()));
 	}
 
 	public float getCenteredRealX() {

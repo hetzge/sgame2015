@@ -24,21 +24,21 @@
 		</repository>
 	</repositories>
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.badlogicgames.gdx</groupId> -->
-<!-- 			<artifactId>gdx</artifactId> -->
-<!-- 			<version>1.6.5</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.badlogicgames.gdx</groupId> -->
-<!-- 			<artifactId>gdx-platform</artifactId> -->
-<!-- 			<version>1.6.5</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.badlogicgames.gdx</groupId> -->
-<!-- 			<artifactId>gdx-backend-lwjgl</artifactId> -->
-<!-- 			<version>1.6.5</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.badlogicgames.gdx</groupId> -->
+		<!-- <artifactId>gdx</artifactId> -->
+		<!-- <version>1.6.5</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.badlogicgames.gdx</groupId> -->
+		<!-- <artifactId>gdx-platform</artifactId> -->
+		<!-- <version>1.6.5</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.badlogicgames.gdx</groupId> -->
+		<!-- <artifactId>gdx-backend-lwjgl</artifactId> -->
+		<!-- <version>1.6.5</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -53,6 +53,11 @@
 			<groupId>org.tinylog</groupId>
 			<artifactId>tinylog</artifactId>
 			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>koloboke-impl-jdk8</artifactId>
+			<version>0.6.7</version>
 		</dependency>
 	</dependencies>
 </project>
