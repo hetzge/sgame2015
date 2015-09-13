@@ -49,18 +49,20 @@ public class WorldFunction implements IF_WorldFunction {
 
 	@Override
 	public GridPosition findEmptyGridPositionAround(E_EntityType entityType, short x, short y) {
+		EntityDefinition entityDefinition = entityType.getEntityDefinition();
+		boolean isMoveable = entityDefinition.isMoveable();
+		if(!isMoveable){
+			throw new IllegalArgumentException("This only works with moveable entities");
+		}
+		
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
 		EntityGrid entityGrid = App.game.getEntityGrid();
-
-		EntityDefinition entityDefinition = entityType.getEntityDefinition();
-		short width = entityDefinition.getWidth();
-		short height = entityDefinition.getHeight();
 		
 		Iterator<GridPosition> spiralIterator = world.getSpiralIterator(x, y, (short) 30);
 		while (spiralIterator.hasNext()) {
 			GridPosition gridPosition = spiralIterator.next();
-			boolean isFixedCollision = fixedCollisionGrid.is(gridPosition, width, height);
+			boolean isFixedCollision = fixedCollisionGrid.is(gridPosition);
 			boolean isEntityCollision = entityGrid.is(gridPosition);
 			if (!isFixedCollision && !isEntityCollision) {
 				return gridPosition;

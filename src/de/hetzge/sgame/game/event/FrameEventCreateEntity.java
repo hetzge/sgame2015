@@ -32,8 +32,8 @@ public class FrameEventCreateEntity extends FrameEvent {
 		boolean checkSpaceForEntity = App.worldFunction.checkSpaceForEntity(entityType, x, y);
 		if (!checkSpaceForEntity) {
 			EntityDefinition definition = entityType.getEntityDefinition();
-			boolean moveable = definition.isMoveable();
-			if (moveable) {
+			boolean isMoveable = definition.isMoveable();
+			if (isMoveable) {
 				GridPosition freeGridPosition = App.worldFunction.findEmptyGridPositionAround(entityType, x, y);
 				if (freeGridPosition != null) {
 					short newX = freeGridPosition.getGridX();

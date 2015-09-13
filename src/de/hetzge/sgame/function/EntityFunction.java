@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
@@ -16,7 +17,7 @@ import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.CollisionGrid;
 import de.hetzge.sgame.world.EntityGrid;
 import de.hetzge.sgame.world.GridPosition;
-import de.hetzge.sgame.world.PathGridPosition;
+import de.hetzge.sgame.world.Path;
 import de.hetzge.sgame.world.World;
 
 public class EntityFunction implements IF_EntityFunction {
@@ -50,7 +51,7 @@ public class EntityFunction implements IF_EntityFunction {
 		Stream<GridPosition> aroundStream = entityGrid.getAroundStream(gridX, gridY);
 		Stream<GridPosition> notBlacklistedAroundStream = aroundStream.filter(gridPosition -> !blacklist.contains(gridPosition));
 		Stream<GridPosition> emptyNotBlacklistedAroundStream = notBlacklistedAroundStream.filter(entityGrid::isNot);
-		GridPosition goalGridPosition = emptyNotBlacklistedAroundStream.findFirst().orElse(aroundStream.findFirst().get());
+		GridPosition goalGridPosition = emptyNotBlacklistedAroundStream.findFirst().orElse(entityGrid.getAroundStream(gridX, gridY).findFirst().get());
 		Entity entityOnGoal = entityGrid.get(goalGridPosition.getGridX(), goalGridPosition.getGridY());
 		if (entityOnGoal != null) {
 			blacklist.add(goalGridPosition);
@@ -61,16 +62,22 @@ public class EntityFunction implements IF_EntityFunction {
 
 	@Override
 	public void gotoGridPosition(Entity entity, short x, short y) {
-		// TODO
+		// TODO nur ein Schritt zulassen
+		
+		short gridX = entity.getGridX();
+		short gridY = entity.getGridY();
+
+		entity.setPath(new short[] { gridX, x }, new short[] { gridY, y });
+		entity.setActivity(E_Activity.WALKING);
 	}
 
 	@Override
-	public Map<Entity, PathGridPosition> findPath(List<Entity> entities, short goalX, short goalY) {
+	public Map<Entity, Path> findPath(List<Entity> entities, short goalX, short goalY) {
 		if (entities.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 
-		HashMap<Entity, PathGridPosition> result = new HashMap<>();
+		HashMap<Entity, Path> result = new HashMap<>();
 
 		Entity alphaEntitiy = entities.get(0);
 		for (int i = 1; i < entities.size(); i++) {
@@ -82,11 +89,11 @@ public class EntityFunction implements IF_EntityFunction {
 		for (Entity entity : entities) {
 			result.put(entity, findPath(entity, goalX, goalY));
 		}
-		
+
 		return result;
 	}
 
-	private PathGridPosition findPath(Entity entity, short goalX, short goalY) {
+	private Path findPath(Entity entity, short goalX, short goalY) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
 		boolean isGoalCollision = fixedCollisionGrid.is(goalX, goalY);
@@ -103,6 +110,7 @@ public class EntityFunction implements IF_EntityFunction {
 		List<GridPosition> nexts = new LinkedList<>();
 		GridPosition goal = new GridPosition(goalX, goalY);
 		nexts.add(goal);
+		ratings.put(goal, rating++);
 
 		boolean isPossible = false;
 		main: while (true) {
@@ -110,6 +118,10 @@ public class EntityFunction implements IF_EntityFunction {
 			for (GridPosition gridPosition : nexts) {
 				for (E_Orientation orientation : E_Orientation.values) {
 					GridPosition next = gridPosition.getAround(orientation);
+					boolean isOnWorld = world.isOnGrid(next);
+					if (!isOnWorld) {
+						continue;
+					}
 					boolean isStart = next.getGridX() == startX && next.getGridY() == startY;
 					if (isStart) {
 						isPossible = true;
@@ -119,11 +131,6 @@ public class EntityFunction implements IF_EntityFunction {
 					if (isCollision) {
 						continue;
 					}
-					boolean isOnWorld = world.isOnGrid(gridPosition);
-					if (!isOnWorld) {
-						continue;
-					}
-
 					boolean alreadyRated = ratings.containsKey(next);
 					if (!alreadyRated) {
 						ratings.put(next, rating);
@@ -144,8 +151,10 @@ public class EntityFunction implements IF_EntityFunction {
 
 		short min = Short.MAX_VALUE;
 		if (isPossible) {
-			PathGridPosition pathGridPosition = new PathGridPosition(startX, startY);
+			Path path = new Path();
 			GridPosition next = new GridPosition(startX, startY);
+			GridPosition nextNext = null;
+			path.add(next);
 			while (next.getGridX() != goalX || next.getGridY() != goalY) {
 				for (E_Orientation orientation : E_Orientation.values) {
 					GridPosition around = next.getAround(orientation);
@@ -153,21 +162,24 @@ public class EntityFunction implements IF_EntityFunction {
 					if (aroundRating != null) {
 						if (aroundRating < min) {
 							min = aroundRating;
-							next = around;
+							nextNext = around;
 						}
 					}
 				}
-				pathGridPosition.setNext(next);
+				next = nextNext;
+				path.add(next);
 			}
 
-			return pathGridPosition;
+			Logger.info("Found path: " + path);
+
+			return path;
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public Map<Entity, PathGridPosition> findPath(List<Entity> entities, Entity goalEntity) {
+	public Map<Entity, Path> findPath(List<Entity> entities, Entity goalEntity) {
 		// TODO Auto-generated method stub
 		return null;
 	}

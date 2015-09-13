@@ -1,5 +1,8 @@
 package de.hetzge.sgame.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntMap.Entries;
 
@@ -24,7 +27,21 @@ public class EntityManager {
 	}
 
 	public Entity get(int entityId) {
-		return entitiesById.get(entityId);
+		Entity entity = entitiesById.get(entityId);
+		if (entity == null) {
+			throw new InvalidGameStateException("Try to access non existing entity " + entityId);
+		} else {
+			return entity;
+		}
+	}
+
+	public List<Entity> get(List<Integer> entityIds) {
+		List<Entity> result = new ArrayList<>(entityIds.size());
+		for (Integer entityId : entityIds) {
+			Entity entity = get(entityId);
+			result.add(entity);
+		}
+		return result;
 	}
 
 	public Iterable<Entity> getEntities() {

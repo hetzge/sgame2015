@@ -1,9 +1,15 @@
 package de.hetzge.sgame.game;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.game.event.request.EventRequestGoto;
 import de.hetzge.sgame.misc.E_Orientation;
+import de.hetzge.sgame.world.EntityGrid;
+import de.hetzge.sgame.world.GridPosition;
 
 public class Updater {
 
@@ -17,11 +23,13 @@ public class Updater {
 			E_Activity activity = entity.getActivity();
 			switch (activity) {
 			case IDLE:
+				updateEntityIdle(entity);
 				break;
 			case WALKING:
 				updateEntityWalking(entity);
 				break;
 			case WORKING:
+				updateEntityWorking(entity);
 				break;
 			default:
 				break;
@@ -29,8 +37,58 @@ public class Updater {
 		}
 	}
 
+	private void updateEntityIdle(Entity entity) {
+
+	}
+
 	private void updateEntityWalking(Entity entity) {
 		if (entity.hasPath()) {
+			EntityGrid entityGrid = App.game.getEntityGrid();
+
+			short nextX = entity.getNextX();
+			short nextY = entity.getNextY();
+			short gridX = entity.getGridX();
+			short gridY = entity.getGridY();
+			Entity entityOnNext = entityGrid.get(nextX, nextY);
+			if (entityOnNext != null) {
+				if (entityOnNext.equals(entity)) {
+					// TODO
+				} else {
+					boolean isEntityOnNextMovable = entityOnNext.getDefinition().isMoveable();
+					if (isEntityOnNextMovable) {
+						boolean hasEntityOnNextAPath = entityOnNext.hasPath();
+						if (hasEntityOnNextAPath) {
+							short entityOnNextNextX = entityOnNext.getNextX();
+							short entityOnNextNextY = entityOnNext.getNextY();
+							if (entityOnNextNextX == gridX && entityOnNextNextY == gridY) {
+								// swap
+								entityGrid.swap(entity, entityOnNext);
+							} else {
+								// wait
+								return;
+							}
+						} else {
+							// verdängen
+							App.entityFunction.goAway(entityOnNext);
+							return;
+						}
+					} else {
+						// rerequest path
+						int entityId = entity.getId();
+						short pathGoalX = entity.getPathGoalX();
+						short pathGoalY = entity.getPathGoalY();
+						EventRequestGoto eventRequestGoto = new EventRequestGoto(Arrays.asList(entityId), pathGoalX, pathGoalY);
+						App.network.sendOrSelf(eventRequestGoto);
+						return;
+					}
+				}
+			} else {
+				boolean isEntityOnCurrentPosition = entityGrid.isEntity(gridX, gridY, entity);
+				if (isEntityOnCurrentPosition) {
+					entityGrid.set(nextX, nextY, entity);
+				}
+			}
+
 			E_Orientation orientationTo = entity.getOrientationToNext();
 			entity.move(orientationTo);
 			boolean isMissTheMark = isMissTheMark(entity, orientationTo);
@@ -40,9 +98,16 @@ public class Updater {
 					entity.setActivity(E_Activity.IDLE);
 				} else {
 					entity.nextWaypoint();
+
+					// reregister on grid
+
 				}
 			}
 		}
+	}
+
+	private void updateEntityWorking(Entity entity) {
+
 	}
 
 	private boolean isMissTheMark(Entity entity, E_Orientation orientationTo) {

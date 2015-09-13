@@ -15,6 +15,7 @@ public class Game {
 	private Players players = null;
 	private PlayerSettings self = null;
 	private final EntityManager entityManager = new EntityManager();
+	private final LocalGameState localGameState = new LocalGameState();
 
 	public World getWorld() {
 		return world;
@@ -77,6 +78,10 @@ public class Game {
 
 	public boolean isReadyToStart() {
 		return isComplete() && isStarted();
+	}
+
+	public LocalGameState getLocalGameState() {
+		return localGameState;
 	}
 
 }

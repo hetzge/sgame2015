@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.world.PathGridPosition;
+import de.hetzge.sgame.world.Path;
 
 public interface IF_EntityFunction {
 
@@ -15,8 +15,8 @@ public interface IF_EntityFunction {
 
 	void createEntity(E_EntityType entityType, short x, short y, int entityId, byte playerId);
 	
-	Map<Entity, PathGridPosition> findPath(List<Entity> entities, short goalX, short goalY);
+	Map<Entity, Path> findPath(List<Entity> entities, short goalX, short goalY);
 	
-	Map<Entity, PathGridPosition> findPath(List<Entity> entities, Entity goalEntity);
+	Map<Entity, Path> findPath(List<Entity> entities, Entity goalEntity);
 	
 }

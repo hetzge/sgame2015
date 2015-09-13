@@ -21,6 +21,9 @@ public class Entity implements IF_GraphicKey, Serializable {
 	private float x;
 	private float y;
 
+	private short registeredX;
+	private short registeredY;
+
 	private byte orientation = 0;
 	private byte activity = 0;
 	private byte entityType;
@@ -93,6 +96,19 @@ public class Entity implements IF_GraphicKey, Serializable {
 		}
 	}
 
+	public void setRegisteredGridPosition(short x, short y) {
+		registeredX = x;
+		registeredY = y;
+	}
+
+	public short getRegisteredX() {
+		return registeredX;
+	}
+
+	public short getRegisteredY() {
+		return registeredY;
+	}
+
 	public boolean isOwnedByGaia() {
 		return owner == Constant.GAIA_PLAYER_ID;
 	}
@@ -109,20 +125,28 @@ public class Entity implements IF_GraphicKey, Serializable {
 		return id;
 	}
 
-	public float getNextWorldX(){
+	public float getNextWorldX() {
 		return getNextX() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 	}
-	
-	public float getNextWorldY(){
+
+	public float getNextWorldY() {
 		return getNextY() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 	}
-	
+
 	public short getNextX() {
 		return pathXs[nextWaypointPointer];
 	}
 
 	public short getNextY() {
 		return pathYs[nextWaypointPointer];
+	}
+
+	public short getPathGoalX() {
+		return pathXs[pathXs.length - 1];
+	}
+
+	public short getPathGoalY() {
+		return pathYs[pathYs.length - 1];
 	}
 
 	public void nextWaypoint() {
@@ -145,25 +169,17 @@ public class Entity implements IF_GraphicKey, Serializable {
 		pathYs = null;
 	}
 
-	public short[] getPathXs() {
-		return pathXs;
-	}
-
-	public short[] getPathYs() {
-		return pathYs;
-	}
-
 	public void setPath(short[] pathXs, short[] pathYs) {
 		this.pathXs = pathXs;
 		this.pathYs = pathYs;
 		nextWaypointPointer = 0;
 	}
-	
-	public E_Orientation getOrientationToNext(){
-		int worldX = (int)getWorldX();
-		int worldY = (int)getWorldY();
-		int nextWorldX = (int)getNextWorldX();
-		int nextWorldY = (int)getNextWorldY();
+
+	public E_Orientation getOrientationToNext() {
+		int worldX = (int) getWorldX();
+		int worldY = (int) getWorldY();
+		int nextWorldX = (int) getNextWorldX();
+		int nextWorldY = (int) getNextWorldY();
 		return E_Orientation.orientationTo(worldX, worldY, nextWorldX, nextWorldY);
 	}
 

@@ -34,12 +34,21 @@ public class Function implements IF_Function {
 		App.game.setSelf(playerSettings);
 		App.game.setPlayers(players);
 
-		App.entityFunction.createEntity(E_EntityType.DUMMY, (short) 1, (short) 0, 1, (byte) 0);
+		int id = 1;
+		for (int x = 0; x < 10; x++) {
+			for (int y = 0; y < 10; y++) {
+				App.entityFunction.createEntity(E_EntityType.DUMMY, (short) (3 + x), (short) (3 + y), id++, (byte) 0);
+			}
+		}
+
 		App.entityFunction.createEntity(E_EntityType.DUMMY, (short) 0, (short) 0, 0, (byte) 0);
 		Entity entity = App.game.getEntityManager().get(0);
-		
+
 		entity.setPath(new short[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 }, new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
 		entity.setActivity(E_Activity.WALKING);
+
+		// TODO TEMP
+		App.game.getLocalGameState().addSelection(entity);
 	}
 
 	@Override

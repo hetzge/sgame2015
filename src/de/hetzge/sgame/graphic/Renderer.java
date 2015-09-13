@@ -3,6 +3,8 @@ package de.hetzge.sgame.graphic;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.pmw.tinylog.Logger;
+
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -56,7 +58,7 @@ public class Renderer {
 		for (Entity entity : entitiesToRender) {
 			renderEntity(entity);
 		}
-		
+
 		fpsLogger.log();
 	}
 

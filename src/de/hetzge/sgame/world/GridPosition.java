@@ -1,9 +1,11 @@
 package de.hetzge.sgame.world;
 
+import java.io.Serializable;
+
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 
-public class GridPosition implements IF_GridPosition {
+public class GridPosition implements IF_GridPosition, Serializable {
 
 	private short x = (short) 0;
 	private short y = (short) 0;

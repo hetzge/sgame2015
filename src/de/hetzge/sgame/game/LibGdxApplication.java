@@ -5,8 +5,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.network.E_NetworkRole;
 
 public class LibGdxApplication extends com.badlogic.gdx.Game {
@@ -49,13 +52,18 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 		super.render();
 		spriteBatch.end();
 	}
-	
+
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
-	
+
 	public SpriteBatch getSpriteBatch() {
 		return spriteBatch;
+	}
+
+	public Vector2 unproject(int x, int y) {
+		Vector3 project = camera.unproject(new Vector3(x, y, 0));
+		return new Vector2(project.x, -project.y + Constant.TILE_SIZE);
 	}
 
 }

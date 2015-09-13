@@ -1,12 +1,21 @@
 package de.hetzge.sgame.game;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.game.event.request.EventRequestGoto;
+import de.hetzge.sgame.misc.Constant;
 
 public class IngameInputProcessor implements InputProcessor {
 
@@ -32,6 +41,19 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
+
+		if (button == Input.Buttons.LEFT) {
+			LocalGameState localGameState = App.game.getLocalGameState();
+			boolean hasSelection = localGameState.hasSelection();
+			if (hasSelection) {
+				Vector2 worldPosition = App.libGdxApplication.unproject(x, y);
+				Set<Entity> selectionEntities = localGameState.getSelection();
+				List<Integer> selectionEntityIds = selectionEntities.stream().map(Entity::getId).collect(Collectors.toList());
+				EventRequestGoto eventRequestGoto = new EventRequestGoto(selectionEntityIds, (short) (worldPosition.x / Constant.TILE_SIZE), (short) (worldPosition.y / Constant.TILE_SIZE));
+				App.network.sendOrSelf(eventRequestGoto);
+			}
+		}
+
 		return false;
 	}
 
@@ -73,10 +95,10 @@ public class IngameInputProcessor implements InputProcessor {
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			camera.translate(0, cameraMoveSpeed, 0);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_0)){
+		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_0)) {
 			camera.zoom = 1;
 		}
-		
+
 		camera.position.x = MathUtils.clamp(camera.position.x, 0, App.game.getWorld().getPixelWidth());
 		camera.position.y = MathUtils.clamp(camera.position.y, -App.game.getWorld().getPixelHeight(), 0);
 	}

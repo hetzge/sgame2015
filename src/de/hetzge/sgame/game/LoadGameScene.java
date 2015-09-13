@@ -1,5 +1,6 @@
 package de.hetzge.sgame.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import de.hetzge.sgame.App;
@@ -9,6 +10,8 @@ public class LoadGameScene implements Screen {
 	@Override
 	public void show() {
 		App.ressources.init();
+
+		Gdx.input.setCursorImage(App.ressources.getCursor(), 0, 0);
 	}
 
 	@Override

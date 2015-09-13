@@ -7,7 +7,7 @@ public abstract class EntityDefinition {
 	protected short height = 1;
 	protected int energie = 1000;
 	protected int buildTime = 3000;
-	protected float speed = 10f;
+	protected float speed = 30f;
 
 	public boolean isMoveable() {
 		return moveable;
