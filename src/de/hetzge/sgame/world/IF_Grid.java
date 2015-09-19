@@ -1,6 +1,8 @@
 package de.hetzge.sgame.world;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 import de.hetzge.sgame.misc.E_Orientation;
@@ -24,9 +26,16 @@ public interface IF_Grid {
 		return x >= 0 && x < getWidth() && y >= 0 && y < getHeight();
 	}
 
-	public default Stream<GridPosition> getAroundStream(final short x, final short y) {
-		GridPosition gridPosition = new GridPosition((short) 0, (short) 0);
-		return E_Orientation.orientations.stream().map((orientation) -> gridPosition.set((short) (x + orientation.getOffsetX()), (short) (y + orientation.getOffsetY()))).filter((newGridPosition) -> isOnGrid(newGridPosition));
+	public default List<GridPosition> getAroundOnMap(short x, short y) {
+		List<GridPosition> result = new ArrayList<>(4);
+		GridPosition gridPosition = new GridPosition(x, y);
+		for (E_Orientation orientation : E_Orientation.values) {
+			GridPosition around = gridPosition.getAround(orientation);
+			if (isOnGrid(around)) {
+				result.add(around);
+			}
+		}
+		return result;
 	}
 
 	public default Iterator<GridPosition> getSpiralIterator(short x, short y, short limit) {

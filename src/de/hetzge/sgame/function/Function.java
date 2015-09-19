@@ -42,13 +42,10 @@ public class Function implements IF_Function {
 		}
 
 		App.entityFunction.createEntity(E_EntityType.DUMMY, (short) 0, (short) 0, 0, (byte) 0);
-		Entity entity = App.game.getEntityManager().get(0);
+		for (int i = 0; i < 100; i++) {
+			App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
+		}
 
-		entity.setPath(new short[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 }, new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
-		entity.setActivity(E_Activity.WALKING);
-
-		// TODO TEMP
-		App.game.getLocalGameState().addSelection(entity);
 	}
 
 	@Override

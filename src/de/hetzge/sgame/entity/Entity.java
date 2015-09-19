@@ -1,9 +1,9 @@
 package de.hetzge.sgame.entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-import com.badlogic.gdx.Gdx;
-
+import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.graphic.IF_GraphicKey;
 import de.hetzge.sgame.misc.Constant;
@@ -220,9 +220,9 @@ public class Entity implements IF_GraphicKey, Serializable {
 	public void move(E_Orientation orientation) {
 		setOrientation(orientation);
 		float speed = getDefinition().getSpeed();
-		float deltaTime = Gdx.graphics.getDeltaTime();
-		x += orientation.getOffsetX() * speed * deltaTime;
-		y += orientation.getOffsetY() * speed * deltaTime;
+		float frameDelta = App.timing.getFrameDelta();
+		x += orientation.getOffsetX() * speed * frameDelta;
+		y += orientation.getOffsetY() * speed * frameDelta;
 	}
 
 	@Override
@@ -255,6 +255,13 @@ public class Entity implements IF_GraphicKey, Serializable {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public static class IdComparator implements Comparator<Entity> {
+		@Override
+		public int compare(Entity e1, Entity e2) {
+			return Integer.compare(e1.getId(), e2.getId());
+		}
 	}
 
 }

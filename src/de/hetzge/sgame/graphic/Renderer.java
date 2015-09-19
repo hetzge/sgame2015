@@ -3,13 +3,12 @@ package de.hetzge.sgame.graphic;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pmw.tinylog.Logger;
-
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
 import de.hetzge.sgame.App;
@@ -84,6 +83,10 @@ public class Renderer {
 
 	private SpriteBatch getSpriteBatch() {
 		return App.libGdxApplication.getSpriteBatch();
+	}
+
+	private ShapeRenderer getShapeRenderer() {
+		return App.libGdxApplication.getShapeRenderer();
 	}
 
 }

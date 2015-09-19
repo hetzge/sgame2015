@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -16,6 +17,7 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 
 	private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
+	private ShapeRenderer shapeRenderer;
 
 	public static void main(String[] args) {
 		handleArgs(args);
@@ -23,6 +25,7 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 		configuration.title = "Game";
 		configuration.width = App.settings.getSystemSettings().getResolutionX();
 		configuration.height = App.settings.getSystemSettings().getResolutionY();
+
 		new LwjglApplication(App.libGdxApplication, configuration);
 	}
 
@@ -41,6 +44,8 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 	public void create() {
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		spriteBatch = new SpriteBatch();
+		shapeRenderer = new ShapeRenderer();
+		shapeRenderer.setAutoShapeType(true);
 		switchGameScene(E_GameScene.LOAD);
 	}
 
@@ -48,9 +53,12 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 	public void render() {
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
+		shapeRenderer.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
+		shapeRenderer.begin();
 		super.render();
 		spriteBatch.end();
+		shapeRenderer.end();
 	}
 
 	public OrthographicCamera getCamera() {
@@ -61,6 +69,10 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 		return spriteBatch;
 	}
 
+	public ShapeRenderer getShapeRenderer() {
+		return shapeRenderer;
+	}
+	
 	public Vector2 unproject(int x, int y) {
 		Vector3 project = camera.unproject(new Vector3(x, y, 0));
 		return new Vector2(project.x, -project.y + Constant.TILE_SIZE);

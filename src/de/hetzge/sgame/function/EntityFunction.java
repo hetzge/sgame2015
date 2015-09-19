@@ -45,30 +45,66 @@ public class EntityFunction implements IF_EntityFunction {
 
 	public void goAway(Entity entity, List<GridPosition> blacklist) {
 		EntityGrid entityGrid = App.game.getEntityGrid();
+		World world = App.game.getWorld();
+
 		short gridX = entity.getGridX();
 		short gridY = entity.getGridY();
 
-		Stream<GridPosition> aroundStream = entityGrid.getAroundStream(gridX, gridY);
-		Stream<GridPosition> notBlacklistedAroundStream = aroundStream.filter(gridPosition -> !blacklist.contains(gridPosition));
-		Stream<GridPosition> emptyNotBlacklistedAroundStream = notBlacklistedAroundStream.filter(entityGrid::isNot);
-		GridPosition goalGridPosition = emptyNotBlacklistedAroundStream.findFirst().orElse(entityGrid.getAroundStream(gridX, gridY).findFirst().get());
-		Entity entityOnGoal = entityGrid.get(goalGridPosition.getGridX(), goalGridPosition.getGridY());
-		if (entityOnGoal != null) {
-			blacklist.add(goalGridPosition);
-			goAway(entityOnGoal, blacklist);
+		blacklist.add(new GridPosition(gridX, gridY));
+
+		List<GridPosition> aroundOnMap = world.getAroundOnMap(gridX, gridY);
+		for (GridPosition aroundGridPosition : aroundOnMap) {
+			if (isGoToAble(aroundGridPosition)) {
+				gotoGridPosition(entity, aroundGridPosition.getGridX(), aroundGridPosition.getGridY());
+				return;
+			}
 		}
-		gotoGridPosition(entity, goalGridPosition.getGridX(), goalGridPosition.getGridY());
+		for (GridPosition aroundGridPosition : aroundOnMap) {
+			if(blacklist.contains(aroundGridPosition)){
+				continue;
+			}
+			Entity entityAround = entityGrid.get(aroundGridPosition);
+			if (entityAround != null && isGoAwayable(entityAround)) {
+				goAway(entityAround, blacklist);
+				return;
+			}
+		}
+
+		// Stream<GridPosition> notBlacklistedAroundStream =
+		// aroundStream.filter(gridPosition ->
+		// !blacklist.contains(gridPosition));
+		// Stream<GridPosition> emptyNotBlacklistedAroundStream =
+		// notBlacklistedAroundStream.filter(entityGrid::isNot);
+		// GridPosition goalGridPosition =
+		// emptyNotBlacklistedAroundStream.findFirst().orElse(entityGrid.getAroundStream(gridX,
+		// gridY).filter(gridPosition ->
+		// !blacklist.contains(gridPosition)).findFirst().get());
+		// Entity entityOnGoal = entityGrid.get(goalGridPosition.getGridX(),
+		// goalGridPosition.getGridY());
+		// if (entityOnGoal != null) {
+		// blacklist.add(goalGridPosition);
+		// goAway(entityOnGoal, blacklist);
+		// }
+		// gotoGridPosition(entity, goalGridPosition.getGridX(),
+		// goalGridPosition.getGridY());
+	}
+
+	private boolean isGoAwayable(Entity entity) {
+		return entity.getDefinition().isMoveable() && !entity.hasPath();
+	}
+
+	private boolean isGoToAble(GridPosition gridPosition) {
+		return !App.game.getEntityGrid().is(gridPosition) && !App.game.getWorld().getFixedCollisionGrid().is(gridPosition);
 	}
 
 	@Override
 	public void gotoGridPosition(Entity entity, short x, short y) {
 		// TODO nur ein Schritt zulassen
-		
+
 		short gridX = entity.getGridX();
 		short gridY = entity.getGridY();
 
 		entity.setPath(new short[] { gridX, x }, new short[] { gridY, y });
-		entity.setActivity(E_Activity.WALKING);
 	}
 
 	@Override

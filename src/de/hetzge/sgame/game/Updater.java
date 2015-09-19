@@ -1,7 +1,6 @@
 package de.hetzge.sgame.game;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
@@ -9,7 +8,6 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.game.event.request.EventRequestGoto;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.EntityGrid;
-import de.hetzge.sgame.world.GridPosition;
 
 public class Updater {
 
@@ -38,7 +36,9 @@ public class Updater {
 	}
 
 	private void updateEntityIdle(Entity entity) {
-
+		if(entity.hasPath()){
+			entity.setActivity(E_Activity.WALKING);
+		}
 	}
 
 	private void updateEntityWalking(Entity entity) {
@@ -49,6 +49,8 @@ public class Updater {
 			short nextY = entity.getNextY();
 			short gridX = entity.getGridX();
 			short gridY = entity.getGridY();
+			short registeredX = entity.getRegisteredX();
+			short registeredY = entity.getRegisteredY();
 			Entity entityOnNext = entityGrid.get(nextX, nextY);
 			if (entityOnNext != null) {
 				if (entityOnNext.equals(entity)) {
@@ -69,6 +71,8 @@ public class Updater {
 							}
 						} else {
 							// verdängen
+							// TODO Sync ?!
+//							entityGrid.swap(entity, entityOnNext);
 							App.entityFunction.goAway(entityOnNext);
 							return;
 						}
@@ -83,7 +87,7 @@ public class Updater {
 					}
 				}
 			} else {
-				boolean isEntityOnCurrentPosition = entityGrid.isEntity(gridX, gridY, entity);
+				boolean isEntityOnCurrentPosition = entityGrid.isEntity(registeredX, registeredY, entity);
 				if (isEntityOnCurrentPosition) {
 					entityGrid.set(nextX, nextY, entity);
 				}
@@ -98,9 +102,6 @@ public class Updater {
 					entity.setActivity(E_Activity.IDLE);
 				} else {
 					entity.nextWaypoint();
-
-					// reregister on grid
-
 				}
 			}
 		}

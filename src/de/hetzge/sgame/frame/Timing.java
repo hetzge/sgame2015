@@ -7,14 +7,18 @@ import org.pmw.tinylog.Logger;
 
 import com.badlogic.gdx.Gdx;
 
+import de.hetzge.sgame.App;
 import de.hetzge.sgame.misc.Timer;
+import de.hetzge.sgame.misc.Util;
 
 public class Timing {
 
-	private final static short FRAMES_PER_SECOND = 5;
+	private final static short FRAMES_PER_SECOND = 30;
 	private final static short DEFAULT_NEXT_FRAMES = FRAMES_PER_SECOND;
+	private final static float FRAME_DELTA = 1f / (float)FRAMES_PER_SECOND;
 
 	private float stateTime = 0f;
+	private float delta = 0f;
 	private final Timer frameTimer;
 
 	private Frame current = new Frame(0);
@@ -32,6 +36,7 @@ public class Timing {
 		flushBuffer();
 		long before = System.currentTimeMillis();
 		current.execute();
+		App.updater.update();
 		long executionTime = System.currentTimeMillis() - before;
 		if (executionTime > frameTimer.getEveryMilliseconds()) {
 			Logger.warn("frame executiontime is longer then frametime: " + executionTime);
@@ -55,14 +60,11 @@ public class Timing {
 		frameTimer.stop();
 	}
 
-	public void gameLoop() {
+	public void update() {
+		Util.sleep(10);
 		frameTimer.call();
-
-		stateTime += Gdx.graphics.getDeltaTime();
-	}
-
-	public float getStateTime() {
-		return stateTime;
+		delta = Gdx.graphics.getDeltaTime();
+		stateTime += delta; 
 	}
 
 	public int getNextFrameId(int frames) {
@@ -73,4 +75,15 @@ public class Timing {
 		return current.getId() + DEFAULT_NEXT_FRAMES;
 	}
 
+	public float getDelta() {
+		return delta;
+	}
+
+	public float getFrameDelta(){
+		return FRAME_DELTA;
+	}
+	
+	public float getStateTime() {
+		return stateTime;
+	}
 }

@@ -88,6 +88,10 @@ public class EntityGrid implements IF_Grid, Serializable {
 		return entities[index(x, y)];
 	}
 
+	public Entity get(GridPosition gridPosition) {
+		return get(gridPosition.getGridX(), gridPosition.getGridY());
+	}
+
 	public boolean isEmpty(short x, short y) {
 		return get(x, y) == null;
 	}
