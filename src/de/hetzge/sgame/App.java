@@ -14,9 +14,9 @@ import de.hetzge.sgame.function.WorldFunction;
 import de.hetzge.sgame.game.Game;
 import de.hetzge.sgame.game.LibGdxApplication;
 import de.hetzge.sgame.game.Updater;
-import de.hetzge.sgame.graphic.Renderer;
 import de.hetzge.sgame.graphic.Ressources;
 import de.hetzge.sgame.network.Network;
+import de.hetzge.sgame.render.Renderer;
 import de.hetzge.sgame.setting.Settings;
 
 public final class App {

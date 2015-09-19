@@ -14,6 +14,11 @@ public class LocalGameState {
 	private final Set<Entity> selection = new HashSet<>();
 	private E_EntityType entityTypeToBuild = null;
 
+	private boolean showPaths = false;
+	private boolean showCollisions = false;
+	private boolean showRegistrations = false;
+	private boolean showIds = false;
+
 	public boolean hasSelection() {
 		return !selection.isEmpty();
 	}
@@ -30,10 +35,10 @@ public class LocalGameState {
 		return selection.stream().filter(predicate).collect(Collectors.toList());
 	}
 
-	public void addSelection(Entity entity){
+	public void addSelection(Entity entity) {
 		selection.add(entity);
 	}
-	
+
 	public void addSelection(List<Entity> entities) {
 		selection.addAll(entities);
 	}
@@ -58,6 +63,54 @@ public class LocalGameState {
 	public void setEntityTypeToBuild(E_EntityType entityTypeToBuild) {
 		clearSelection();
 		this.entityTypeToBuild = entityTypeToBuild;
+	}
+
+	public boolean isShowPaths() {
+		return showPaths;
+	}
+
+	public void setShowPaths(boolean showPaths) {
+		this.showPaths = showPaths;
+	}
+
+	public void toggleShowPaths() {
+		this.showPaths = !this.showPaths;
+	}
+
+	public boolean isShowCollisions() {
+		return showCollisions;
+	}
+
+	public void setShowCollisions(boolean showCollisions) {
+		this.showCollisions = showCollisions;
+	}
+
+	public void toggleShowCollision() {
+		this.showCollisions = !this.showCollisions;
+	}
+
+	public boolean isShowRegistrations() {
+		return showRegistrations;
+	}
+
+	public void setShowRegistrations(boolean showRegistrations) {
+		this.showRegistrations = showRegistrations;
+	}
+
+	public void toggleShowRegistrations() {
+		this.showRegistrations = !this.showRegistrations;
+	}
+
+	public boolean isShowIds() {
+		return showIds;
+	}
+
+	public void setShowIds(boolean showIds) {
+		this.showIds = showIds;
+	}
+
+	public void toggleShowIds() {
+		this.showIds = !this.showIds;
 	}
 
 	public E_CommandMode getCommandMode() {

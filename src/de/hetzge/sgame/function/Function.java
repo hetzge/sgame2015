@@ -7,9 +7,7 @@ import org.nustaq.net.TCPObjectSocket;
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
-import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.E_EntityType;
-import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.frame.IF_FrameEvent;
 import de.hetzge.sgame.game.Players;
 import de.hetzge.sgame.game.event.EventPlayerHandshake;
@@ -30,6 +28,8 @@ public class Function implements IF_Function {
 		players.addPlayer(playerSettings);
 
 		App.game.setWorld(new World(gameSettings.getWorldSizeX(), gameSettings.getWorldSizeY()));
+		App.game.getWorld().getFixedCollisionGrid().set((short) 10, (short) 10);
+
 		App.game.setEntityGrid(new EntityGrid(gameSettings.getWorldSizeX(), gameSettings.getWorldSizeY()));
 		App.game.setSelf(playerSettings);
 		App.game.setPlayers(players);

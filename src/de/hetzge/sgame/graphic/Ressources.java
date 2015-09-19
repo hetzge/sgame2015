@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.IntMap;
@@ -22,17 +23,19 @@ public class Ressources {
 	private Skin skin;
 	private List<TextureRegion> tiles;
 	private final IntMap<Animation> graphics = new IntMap<>();
-	
+	private BitmapFont bitmapFont;
+
 	private Pixmap cursor;
 
 	public void init() {
 		skin = new Skin(Gdx.files.internal("asset/skin/uiskin.json"));
+		bitmapFont = skin.getFont("default-font");
 		tiles = App.ressourceFunction.loadTiles();
-		
+
 		TextureData cursorTextureData = new Texture(Gdx.files.internal("asset/cursor.png")).getTextureData();
 		cursorTextureData.prepare();
 		cursor = cursorTextureData.consumePixmap();
-		
+
 		Texture texture = new Texture(Gdx.files.internal("asset/sprites/test.png"));
 		TextureRegion[][] textureRegions = TextureRegion.split(texture, 16, 16);
 
@@ -50,7 +53,6 @@ public class Ressources {
 
 		loadLine(textureRegions, 2, E_Activity.WALKING);
 		loadLine(textureRegions, 7, E_Activity.WORKING);
-
 	}
 
 	private void loadLine(TextureRegion[][] textureRegions, int line, E_Activity activity) {
@@ -86,9 +88,13 @@ public class Ressources {
 	public Skin getSkin() {
 		return skin;
 	}
-	
+
 	public Pixmap getCursor() {
 		return cursor;
+	}
+
+	public BitmapFont getBitmapFont() {
+		return bitmapFont;
 	}
 
 }

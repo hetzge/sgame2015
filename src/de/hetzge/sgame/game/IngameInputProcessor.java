@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,6 +27,22 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
+
+		LocalGameState localGameState = App.game.getLocalGameState();
+		switch (keycode) {
+		case Keys.F1:
+			localGameState.toggleShowCollision();
+			break;
+		case Keys.F2:
+			localGameState.toggleShowRegistrations();
+			break;
+		case Keys.F3:
+			localGameState.toggleShowPaths();
+			break;
+		case Keys.F4:
+			localGameState.toggleShowIds();
+		}
+
 		return false;
 	}
 
