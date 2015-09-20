@@ -12,7 +12,7 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	private final short height;
 
 	public CollisionGrid(short width, short height) {
-		this.collision = new BitSet(width * height);
+		collision = new BitSet(width * height);
 		this.width = width;
 		this.height = height;
 	}
@@ -31,8 +31,16 @@ public class CollisionGrid implements IF_Grid, Serializable {
 		collision.set(index(x, y));
 	}
 
+	public void set(GridPosition gridPosition) {
+		set(gridPosition.getGridX(), gridPosition.getGridY());
+	}
+
 	public void unset(short x, short y) {
 		collision.clear(index(x, y));
+	}
+
+	public void unset(GridPosition gridPosition) {
+		unset(gridPosition.getGridX(), gridPosition.getGridY());
 	}
 
 	public boolean is(short x, short y) {
@@ -66,31 +74,11 @@ public class CollisionGrid implements IF_Grid, Serializable {
 		if (is(x, y, width, height)) {
 			throw new InvalidGameStateException("Try to set collision where already is collision.");
 		}
-		int xOffset = width % 2 == 0 ? width / 2 : (width - 1) / 2;
-		int yOffset = height % 2 == 0 ? height / 2 : (height - 1) / 2;
-		for (short xi = 0; xi < width; xi++) {
-			for (short yi = 0; yi < height; yi++) {
-				short posX = (short) (x - xOffset + xi);
-				short posY = (short) (y - yOffset - yi);
-				if (isOnGrid(posX, posY)) {
-					set(posX, posY);
-				}
-			}
-		}
+		eachEntityGridPosition(new GridEntity(x, y, width, height), this::set);
 	}
 
 	public void unsetCollision(short x, short y, short width, short height) {
-		int xOffset = width % 2 == 0 ? width / 2 : (width - 1) / 2;
-		int yOffset = height % 2 == 0 ? height / 2 : (height - 1) / 2;
-		for (short xi = 0; xi < width; xi++) {
-			for (short yi = 0; yi < height; yi++) {
-				short posX = (short) (x - xOffset + xi);
-				short posY = (short) (y - yOffset - yi);
-				if (isOnGrid(posX, posY)) {
-					unset(posX, posY);
-				}
-			}
-		}
+		eachEntityGridPosition(new GridEntity(x, y, width, height), this::unset);
 	}
 
 }

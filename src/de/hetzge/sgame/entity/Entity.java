@@ -8,8 +8,9 @@ import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.graphic.IF_GraphicKey;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
+import de.hetzge.sgame.world.IF_GridEntity;
 
-public class Entity implements IF_GraphicKey, Serializable {
+public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	private int id;
 
@@ -34,6 +35,8 @@ public class Entity implements IF_GraphicKey, Serializable {
 	private short[] pathXs;
 	private short[] pathYs;
 
+	private byte item = -1;
+
 	public Entity(int id, byte owner, E_EntityType entityType) {
 		this.id = id;
 		this.entityType = (byte) entityType.ordinal();
@@ -56,12 +59,22 @@ public class Entity implements IF_GraphicKey, Serializable {
 		}
 	}
 
+	@Override
+	public short getWidth() {
+		return getDefinition().getWidth();
+	}
+
+	@Override
+	public short getHeight() {
+		return getDefinition().getHeight();
+	}
+
 	public float getRenderX() {
-		return getWorldX() - getDefinition().getWidth() * Constant.HALF_TILE_SIZE;
+		return getWorldX() - getWidth() * Constant.HALF_TILE_SIZE;
 	}
 
 	public float getRenderY() {
-		return getWorldY() - getDefinition().getHeight() * Constant.TILE_SIZE;
+		return getWorldY() - getWidth() * Constant.TILE_SIZE;
 	}
 
 	public float getWorldX() {
@@ -101,10 +114,12 @@ public class Entity implements IF_GraphicKey, Serializable {
 		registeredY = y;
 	}
 
+	@Override
 	public short getRegisteredX() {
 		return registeredX;
 	}
 
+	@Override
 	public short getRegisteredY() {
 		return registeredY;
 	}
@@ -147,6 +162,22 @@ public class Entity implements IF_GraphicKey, Serializable {
 
 	public short getPathGoalY() {
 		return pathYs[pathYs.length - 1];
+	}
+
+	public boolean hasItem() {
+		return item != -1;
+	}
+
+	public E_Item getItem() {
+		return E_Item.values[item];
+	}
+
+	public void setItem(E_Item item) {
+		if (item == null) {
+			this.item = -1;
+		} else {
+			this.item = (byte) item.ordinal();
+		}
 	}
 
 	public void nextWaypoint() {

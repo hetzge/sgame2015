@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
-import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
@@ -32,8 +30,8 @@ public class EntityFunction implements IF_EntityFunction {
 		App.game.getEntityManager().register(entity);
 		App.game.getEntityGrid().set(x, y, entity);
 		if (!moveable) {
-			short width = definition.getWidth();
-			short height = definition.getHeight();
+			short width = entity.getWidth();
+			short height = entity.getHeight();
 			App.game.getWorld().getFixedCollisionGrid().setCollision(x, y, width, height);
 		}
 	}
@@ -60,7 +58,7 @@ public class EntityFunction implements IF_EntityFunction {
 			}
 		}
 		for (GridPosition aroundGridPosition : aroundOnMap) {
-			if(blacklist.contains(aroundGridPosition)){
+			if (blacklist.contains(aroundGridPosition)) {
 				continue;
 			}
 			Entity entityAround = entityGrid.get(aroundGridPosition);

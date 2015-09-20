@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.misc.Constant;
 
 public class EntityRenderer implements IF_Renderer {
@@ -17,11 +16,10 @@ public class EntityRenderer implements IF_Renderer {
 		float renderY = entity.getRenderY();
 		Animation animation = App.ressources.getGraphic(entity);
 		TextureRegion keyFrame = animation.getKeyFrame(stateTime, true);
-		EntityDefinition definition = entity.getDefinition();
 		int regionWidth = keyFrame.getRegionWidth();
 		int regionHeight = keyFrame.getRegionHeight();
-		int entityWidth = definition.getWidth() * Constant.TILE_SIZE;
-		int entityHeight = definition.getHeight() * Constant.TILE_SIZE;
+		int entityWidth = entity.getWidth() * Constant.TILE_SIZE;
+		int entityHeight = entity.getHeight() * Constant.TILE_SIZE;
 		int offsetX = (entityWidth - regionWidth) / 2;
 		int offsetY = (entityHeight - regionHeight) / 2;
 		getSpriteBatch().draw(keyFrame, renderX + offsetX, -renderY - offsetY);

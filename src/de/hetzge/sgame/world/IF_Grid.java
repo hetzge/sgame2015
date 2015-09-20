@@ -3,7 +3,7 @@ package de.hetzge.sgame.world;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.misc.Util;
@@ -24,6 +24,33 @@ public interface IF_Grid {
 
 	public default boolean isOnGrid(short x, short y) {
 		return x >= 0 && x < getWidth() && y >= 0 && y < getHeight();
+	}
+
+	public default <T extends IF_GridEntity> void eachEntityGridPosition(T gridEntity, Consumer<GridPosition> consumer) {
+		eachEntityGridPosition(gridEntity, gridEntity.getRegisteredX(), gridEntity.getRegisteredY(), consumer);
+	}
+
+	/**
+	 * Warning: GridPosition object is reused !!!
+	 */
+	public default <T extends IF_GridEntity> void eachEntityGridPosition(T gridEntity, short x, short y, Consumer<GridPosition> consumer) {
+		short width = gridEntity.getWidth();
+		short height = gridEntity.getHeight();
+
+		int xOffset = width % 2 == 0 ? width / 2 : (width - 1) / 2;
+		int yOffset = height % 2 == 0 ? height / 2 : (height - 1) / 2;
+
+		GridPosition gridPosition = new GridPosition();
+
+		for (short xi = 0; xi < width; xi++) {
+			for (short yi = 0; yi < height; yi++) {
+				short posX = (short) (x - xOffset + xi);
+				short posY = (short) (y - yOffset - yi);
+				if (isOnGrid(posX, posY)) {
+					consumer.accept(gridPosition.set(posX, posY));
+				}
+			}
+		}
 	}
 
 	public default List<GridPosition> getAroundOnMap(short x, short y) {

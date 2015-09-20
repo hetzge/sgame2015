@@ -3,6 +3,7 @@ package de.hetzge.sgame.world;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.error.InvalidGameStateException;
@@ -18,7 +19,7 @@ public class EntityGrid implements IF_Grid, Serializable {
 		this.width = width;
 		this.height = height;
 
-		this.entities = new Entity[width * height];
+		entities = new Entity[width * height];
 	}
 
 	@Override
@@ -36,11 +37,10 @@ public class EntityGrid implements IF_Grid, Serializable {
 		short registeredAY = entityA.getRegisteredY();
 		short registeredBX = entityB.getRegisteredX();
 		short registeredBY = entityB.getRegisteredY();
-
-		entityA.setRegisteredGridPosition(registeredBX, registeredBY);
-		entities[index(registeredBX, registeredBY)] = entityA;
-		entityB.setRegisteredGridPosition(registeredAX, registeredAY);
-		entities[index(registeredAX, registeredAY)] = entityB;
+		unset(entityA);
+		unset(entityB);
+		set(registeredBX, registeredBY, entityA);
+		set(registeredAX, registeredAY, entityB);
 	}
 
 	public void set(short x, short y, Entity entity) {
@@ -49,14 +49,20 @@ public class EntityGrid implements IF_Grid, Serializable {
 			throw new InvalidGameStateException("Try to move to already used tile.");
 		}
 		unset(entity);
+		eachEntityGridPosition(entity, x, y, set(entity));
 		entity.setRegisteredGridPosition(x, y);
-		entities[index(x, y)] = entity;
+	}
+
+	private Consumer<GridPosition> set(Entity entity) {
+		return gridPosition -> entities[index(gridPosition.getGridX(), gridPosition.getGridY())] = entity;
 	}
 
 	private void unset(Entity entity) {
-		short x = entity.getRegisteredX();
-		short y = entity.getRegisteredY();
-		entities[index(x, y)] = null;
+		eachEntityGridPosition(entity, this::unset);
+	}
+
+	private void unset(GridPosition gridPosition) {
+		entities[index(gridPosition.getGridX(), gridPosition.getGridY())] = null;
 	}
 
 	public boolean is(short x, short y) {
