@@ -1,7 +1,7 @@
 package graceyard;
 
-import de.hetzge.sgame.entity.E_Item;
 import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.item.E_Item;
 
 public class ItemContainerFunction {
 

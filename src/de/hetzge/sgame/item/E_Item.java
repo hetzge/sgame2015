@@ -1,4 +1,4 @@
-package de.hetzge.sgame.entity;
+package de.hetzge.sgame.item;
 
 public enum E_Item {
 

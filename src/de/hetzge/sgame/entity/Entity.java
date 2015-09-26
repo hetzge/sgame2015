@@ -5,7 +5,9 @@ import java.util.Comparator;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
+import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.graphic.IF_GraphicKey;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.IF_GridEntity;
@@ -36,6 +38,8 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	private short[] pathYs;
 
 	private byte item = -1;
+
+	private EntityJob job;
 
 	public Entity(int id, byte owner, E_EntityType entityType) {
 		this.id = id;
@@ -140,6 +144,65 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		return id;
 	}
 
+	/*- #################################################
+	 * The door is a place around the entity where things can be delivered. 
+	 */
+	public short getDoorX() {
+		EntityDefinition definition = getDefinition();
+		short doorOffsetX = definition.getDoorOffsetX();
+		return (short) (getGridX() + doorOffsetX);
+	}
+
+	public short getDoorY() {
+		EntityDefinition definition = getDefinition();
+		short doorOffsetY = definition.getDoorOffsetY();
+		return (short) (getGridY() + doorOffsetY);
+	}
+	/*
+	 * ##################################################
+	 */
+
+	/*- #################################################
+	 * A job represents the ki of a entity and stores job specific data.
+	 */
+	public EntityJob getJob() {
+		return job;
+	}
+
+	public void popJob() {
+		if (job != null) {
+			job.pop();
+		}
+	}
+	/*
+	 * ##################################################
+	 */
+
+	/*- #################################################
+	 * A entity can carry a single item at a moment which is represented by the item ordinal.
+	 */
+	public boolean hasItem() {
+		return item != -1;
+	}
+
+	public E_Item getItem() {
+		return E_Item.values[item];
+	}
+
+	public void setItem(E_Item item) {
+		if (item == null) {
+			this.item = -1;
+		} else {
+			this.item = (byte) item.ordinal();
+		}
+	}
+	/*
+	 * ##################################################
+	 */
+
+	/*- #################################################
+	 * A entity can have a path where it can walk along.
+	 */
 	public float getNextWorldX() {
 		return getNextX() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 	}
@@ -162,22 +225,6 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	public short getPathGoalY() {
 		return pathYs[pathYs.length - 1];
-	}
-
-	public boolean hasItem() {
-		return item != -1;
-	}
-
-	public E_Item getItem() {
-		return E_Item.values[item];
-	}
-
-	public void setItem(E_Item item) {
-		if (item == null) {
-			this.item = -1;
-		} else {
-			this.item = (byte) item.ordinal();
-		}
 	}
 
 	public void nextWaypoint() {
@@ -213,6 +260,9 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		int nextWorldY = (int) getNextWorldY();
 		return E_Orientation.orientationTo(worldX, worldY, nextWorldX, nextWorldY);
 	}
+	/*
+	 * ##################################################
+	 */
 
 	public EntityDefinition getDefinition() {
 		return E_EntityType.values[entityType].getEntityDefinition();

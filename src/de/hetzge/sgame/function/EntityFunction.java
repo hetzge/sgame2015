@@ -3,7 +3,9 @@ package de.hetzge.sgame.function;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.pmw.tinylog.Logger;
 
@@ -127,7 +129,51 @@ public class EntityFunction implements IF_EntityFunction {
 		return result;
 	}
 
-	private Path findPath(Entity entity, short goalX, short goalY) {
+	@Override
+	public Map<Entity, Path> findPath(List<Entity> entities, Entity goalEntity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Path findPath(Entity entity, Entity goalEntity) {
+		World world = App.game.getWorld();
+		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
+		short goalX = goalEntity.getGridX();
+		short goalY = goalEntity.getGridY();
+
+		Predicate<GridPosition> predicate = (gridPosition) -> {
+			boolean collision = fixedCollisionGrid.is(gridPosition);
+			if (collision) {
+				collision = !entity.isEntityGrid(gridPosition);
+			}
+			return collision;
+		};
+
+		Path path = findPath(entity, goalX, goalY, predicate);
+		if (path != null) {
+			ListIterator<GridPosition> listIterator = path.listIterator(path.pathSize());
+			while (listIterator.hasPrevious()) {
+				GridPosition previous = listIterator.previous();
+				if (entity.isEntityGrid(previous)) {
+					listIterator.remove();
+				} else {
+					break;
+				}
+			}
+		}
+
+		return path;
+	}
+
+	@Override
+	public Path findPath(Entity entity, short goalX, short goalY) {
+		World world = App.game.getWorld();
+		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
+		return findPath(entity, goalX, goalY, gridPosition -> fixedCollisionGrid.is(gridPosition));
+	}
+
+	private Path findPath(Entity entity, short goalX, short goalY, Predicate<GridPosition> collisionPredicate) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
 		boolean isGoalCollision = fixedCollisionGrid.is(goalX, goalY);
@@ -161,7 +207,7 @@ public class EntityFunction implements IF_EntityFunction {
 						isPossible = true;
 						break main;
 					}
-					boolean isCollision = fixedCollisionGrid.is(next);
+					boolean isCollision = collisionPredicate.test(next);
 					if (isCollision) {
 						continue;
 					}
@@ -210,12 +256,6 @@ public class EntityFunction implements IF_EntityFunction {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public Map<Entity, Path> findPath(List<Entity> entities, Entity goalEntity) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

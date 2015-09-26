@@ -1,4 +1,4 @@
-package de.hetzge.sgame.entity;
+package de.hetzge.sgame.item;
 
 public class Booking {
 	final E_Item item;
@@ -20,6 +20,23 @@ public class Booking {
 		this.amount = amount;
 		this.from = from;
 		this.to = to;
+	}
+
+	public Container getFrom() {
+		return from;
+	}
+
+	public Container getTo() {
+		return to;
+	}
+
+	public E_Item getItem() {
+		return item;
+	}
+
+	public void rollback() {
+		from.removeBooking(this);
+		to.removeBooking(this);
 	}
 
 	@Override

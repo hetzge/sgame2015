@@ -1,4 +1,4 @@
-package de.hetzge.sgame.entity;
+package de.hetzge.sgame.item;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -89,11 +89,11 @@ public class Container implements Serializable {
 		}
 	}
 
-	private synchronized void addBooking(Booking booking) {
+	protected synchronized void addBooking(Booking booking) {
 		bookings.add(booking);
 	}
 
-	private synchronized void removeBooking(Booking booking) {
+	protected synchronized void removeBooking(Booking booking) {
 		bookings.remove(booking);
 	}
 

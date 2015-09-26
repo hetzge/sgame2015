@@ -11,19 +11,23 @@ public class World implements IF_Grid, Serializable {
 
 	private final CollisionGrid fixedCollisionMap;
 	private final TileGrid tileGrid;
+	private final ContainerGrid containerGrid;
 
 	public World(short width, short height) {
 		this.width = width;
 		this.height = height;
 
-		this.fixedCollisionMap = new CollisionGrid(width, height);
-		this.tileGrid = new TileGrid(width, height);
+		fixedCollisionMap = new CollisionGrid(width, height);
+		tileGrid = new TileGrid(width, height);
+		containerGrid = new ContainerGrid(width, height);
 	}
 
+	@Override
 	public short getWidth() {
 		return width;
 	}
 
+	@Override
 	public short getHeight() {
 		return height;
 	}
@@ -34,6 +38,10 @@ public class World implements IF_Grid, Serializable {
 
 	public TileGrid getTileGrid() {
 		return tileGrid;
+	}
+
+	public ContainerGrid getContainerGrid() {
+		return containerGrid;
 	}
 
 	public int getPixelWidth() {

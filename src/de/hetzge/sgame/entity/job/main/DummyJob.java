@@ -4,11 +4,11 @@ import java.util.List;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.entity.job.Job;
+import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.World;
 
-public class DummyJob extends Job {
+public class DummyJob extends EntityJob {
 
 	@Override
 	protected void work(Entity entity) {
@@ -21,7 +21,6 @@ public class DummyJob extends Job {
 		if (hasPath) {
 			List<GridPosition> aroundOnMap = world.getAroundOnMap(pathGoalX, pathGoalY);
 			for (GridPosition gridPosition : aroundOnMap) {
-				if()
 			}
 		}
 
@@ -40,11 +39,5 @@ public class DummyJob extends Job {
 		// abladen
 
 	}
-
-	private boolean isWalking(Entity entity) {
-
-	}
-
-	private boolean isWalkingTo
 
 }

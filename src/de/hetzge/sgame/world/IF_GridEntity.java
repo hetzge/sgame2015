@@ -1,5 +1,7 @@
 package de.hetzge.sgame.world;
 
+import de.hetzge.sgame.misc.Util;
+
 public interface IF_GridEntity {
 
 	short getRegisteredX();
@@ -12,12 +14,36 @@ public interface IF_GridEntity {
 
 	public default int getGridOffsetX() {
 		short width = getWidth();
-		return width % 2 == 0 ? width / 2 : (width - 1) / 2;
+		return Util.offset(width);
 	}
 
 	public default int getGridOffsetY() {
 		short height = getHeight();
-		return height % 2 == 0 ? height / 2 : (height - 1) / 2;
+		return Util.offset(height);
+	}
+
+	public default boolean isEntityGrid(GridPosition gridPosition) {
+		short width = getWidth();
+		short height = getHeight();
+		short x = getRegisteredX();
+		short y = getRegisteredY();
+		int xOffset = getGridOffsetX();
+		int yOffset = getGridOffsetY();
+		short gridX = gridPosition.getGridX();
+		short gridY = gridPosition.getGridY();
+
+		// TODO das geht auch effektiver
+		for (short xi = 0; xi < width; xi++) {
+			for (short yi = 0; yi < height; yi++) {
+				short posX = (short) (x - xOffset + xi);
+				short posY = (short) (y - yOffset - yi);
+				if (gridX == posX && gridY == posY) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

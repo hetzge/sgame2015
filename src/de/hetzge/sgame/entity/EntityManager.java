@@ -8,6 +8,8 @@ import java.util.TreeSet;
 import com.badlogic.gdx.utils.IntMap;
 
 import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.item.Container;
+import de.hetzge.sgame.misc.Constant;
 
 public class EntityManager {
 
@@ -39,7 +41,11 @@ public class EntityManager {
 	public Entity get(int entityId) {
 		Entity entity = entitiesById.get(entityId);
 		if (entity == null) {
-			throw new InvalidGameStateException("Try to access non existing entity " + entityId);
+			if (entityId == Constant.NO_ENTITY_ID) {
+				return null;
+			} else {
+				throw new InvalidGameStateException("Try to access non existing entity " + entityId);
+			}
 		} else {
 			return entity;
 		}

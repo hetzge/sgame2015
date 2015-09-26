@@ -16,6 +16,10 @@ public final class Util {
 		}
 	}
 
+	public static int offset(int size) {
+		return size % 2 == 0 ? size / 2 : (size - 1) / 2;
+	}
+
 	public static int index(short x, short y, short width) {
 		return x + y * width;
 	}

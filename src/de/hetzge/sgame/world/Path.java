@@ -2,6 +2,7 @@ package de.hetzge.sgame.world;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Path {
 
@@ -9,6 +10,10 @@ public class Path {
 
 	public void add(GridPosition gridPosition) {
 		gridPositions.add(gridPosition);
+	}
+
+	public ListIterator<GridPosition> listIterator(int index) {
+		return gridPositions.listIterator(index);
 	}
 
 	public int pathSize() {

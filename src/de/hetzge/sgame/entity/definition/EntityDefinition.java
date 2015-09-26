@@ -3,12 +3,17 @@ package de.hetzge.sgame.entity.definition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
-import de.hetzge.sgame.entity.Container;
-import de.hetzge.sgame.entity.E_Item;
+import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.entity.job.main.NoJob;
+import de.hetzge.sgame.item.Container;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
+
+	private static final EntityJob NO_JOB = new NoJob();
 
 	protected boolean moveable = false;
 	protected short width = 1;
@@ -16,8 +21,14 @@ public abstract class EntityDefinition {
 	protected int energie = 1000;
 	protected int buildTime = 3000;
 	protected float speed = 30f;
+	protected short mineSpeed = 1;
+	protected short doorOffsetX = 0;
+	protected short doorOffsetY = 1;
+	protected int updateEveryFrames = 100; // TODO
+	protected Map<E_Item, Integer> mineProvides = new HashMap<>();
 	protected Map<E_Item, Integer> provides = new HashMap<>();
 	protected Map<E_Item, Integer> needs = new HashMap<>();
+	protected Supplier<EntityJob> jobSupplier = () -> NO_JOB;
 
 	public boolean isMoveable() {
 		return moveable;
@@ -43,6 +54,18 @@ public abstract class EntityDefinition {
 		return speed;
 	}
 
+	public short getMineSpeed() {
+		return mineSpeed;
+	}
+
+	public short getDoorOffsetX() {
+		return doorOffsetX;
+	}
+
+	public short getDoorOffsetY() {
+		return doorOffsetY;
+	}
+
 	public boolean doProvide(E_Item item) {
 		return provides.containsKey(item);
 	}
@@ -55,6 +78,16 @@ public abstract class EntityDefinition {
 		public Dummy() {
 			moveable = true;
 		}
+	}
+
+	public Container createDefaultMineProvideContainer(int entityId) {
+		Container container = new Container(entityId);
+		for (Entry<E_Item, Integer> entry : mineProvides.entrySet()) {
+			E_Item item = entry.getKey();
+			Integer value = entry.getValue();
+			container.set(item, value);
+		}
+		return container;
 	}
 
 	public Container createDefaultProvideContainer(int entityId) {

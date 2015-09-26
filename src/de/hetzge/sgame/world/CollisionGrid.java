@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.BitSet;
 
 import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.misc.Util;
 
 public class CollisionGrid implements IF_Grid, Serializable {
 
@@ -56,8 +57,8 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	}
 
 	public boolean is(short x, short y, short width, short height) {
-		int xOffset = width % 2 == 0 ? width / 2 : (width - 1) / 2;
-		int yOffset = height % 2 == 0 ? height / 2 : (height - 1) / 2;
+		int xOffset = Util.offset(width);
+		int yOffset = Util.offset(height);
 		for (short xi = 0; xi < width; xi++) {
 			for (short yi = 0; yi < height; yi++) {
 				short posX = (short) (x - xOffset + xi);
