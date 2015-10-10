@@ -21,6 +21,4 @@ public interface IF_EntityFunction {
 
 	Map<Entity, Path> findPath(List<Entity> entities, short goalX, short goalY);
 
-	Map<Entity, Path> findPath(List<Entity> entities, Entity goalEntity);
-
 }

@@ -6,6 +6,7 @@ import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.sub.MineSubJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.item.Booking;
+import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.world.Path;
@@ -43,8 +44,12 @@ public class MinerJob extends EntityJob {
 					} else {
 						Path path = App.entityFunction.findPath(entity, doorX, doorY);
 						if (path == null) {
+							// item fallen lassen
 							workstationEntityId = Constant.NO_ENTITY_ID;
-							// TODO item fallen lassen
+							Container worldContainer = App.game.getWorld().getContainerGrid().get(gridX, gridY);
+							booking.changeTo(worldContainer);
+							booking.transfer();
+							entity.setItem(null);
 						} else {
 							short[] xPath = path.getXPath();
 							short[] yPath = path.getYPath();

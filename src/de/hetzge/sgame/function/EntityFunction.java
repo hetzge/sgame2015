@@ -130,12 +130,6 @@ public class EntityFunction implements IF_EntityFunction {
 	}
 
 	@Override
-	public Map<Entity, Path> findPath(List<Entity> entities, Entity goalEntity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Path findPath(Entity entity, Entity goalEntity) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();

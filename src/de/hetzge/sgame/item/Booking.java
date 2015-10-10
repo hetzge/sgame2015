@@ -4,7 +4,7 @@ public class Booking {
 	final E_Item item;
 	final int amount;
 	final Container from;
-	final Container to;
+	Container to;
 
 	Booking(E_Item item, int amount, Container from, Container to) {
 		if (item == null || from == null || to == null) {
@@ -30,6 +30,11 @@ public class Booking {
 		return to;
 	}
 
+	public void changeTo(Container container) {
+		to.removeBooking(this);
+		to = container;
+	}
+
 	public E_Item getItem() {
 		return item;
 	}
@@ -37,6 +42,10 @@ public class Booking {
 	public void rollback() {
 		from.removeBooking(this);
 		to.removeBooking(this);
+	}
+
+	public boolean transfer() {
+		return from.transfer(this);
 	}
 
 	@Override
