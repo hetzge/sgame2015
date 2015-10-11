@@ -24,6 +24,8 @@ public class DummyJob extends EntityJob {
 			}
 		}
 
+		System.out.println("Ich bin doof!");
+
 		// prüfe ob entity geht
 		// zu gesuchtem entity
 		// ansonsten

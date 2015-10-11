@@ -10,7 +10,9 @@ import de.hetzge.sgame.graphic.IF_GraphicKey;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
+import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.IF_GridEntity;
+import de.hetzge.sgame.world.Path;
 
 public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
@@ -45,6 +47,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		this.id = id;
 		this.entityType = (byte) entityType.ordinal();
 		this.owner = owner;
+		job = getDefinition().createJob(this);
 	}
 
 	public void setWorldX(short x) {
@@ -113,6 +116,10 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		}
 	}
 
+	public GridPosition getGridPosition() {
+		return new GridPosition(getGridX(), getGridY());
+	}
+
 	public void setRegisteredGridPosition(short x, short y) {
 		registeredX = x;
 		registeredY = y;
@@ -158,6 +165,11 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		short doorOffsetY = definition.getDoorOffsetY();
 		return (short) (getGridY() + doorOffsetY);
 	}
+
+	public GridPosition getDoorGridPosition() {
+		return new GridPosition(getDoorX(), getDoorY());
+	}
+
 	/*
 	 * ##################################################
 	 */
@@ -245,6 +257,10 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		nextWaypointPointer = 0;
 		pathXs = null;
 		pathYs = null;
+	}
+
+	public void setPath(Path path) {
+		setPath(path.getXPath(), path.getYPath());
 	}
 
 	public void setPath(short[] pathXs, short[] pathYs) {

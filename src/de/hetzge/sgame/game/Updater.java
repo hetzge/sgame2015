@@ -18,6 +18,7 @@ public class Updater {
 	private void updateEntities() {
 		Iterable<Entity> entities = App.game.getEntityManager().getEntities();
 		for (Entity entity : entities) {
+			entity.getJob().doWork(entity);
 			E_Activity activity = entity.getActivity();
 			switch (activity) {
 			case IDLE:
@@ -36,7 +37,7 @@ public class Updater {
 	}
 
 	private void updateEntityIdle(Entity entity) {
-		if(entity.hasPath()){
+		if (entity.hasPath()) {
 			entity.setActivity(E_Activity.WALKING);
 		}
 	}
@@ -72,7 +73,7 @@ public class Updater {
 						} else {
 							// verdängen
 							// TODO Sync ?!
-//							entityGrid.swap(entity, entityOnNext);
+							// entityGrid.swap(entity, entityOnNext);
 							App.entityFunction.goAway(entityOnNext);
 							return;
 						}

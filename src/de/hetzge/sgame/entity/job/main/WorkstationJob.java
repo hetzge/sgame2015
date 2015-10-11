@@ -4,21 +4,21 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.item.Container;
 
-public class MineProviderJob extends EntityJob {
+public class WorkstationJob extends EntityJob {
 
 	private final Container container;
 
-	public MineProviderJob(Entity entity) {
+	public WorkstationJob(Entity entity) {
 		int entityId = entity.getId();
-		container = entity.getDefinition().createDefaultMineProvideContainer(entityId);
-	}
-
-	public Container getContainer() {
-		return container;
+		container = entity.getDefinition().createDefaultNeedContainer(entityId);
 	}
 
 	@Override
 	protected void work(Entity entity) {
+	}
+
+	public Container getContainer() {
+		return container;
 	}
 
 }

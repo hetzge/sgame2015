@@ -36,8 +36,13 @@ public class Ressources {
 		cursorTextureData.prepare();
 		cursor = cursorTextureData.consumePixmap();
 
-		Texture texture = new Texture(Gdx.files.internal("asset/sprites/test.png"));
-		TextureRegion[][] textureRegions = TextureRegion.split(texture, 16, 16);
+		Texture test1Texture = new Texture(Gdx.files.internal("asset/sprites/test1.png"));
+		TextureRegion test1TextureRegion = new TextureRegion(test1Texture);
+
+		Animation test1Animation = new Animation(1, test1TextureRegion);
+
+		Texture testTexture = new Texture(Gdx.files.internal("asset/sprites/test.png"));
+		TextureRegion[][] textureRegions = TextureRegion.split(testTexture, 16, 16);
 
 		Animation idleWestAnimation = new Animation(1, new TextureRegion[] { textureRegions[1][0] });
 		Animation ideSouthAnimation = new Animation(1, new TextureRegion[] { textureRegions[1][1] });
@@ -46,10 +51,13 @@ public class Ressources {
 		idleWestTextureRegion.flip(true, false);
 		Animation idleEastAnimation = new Animation(1, new TextureRegion[] { idleWestTextureRegion });
 
-		registerGraphic(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, E_EntityType.DUMMY), idleEastAnimation);
-		registerGraphic(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, E_EntityType.DUMMY), idleNorthAnimation);
-		registerGraphic(new GraphicKey(E_Orientation.WEST, E_Activity.IDLE, E_EntityType.DUMMY), idleWestAnimation);
-		registerGraphic(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.DUMMY), ideSouthAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.PROVIDER), test1Animation);
+		registerGraphic(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.WORKSTATION), test1Animation);
+
+		registerGraphic(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, E_EntityType.MINER), idleEastAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, E_EntityType.MINER), idleNorthAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.WEST, E_Activity.IDLE, E_EntityType.MINER), idleWestAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.MINER), ideSouthAnimation);
 
 		loadLine(textureRegions, 2, E_Activity.WALKING);
 		loadLine(textureRegions, 7, E_Activity.WORKING);
@@ -63,10 +71,10 @@ public class Ressources {
 		Animation walkWestAnimation = new Animation(FRAME_TIME, new TextureRegion[] { textureRegions[line][4], textureRegions[line][5] });
 		Animation walkSouthAnimation = new Animation(FRAME_TIME, new TextureRegion[] { textureRegions[line][6], textureRegions[line][7] });
 
-		registerGraphic(new GraphicKey(E_Orientation.EAST, activity, E_EntityType.DUMMY), walkEastAnimation);
-		registerGraphic(new GraphicKey(E_Orientation.NORTH, activity, E_EntityType.DUMMY), walkNorthAnimation);
-		registerGraphic(new GraphicKey(E_Orientation.WEST, activity, E_EntityType.DUMMY), walkWestAnimation);
-		registerGraphic(new GraphicKey(E_Orientation.SOUTH, activity, E_EntityType.DUMMY), walkSouthAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.EAST, activity, E_EntityType.MINER), walkEastAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.NORTH, activity, E_EntityType.MINER), walkNorthAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.WEST, activity, E_EntityType.MINER), walkWestAnimation);
+		registerGraphic(new GraphicKey(E_Orientation.SOUTH, activity, E_EntityType.MINER), walkSouthAnimation);
 	}
 
 	private void registerGraphic(IF_GraphicKey graphicKey, Animation animation) {

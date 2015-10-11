@@ -20,9 +20,8 @@ import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 import de.hetzge.sgame.world.World;
 
-public class EntityFunction implements IF_EntityFunction {
+public class EntityFunction {
 
-	@Override
 	public void createEntity(E_EntityType entityType, short x, short y, int entityId, byte playerId) {
 		EntityDefinition definition = entityType.getEntityDefinition();
 		boolean moveable = definition.isMoveable();
@@ -38,12 +37,11 @@ public class EntityFunction implements IF_EntityFunction {
 		}
 	}
 
-	@Override
 	public void goAway(Entity entity) {
 		goAway(entity, new LinkedList<>());
 	}
 
-	public void goAway(Entity entity, List<GridPosition> blacklist) {
+	private void goAway(Entity entity, List<GridPosition> blacklist) {
 		EntityGrid entityGrid = App.game.getEntityGrid();
 		World world = App.game.getWorld();
 
@@ -97,7 +95,6 @@ public class EntityFunction implements IF_EntityFunction {
 		return !App.game.getEntityGrid().is(gridPosition) && !App.game.getWorld().getFixedCollisionGrid().is(gridPosition);
 	}
 
-	@Override
 	public void gotoGridPosition(Entity entity, short x, short y) {
 		// TODO nur ein Schritt zulassen
 
@@ -107,8 +104,7 @@ public class EntityFunction implements IF_EntityFunction {
 		entity.setPath(new short[] { gridX, x }, new short[] { gridY, y });
 	}
 
-	@Override
-	public Map<Entity, Path> findPath(List<Entity> entities, short goalX, short goalY) {
+	public Map<Entity, Path> findPath(List<Entity> entities, GridPosition goal) {
 		if (entities.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
@@ -123,20 +119,19 @@ public class EntityFunction implements IF_EntityFunction {
 		}
 
 		for (Entity entity : entities) {
-			result.put(entity, findPath(entity, goalX, goalY));
+			result.put(entity, findPath(entity, goal));
 		}
 
 		return result;
 	}
 
-	@Override
-	public Path findPath(Entity entity, Entity goalEntity) {
+	public Path findPathToEntity(Entity entity, Entity goalEntity) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
-		short goalX = goalEntity.getGridX();
-		short goalY = goalEntity.getGridY();
+		GridPosition goalGridPosition = goalEntity.getGridPosition();
 
-		Predicate<GridPosition> predicate = (gridPosition) -> {
+		// ignore goal entity
+		CollisionPredicate collisionPredicate = (gridPosition) -> {
 			boolean collision = fixedCollisionGrid.is(gridPosition);
 			if (collision) {
 				collision = !entity.isEntityGrid(gridPosition);
@@ -144,7 +139,7 @@ public class EntityFunction implements IF_EntityFunction {
 			return collision;
 		};
 
-		Path path = findPath(entity, goalX, goalY, predicate);
+		Path path = findPath(entity, goalGridPosition, collisionPredicate);
 		if (path != null) {
 			ListIterator<GridPosition> listIterator = path.listIterator(path.pathSize());
 			while (listIterator.hasPrevious()) {
@@ -160,34 +155,80 @@ public class EntityFunction implements IF_EntityFunction {
 		return path;
 	}
 
-	@Override
-	public Path findPath(Entity entity, short goalX, short goalY) {
+	/**
+	 * Finds a path to given <code>goal</code>
+	 */
+	public Path findPath(Entity entity, GridPosition goal) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
-		return findPath(entity, goalX, goalY, gridPosition -> fixedCollisionGrid.is(gridPosition));
+		return findPath(entity, goal, fixedCollisionGrid::is);
 	}
 
-	private Path findPath(Entity entity, short goalX, short goalY, Predicate<GridPosition> collisionPredicate) {
+	/**
+	 * Finds a path to given <code>goal</code>
+	 */
+	public Path findPath(Entity entity, GridPosition goal, CollisionPredicate collisionPredicate) {
+		GridPosition start = entity.getGridPosition();
+		RatingMap ratings = ratePath(start, goal, start::equals, collisionPredicate);
+		return ratings != null ? evaluatePath(start, goal, ratings) : null;
+	}
+
+	/**
+	 * Finds a path to a unknown goal defined by <code>searchPredicate</code>
+	 */
+	public Path findPath(Entity entity, SearchPredicate searchPredicate) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
-		boolean isGoalCollision = fixedCollisionGrid.is(goalX, goalY);
+		return findPath(entity, fixedCollisionGrid::is, searchPredicate);
+	}
+
+	/**
+	 * Finds a path to a unknown goal defined by <code>searchPredicate</code>
+	 */
+	public Path findPath(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
+		GridPosition start = entity.getGridPosition();
+		RatingMap ratings = rateSearch(entity, collisionPredicate, searchPredicate);
+		return ratings != null ? evaluatePath(ratings.goal, start, ratings) : null;
+	}
+
+	private RatingMap rateSearch(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
+		EntityGrid entityGrid = App.game.getEntityGrid();
+
+		Predicate<GridPosition> endOfPathPredicate = (gridPosition) -> {
+			Entity entityOnGridPositon = entityGrid.get(gridPosition);
+			return entityOnGridPositon != null ? searchPredicate.test(entityOnGridPositon) : false;
+		};
+
+		return rate(entity.getGridPosition(), endOfPathPredicate, collisionPredicate);
+	}
+
+	private RatingMap ratePath(GridPosition start, GridPosition goal, Predicate<GridPosition> endOfPathPredicate, CollisionPredicate collisionPredicate) {
+		boolean isStartIsGoal = start.equals(goal);
+		if (isStartIsGoal) {
+			return null;
+		}
+
+		World world = App.game.getWorld();
+		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
+		boolean isGoalCollision = fixedCollisionGrid.is(goal);
 		if (isGoalCollision) {
 			return null;
 		}
 
-		short startX = entity.getGridX();
-		short startY = entity.getGridY();
+		return rate(goal, endOfPathPredicate, collisionPredicate);
+	}
+
+	private RatingMap rate(GridPosition beginAtGridPosition, Predicate<GridPosition> endOfPathPredicate, CollisionPredicate collisionPredicate) {
+		World world = App.game.getWorld();
 
 		final short MAX_RATING = 1000;
 		short rating = 0;
-		Map<GridPosition, Short> ratings = new HashMap<>();
+		RatingMap ratings = new RatingMap();
 		List<GridPosition> nexts = new LinkedList<>();
-		GridPosition goal = new GridPosition(goalX, goalY);
-		nexts.add(goal);
-		ratings.put(goal, rating++);
+		nexts.add(beginAtGridPosition);
+		ratings.put(beginAtGridPosition, rating++);
 
-		boolean isPossible = false;
-		main: while (true) {
+		while (true) {
 			List<GridPosition> nextNexts = new LinkedList<>();
 			for (GridPosition gridPosition : nexts) {
 				for (E_Orientation orientation : E_Orientation.values) {
@@ -196,10 +237,9 @@ public class EntityFunction implements IF_EntityFunction {
 					if (!isOnWorld) {
 						continue;
 					}
-					boolean isStart = next.getGridX() == startX && next.getGridY() == startY;
-					if (isStart) {
-						isPossible = true;
-						break main;
+					if (endOfPathPredicate.test(next)) {
+						ratings.goal = next;
+						return ratings;
 					}
 					boolean isCollision = collisionPredicate.test(next);
 					if (isCollision) {
@@ -215,41 +255,50 @@ public class EntityFunction implements IF_EntityFunction {
 			rating++;
 			if (rating >= MAX_RATING) {
 				Logger.warn("Stoped pathfinding because reached max rating.");
-				break main;
+				return null;
 			}
 			nexts = nextNexts;
 			if (nexts.isEmpty()) {
-				break main;
+				return null;
 			}
 		}
+	}
 
+	private Path evaluatePath(GridPosition start, GridPosition goal, RatingMap ratings) {
 		short min = Short.MAX_VALUE;
-		if (isPossible) {
-			Path path = new Path();
-			GridPosition next = new GridPosition(startX, startY);
-			GridPosition nextNext = null;
-			path.add(next);
-			while (next.getGridX() != goalX || next.getGridY() != goalY) {
-				for (E_Orientation orientation : E_Orientation.values) {
-					GridPosition around = next.getAround(orientation);
-					Short aroundRating = ratings.get(around);
-					if (aroundRating != null) {
-						if (aroundRating < min) {
-							min = aroundRating;
-							nextNext = around;
-						}
+		Path path = new Path();
+		GridPosition next = new GridPosition(start);
+		GridPosition nextNext = null;
+		path.add(next);
+		while (!next.equals(goal)) {
+			for (E_Orientation orientation : E_Orientation.values) {
+				GridPosition around = next.getAround(orientation);
+				Short aroundRating = ratings.get(around);
+				if (aroundRating != null) {
+					if (aroundRating < min) {
+						min = aroundRating;
+						nextNext = around;
 					}
 				}
-				next = nextNext;
-				path.add(next);
 			}
-
-			Logger.info("Found path: " + path);
-
-			return path;
-		} else {
-			return null;
+			next = nextNext;
+			path.add(next);
 		}
+
+		Logger.info("Found path: " + path);
+
+		return path;
+	}
+
+	private static class RatingMap extends HashMap<GridPosition, Short> {
+		private GridPosition goal;
+	}
+
+	private static interface CollisionPredicate extends Predicate<GridPosition> {
+	}
+
+	private static interface SearchPredicate extends Predicate<Entity> {
+
 	}
 
 }

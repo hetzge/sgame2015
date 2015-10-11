@@ -19,6 +19,10 @@ public class ContainerGrid implements IF_Grid, Serializable {
 		containers = new Container[width * height];
 	}
 
+	public Container get(GridPosition gridPosition) {
+		return get(gridPosition.getGridX(), gridPosition.getGridY());
+	}
+
 	public Container get(short x, short y) {
 		Container container = containers[index(x, y)];
 		if (container == null) {

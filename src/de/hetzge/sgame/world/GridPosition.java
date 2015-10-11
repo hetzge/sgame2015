@@ -13,6 +13,10 @@ public class GridPosition implements IF_GridPosition, Serializable {
 	public GridPosition() {
 	}
 
+	public GridPosition(GridPosition gridPosition) {
+		this(gridPosition.getGridX(), gridPosition.getGridY());
+	}
+
 	public GridPosition(short x, short y) {
 		this.x = x;
 		this.y = y;

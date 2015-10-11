@@ -15,40 +15,42 @@ import de.hetzge.sgame.network.IF_ConnectionEvent;
 import de.hetzge.sgame.network.IF_Event;
 import de.hetzge.sgame.setting.GameSettings;
 import de.hetzge.sgame.setting.PlayerSettings;
+import de.hetzge.sgame.setting.SystemSettings;
 import de.hetzge.sgame.world.EntityGrid;
 import de.hetzge.sgame.world.World;
 
-public class Function implements IF_Function {
+public class Function {
 
-	@Override
 	public void initGame() {
 		GameSettings gameSettings = App.settings.getGameSettings();
+		SystemSettings systemSettings = App.settings.getSystemSettings();
 		Players players = new Players();
-		PlayerSettings playerSettings = new PlayerSettings(players.nextPlayerId(), App.settings.getSystemSettings().getPlayerName());
+		PlayerSettings playerSettings = new PlayerSettings(players.nextPlayerId(), systemSettings.getPlayerName());
 		players.addPlayer(playerSettings);
 
 		App.game.setWorld(new World(gameSettings.getWorldSizeX(), gameSettings.getWorldSizeY()));
-		App.game.getWorld().getFixedCollisionGrid().set((short) 10, (short) 10);
 
 		App.game.setEntityGrid(new EntityGrid(gameSettings.getWorldSizeX(), gameSettings.getWorldSizeY()));
 		App.game.setSelf(playerSettings);
 		App.game.setPlayers(players);
 
-		int id = 1;
-		for (int x = 0; x < 10; x++) {
-			for (int y = 0; y < 10; y++) {
-				App.entityFunction.createEntity(E_EntityType.DUMMY, (short) (3 + x), (short) (3 + y), id++, (byte) 0);
-			}
-		}
+		// int id = 1;
+		// for (int x = 0; x < 10; x++) {
+		// for (int y = 0; y < 10; y++) {
+		// App.entityFunction.createEntity(E_EntityType.DUMMY, (short) (3 + x),
+		// (short) (3 + y), id++, (byte) 0);
+		// }
+		// }
 
-		App.entityFunction.createEntity(E_EntityType.DUMMY, (short) 0, (short) 0, 0, (byte) 0);
-		for (int i = 0; i < 100; i++) {
-			App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
-		}
+		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 20, (short) 20, (short) 2, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.PROVIDER, (short) 10, (short) 10, (short) 1, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.MINER, (short) 0, (short) 0, 0, (byte) 0);
+		// for (int i = 0; i < 100; i++) {
+		// App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
+		// }
 
 	}
 
-	@Override
 	public void dispatch(Object object, TCPObjectSocket tcpObjectSocket) {
 		if (object instanceof IF_FrameEvent) {
 			IF_FrameEvent frameEvent = (IF_FrameEvent) object;
@@ -65,7 +67,6 @@ public class Function implements IF_Function {
 		}
 	}
 
-	@Override
 	public void send(TCPObjectSocket tcpObjectSocket, Serializable object) {
 		try {
 			tcpObjectSocket.writeObject(object);
@@ -75,7 +76,6 @@ public class Function implements IF_Function {
 		}
 	}
 
-	@Override
 	public void sendHandshake() {
 		App.network.send(new EventPlayerHandshake(App.settings.getSystemSettings().getPlayerName()));
 	}

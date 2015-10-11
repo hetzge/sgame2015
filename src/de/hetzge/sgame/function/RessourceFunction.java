@@ -10,9 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hetzge.sgame.misc.Constant;
 
-public class RessourceFunction implements IF_RessourceFunction {
+public class RessourceFunction {
 
-	@Override
 	public List<TextureRegion> loadTiles() {
 		List<TextureRegion> result = new ArrayList<>();
 
@@ -30,7 +29,7 @@ public class RessourceFunction implements IF_RessourceFunction {
 				}
 			}
 		}
-		
+
 		return result;
 	}
 

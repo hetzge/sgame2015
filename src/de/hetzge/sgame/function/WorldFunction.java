@@ -11,22 +11,18 @@ import de.hetzge.sgame.world.EntityGrid;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.World;
 
-public class WorldFunction implements IF_WorldFunction {
+public class WorldFunction {
 
-	@Override
 	public void setOnWorld(Entity entity, short x, short y) {
 	}
 
-	@Override
 	public void moveOnWorld(Entity entity, short oldX, short oldY, short newX, short newY) {
 	}
 
-	@Override
 	public boolean checkSpaceForEntity(Entity entity, short x, short y) {
 		return checkSpaceForEntity(entity.getEntityType(), x, y);
 	}
 
-	@Override
 	public boolean checkSpaceForEntity(E_EntityType entityType, short x, short y) {
 		World world = App.game.getWorld();
 		EntityGrid entityGrid = App.game.getEntityGrid();
@@ -47,18 +43,17 @@ public class WorldFunction implements IF_WorldFunction {
 		return true;
 	}
 
-	@Override
 	public GridPosition findEmptyGridPositionAround(E_EntityType entityType, short x, short y) {
 		EntityDefinition entityDefinition = entityType.getEntityDefinition();
 		boolean isMoveable = entityDefinition.isMoveable();
-		if(!isMoveable){
+		if (!isMoveable) {
 			throw new IllegalArgumentException("This only works with moveable entities");
 		}
-		
+
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
 		EntityGrid entityGrid = App.game.getEntityGrid();
-		
+
 		Iterator<GridPosition> spiralIterator = world.getSpiralIterator(x, y, (short) 30);
 		while (spiralIterator.hasNext()) {
 			GridPosition gridPosition = spiralIterator.next();
