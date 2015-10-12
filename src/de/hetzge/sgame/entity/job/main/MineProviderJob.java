@@ -9,8 +9,8 @@ public class MineProviderJob extends EntityJob {
 	private final Container container;
 
 	public MineProviderJob(Entity entity) {
-		int entityId = entity.getId();
-		container = entity.getDefinition().createDefaultMineProvideContainer(entityId);
+		super(entity);
+		container = entity.getDefinition().createDefaultMineProvideContainer(entity);
 	}
 
 	public Container getContainer() {
@@ -18,7 +18,7 @@ public class MineProviderJob extends EntityJob {
 	}
 
 	@Override
-	protected void work(Entity entity) {
+	protected void work() {
 	}
 
 }

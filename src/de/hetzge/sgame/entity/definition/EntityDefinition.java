@@ -17,7 +17,7 @@ import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
 
-	private static final EntityJob NO_JOB = new NoJob();
+	private static final EntityJob NO_JOB = new NoJob(null);
 
 	protected boolean moveable = false;
 	protected short width = 1;
@@ -91,7 +91,7 @@ public abstract class EntityDefinition {
 	public static class Miner extends EntityDefinition {
 		public Miner() {
 			moveable = true;
-			jobSupplier = entity -> new MinerJob();
+			jobSupplier = entity -> new MinerJob(entity);
 		}
 	}
 
@@ -113,8 +113,8 @@ public abstract class EntityDefinition {
 		}
 	}
 
-	public Container createDefaultMineProvideContainer(int entityId) {
-		Container container = new Container(entityId);
+	public Container createDefaultMineProvideContainer(Entity entity) {
+		Container container = new Container(entity);
 		for (Entry<E_Item, Integer> entry : mineProvides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
@@ -123,8 +123,8 @@ public abstract class EntityDefinition {
 		return container;
 	}
 
-	public Container createDefaultProvideContainer(int entityId) {
-		Container container = new Container(entityId);
+	public Container createDefaultProvideContainer(Entity entity) {
+		Container container = new Container(entity);
 		for (Entry<E_Item, Integer> entry : provides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
@@ -137,8 +137,8 @@ public abstract class EntityDefinition {
 		return container;
 	}
 
-	public Container createDefaultNeedContainer(int entityId) {
-		Container container = new Container(entityId);
+	public Container createDefaultNeedContainer(Entity entity) {
+		Container container = new Container(entity);
 		for (Entry<E_Item, Integer> entry : needs.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();

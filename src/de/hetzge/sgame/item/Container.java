@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.hetzge.sgame.entity.Entity;
+
 public class Container implements Serializable {
 
 	private class Value implements Serializable {
@@ -13,13 +15,13 @@ public class Container implements Serializable {
 		private int amount;
 	}
 
-	private final int entityId;
+	private final Entity entity;
 
 	private final Map<E_Item, Value> items = new HashMap<>();
 	private final List<Booking> bookings = new LinkedList<>();
 
-	public Container(int entityId) {
-		this.entityId = entityId;
+	public Container(Entity entity) {
+		this.entity = entity;
 	}
 
 	public synchronized boolean transfer(Booking booking) {
@@ -185,8 +187,8 @@ public class Container implements Serializable {
 		bookings.clear();
 	}
 
-	public int getEntityId() {
-		return entityId;
+	public Entity getEntity() {
+		return entity;
 	}
 
 }

@@ -208,6 +208,10 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 			this.item = (byte) item.ordinal();
 		}
 	}
+
+	public void unsetItem() {
+		setItem(null);
+	}
 	/*
 	 * ##################################################
 	 */

@@ -5,8 +5,12 @@ import de.hetzge.sgame.entity.job.EntityJob;
 
 public class NoJob extends EntityJob {
 
+	public NoJob(Entity entity) {
+		super(entity);
+	}
+
 	@Override
-	protected void work(Entity entity) {
+	protected void work() {
 	}
 
 }

@@ -2,42 +2,23 @@ package de.hetzge.sgame.entity.job;
 
 import de.hetzge.sgame.entity.Entity;
 
-public abstract class EntityJob {
+public abstract class EntityJob extends Job {
 
-	private EntityJob child;
+	protected final Entity entity;
 
-	protected abstract void work(Entity entity);
-
-	public void doWork(Entity entity) {
-		if (child != null) {
-			child.doWork(entity);
-		} else {
-			work(entity);
-		}
+	public EntityJob(Entity entity) {
+		this.entity = entity;
 	}
 
-	public void pop() {
-		if (child != null) {
-			if (child.child == null) {
-				child = null;
-			}
-		}
+	protected abstract void work();
+
+	@Override
+	protected void work(Entity entity) {
+		work();
 	}
 
-	public void setChild(EntityJob job) {
-		child = job;
-	}
-
-	public void unsetChild() {
-		child = null;
-	}
-
-	public void addChild(EntityJob job) {
-		if (child == null) {
-			child = job;
-		} else {
-			child.addChild(job);
-		}
+	public Entity getEntity() {
+		return entity;
 	}
 
 }

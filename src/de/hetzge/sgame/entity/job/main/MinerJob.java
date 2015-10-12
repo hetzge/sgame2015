@@ -8,111 +8,65 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.sub.MineSubJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.function.EntityFunction.SearchPredicate;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
-import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
 public class MinerJob extends EntityJob {
 
 	private List<E_Item> items = Arrays.asList(E_Item.values);
-	private int workstationEntityId = 2; // TODO
+	private Entity workstation = null;
 	private Booking booking = null;
+
+	public MinerJob(Entity entity) {
+		super(entity);
+	}
 
 	// TODO sleep
 
 	@Override
-	protected void work(Entity entity) {
-		if (workstationEntityId != Constant.NO_ENTITY_ID) {
+	protected void work() {
+		if (hasWorkstation()) {
 			if (entity.hasItem()) {
 				// bring home
 				if (entity.hasPath()) {
 					// walk
 				} else {
 					// check if is at workstation
-					Entity workstation = getWorkstation();
-					GridPosition doorGridPosition = workstation.getDoorGridPosition();
-					GridPosition gridPosition = entity.getGridPosition();
-					if (gridPosition.equals(doorGridPosition)) {
+					if (isEntityAtWorkstationDoor()) {
 						// make transfer complete
-						entity.setItem(null);
-						if (booking != null) {
+						if (hasBooking()) {
+							entity.unsetItem();
 							booking.getFrom().transfer(booking);
+							unsetBooking();
 						} else {
 							throw new InvalidGameStateException("No transfer without booking.");
 						}
-						booking = null;
 					} else {
+						GridPosition doorGridPosition = workstation.getDoorGridPosition();
 						Path path = App.entityFunction.findPath(entity, doorGridPosition);
-						if (path == null) {
-							// item fallen lassen
-							workstationEntityId = Constant.NO_ENTITY_ID;
-							Container worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
-							booking.changeTo(worldContainer);
-							booking.transfer();
-							entity.setItem(null);
+						if (path != null) {
+							setPath(path);
 						} else {
-							short[] xPath = path.getXPath();
-							short[] yPath = path.getYPath();
-							entity.setPath(xPath, yPath);
+							// item fallen lassen
+							unsetWorkstation();
+							dropItem();
 						}
 					}
 				}
 			} else {
-				if (booking == null) {
-					// TODO extract predicate
-					Path path = App.entityFunction.findPath(entity, searchEntity -> {
-						System.out.println("yjsgdsuiogkd jklsdjklgk ");
-						EntityJob job = searchEntity.getJob();
-						if (job instanceof MineProviderJob) {
-							MineProviderJob mineProviderJob = (MineProviderJob) job;
-							itemsLoop: for (E_Item item : items) {
-								Container fromContainer = mineProviderJob.getContainer();
-								boolean hasItem = fromContainer.has(item);
-								if (!hasItem) {
-									continue itemsLoop;
-								}
-								Entity workstation = getWorkstation();
-								EntityJob workstationEntityJob = workstation.getJob();
-								if (workstationEntityJob instanceof WorkstationJob) {
-									WorkstationJob workstationJob = (WorkstationJob) workstationEntityJob;
-									Container toContainer = workstationJob.getContainer();
-									Booking booking = fromContainer.book(item, 1, toContainer);
-									if (booking != null) {
-										this.booking = booking;
-										return true;
-									}
-								}
-							}
-						}
-						return false;
-					});
-
-					if (path != null) {
-						entity.setPath(path);
-					}
+				if (!hasBooking()) {
+					findMineEntityAndBookAndGoto();
 				} else {
 					if (entity.hasPath()) {
-
+						// walk
 					} else {
-						E_Item item = booking.getItem();
-						int entityId = booking.getFrom().getEntityId();
-						Entity mineEntity = App.game.getEntityManager().get(entityId);
-
+						Entity mineEntity = booking.getFrom().getEntity();
 						if (mineEntity != null) {
-							EntityJob mineEntityJob = mineEntity.getJob();
-							if (mineEntityJob != null) {
-								if (mineEntityJob instanceof MineProviderJob) {
-									MineProviderJob mineProviderJob = (MineProviderJob) mineEntityJob;
-									addChild(new MineSubJob(mineProviderJob, item));
-								} else {
-									throw new InvalidGameStateException();
-								}
-							} else {
-								throw new InvalidGameStateException();
-							}
+							startWorking(mineEntity);
 						} else {
 							// remove invalid booking
 							booking.rollback();
@@ -121,15 +75,120 @@ public class MinerJob extends EntityJob {
 					}
 				}
 			}
-		}
-
-	}
-
-	private Entity getWorkstation() {
-		if (workstationEntityId == Constant.NO_ENTITY_ID) {
-			throw new InvalidGameStateException();
 		} else {
-			return App.game.getEntityManager().get(workstationEntityId);
+			findWorkstation();
+		}
+
+	}
+
+	private void findWorkstation() {
+		SearchPredicate searchPredicate = entityToTest -> {
+			EntityJob job = entityToTest.getJob();
+			if (job instanceof WorkstationJob) {
+				WorkstationJob workstationJob = (WorkstationJob) job;
+				if (!workstationJob.hasWorker()) {
+					workstationJob.setWorker(entity);
+					setWorkstation(entityToTest);
+					return true;
+				}
+			}
+			return false;
+		};
+		App.entityFunction.findEntity(entity, searchPredicate);
+	}
+
+	private void findMineEntityAndBookAndGoto() {
+		SearchPredicate searchPredicate = entityToTest -> {
+			EntityJob job = entityToTest.getJob();
+			if (job instanceof MineProviderJob) {
+				MineProviderJob mineProviderJob = (MineProviderJob) job;
+				for (E_Item item : items) {
+					Container from = mineProviderJob.getContainer();
+					boolean hasItem = from.has(item);
+					if (hasItem) {
+						WorkstationJob workstationJob = getWorkstationJob();
+						Container to = workstationJob.getContainer();
+						Booking booking = from.book(item, 1, to);
+						if (booking != null) {
+							this.booking = booking;
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		};
+
+		Path path = App.entityFunction.findPath(entity, searchPredicate);
+
+		if (path != null) {
+			entity.setPath(path);
 		}
 	}
+
+	private void startWorking(Entity mineEntity) {
+		EntityJob mineEntityJob = mineEntity.getJob();
+		if (mineEntityJob instanceof MineProviderJob) {
+			MineProviderJob mineProviderJob = (MineProviderJob) mineEntityJob;
+			E_Item item = booking.getItem();
+			addChild(new MineSubJob(mineProviderJob, item));
+		} else {
+			throw new InvalidGameStateException();
+		}
+	}
+
+	private void setPath(Path path) {
+		short[] xPath = path.getXPath();
+		short[] yPath = path.getYPath();
+		entity.setPath(xPath, yPath);
+	}
+
+	private void dropItem() {
+		GridPosition gridPosition = entity.getGridPosition();
+		Container worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
+		booking.changeTo(worldContainer);
+		booking.transfer();
+		entity.setItem(null);
+	}
+
+	private boolean isEntityAtWorkstationDoor() {
+		GridPosition doorGridPosition = workstation.getDoorGridPosition();
+		GridPosition gridPosition = entity.getGridPosition();
+		return gridPosition.equals(doorGridPosition);
+	}
+
+	public void unsetWorkstation() {
+		workstation = null;
+	}
+
+	public void setWorkstation(Entity workstation) {
+		this.workstation = workstation;
+	}
+
+	public WorkstationJob getWorkstationJob() {
+		if (hasWorkstation()) {
+			EntityJob workstationEntityJob = workstation.getJob();
+			if (workstationEntityJob instanceof WorkstationJob) {
+				WorkstationJob workstationJob = (WorkstationJob) workstationEntityJob;
+				return workstationJob;
+			} else {
+				throw new InvalidGameStateException("Workstation without workstation job");
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public boolean hasWorkstation() {
+		return workstation != null;
+	}
+
+	public boolean hasBooking() {
+		return booking != null;
+	}
+
+	public void unsetBooking() {
+		booking = null;
+	}
+
 }

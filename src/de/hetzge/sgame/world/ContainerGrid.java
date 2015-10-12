@@ -3,7 +3,6 @@ package de.hetzge.sgame.world;
 import java.io.Serializable;
 
 import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.misc.Constant;
 
 public class ContainerGrid implements IF_Grid, Serializable {
 
@@ -26,7 +25,7 @@ public class ContainerGrid implements IF_Grid, Serializable {
 	public Container get(short x, short y) {
 		Container container = containers[index(x, y)];
 		if (container == null) {
-			containers[index(x, y)] = new Container(Constant.NO_ENTITY_ID);
+			containers[index(x, y)] = new Container(null);
 			container = get(x, y);
 		}
 		return container;

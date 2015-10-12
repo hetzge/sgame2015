@@ -10,8 +10,12 @@ import de.hetzge.sgame.world.World;
 
 public class DummyJob extends EntityJob {
 
+	public DummyJob(Entity entity) {
+		super(entity);
+	}
+
 	@Override
-	protected void work(Entity entity) {
+	protected void work() {
 		World world = App.game.getWorld();
 
 		boolean hasPath = entity.hasPath();

@@ -197,6 +197,18 @@ public class EntityFunction {
 		}
 	}
 
+	public Entity findEntity(Entity entity, SearchPredicate searchPredicate) {
+		World world = App.game.getWorld();
+		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
+		return findEntity(entity, fixedCollisionGrid::is, searchPredicate);
+	}
+
+	public Entity findEntity(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
+		EntitySearchPredicate entitySearchPredicate = new EntitySearchPredicate(searchPredicate);
+		findPath(entity, collisionPredicate, entitySearchPredicate);
+		return entitySearchPredicate.getEntity();
+	}
+
 	private RatingMap rateSearch(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
 		EntityGrid entityGrid = App.game.getEntityGrid();
 
@@ -304,6 +316,31 @@ public class EntityFunction {
 	}
 
 	public static interface SearchPredicate extends Predicate<Entity> {
+
+	}
+
+	public static class EntitySearchPredicate implements SearchPredicate {
+
+		private Entity entity;
+		private final SearchPredicate searchPredicate;
+
+		public EntitySearchPredicate(SearchPredicate searchPredicate) {
+			this.searchPredicate = searchPredicate;
+		}
+
+		@Override
+		public boolean test(Entity entityToTest) {
+			if (searchPredicate.test(entityToTest)) {
+				entity = entityToTest;
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public Entity getEntity() {
+			return entity;
+		}
 
 	}
 

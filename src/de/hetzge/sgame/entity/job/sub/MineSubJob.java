@@ -2,12 +2,12 @@ package de.hetzge.sgame.entity.job.sub;
 
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.entity.job.Job;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 
-public class MineSubJob extends EntityJob {
+public class MineSubJob extends Job {
 
 	private final MineProviderJob mineProviderJob;
 	private final E_Item item;
