@@ -1,8 +1,10 @@
 package de.hetzge.sgame.render;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -37,12 +39,13 @@ public class WorldRenderer implements IF_Renderer {
 		minY = MathUtils.clamp(minY, (short) 0, (short) (height - 1));
 		maxY = MathUtils.clamp(maxY, (short) 1, height);
 
+		Set<Entity> duplicates = new HashSet<>();
 		List<Entity> entitiesToRender = new LinkedList<>();
 		for (short x = minX; x < maxX; x++) {
 			for (short y = minY; y < maxY; y++) {
 				renderTile(world, x, y);
 				Entity entity = App.game.getEntityGrid().get(x, y);
-				if (entity != null) {
+				if (entity != null && duplicates.add(entity)) {
 					entitiesToRender.add(entity);
 				}
 			}

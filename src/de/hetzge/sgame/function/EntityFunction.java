@@ -188,7 +188,13 @@ public class EntityFunction {
 	public Path findPath(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
 		GridPosition start = entity.getGridPosition();
 		RatingMap ratings = rateSearch(entity, collisionPredicate, searchPredicate);
-		return ratings != null ? evaluatePath(ratings.goal, start, ratings) : null;
+		Path path = ratings != null ? evaluatePath(ratings.goal, start, ratings) : null;
+		if (path != null) {
+			path.removeFirst();
+			return path.reverse();
+		} else {
+			return null;
+		}
 	}
 
 	private RatingMap rateSearch(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
@@ -290,14 +296,14 @@ public class EntityFunction {
 		return path;
 	}
 
-	private static class RatingMap extends HashMap<GridPosition, Short> {
+	public static class RatingMap extends HashMap<GridPosition, Short> {
 		private GridPosition goal;
 	}
 
-	private static interface CollisionPredicate extends Predicate<GridPosition> {
+	public static interface CollisionPredicate extends Predicate<GridPosition> {
 	}
 
-	private static interface SearchPredicate extends Predicate<Entity> {
+	public static interface SearchPredicate extends Predicate<Entity> {
 
 	}
 

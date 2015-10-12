@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 
 public class EntityRenderer implements IF_Renderer {
@@ -24,9 +25,20 @@ public class EntityRenderer implements IF_Renderer {
 		int offsetY = (entityHeight - regionHeight) / 2;
 		getSpriteBatch().draw(keyFrame, renderX + offsetX, -renderY - offsetY);
 
+		renderItem(entity);
 		renderId(entity);
 		renderPath(entity);
 		renderRegistration(entity);
+	}
+
+	public void renderItem(Entity entity) {
+		E_Item item = entity.getItem();
+		if (item != null) {
+			float renderX = entity.getRenderX();
+			float renderY = entity.getRenderY();
+			TextureRegion itemTextureRegion = App.ressources.getItemTextureRegion(item);
+			getSpriteBatch().draw(itemTextureRegion, renderX, -renderY);
+		}
 	}
 
 	public void renderId(Entity entity) {

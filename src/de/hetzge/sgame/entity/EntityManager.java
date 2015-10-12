@@ -25,7 +25,6 @@ public class EntityManager {
 		if (entitiesById.containsKey(entityId)) {
 			throw new InvalidGameStateException("Try to register entity with already registered id.");
 		}
-		System.out.println(entity.getId());
 		entitiesById.put(entity.getId(), entity);
 		entities.add(entity);
 	}

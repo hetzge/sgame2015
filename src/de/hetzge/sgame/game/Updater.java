@@ -30,6 +30,9 @@ public class Updater {
 			case WORKING:
 				updateEntityWorking(entity);
 				break;
+			case CARRY:
+				updateEntityWalking(entity);
+				break;
 			default:
 				break;
 			}

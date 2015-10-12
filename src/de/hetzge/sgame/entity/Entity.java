@@ -81,7 +81,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	}
 
 	public float getRenderY() {
-		return getWorldY() - getWidth() * Constant.TILE_SIZE;
+		return getWorldY() - getHeight() * Constant.TILE_SIZE;
 	}
 
 	public float getWorldX() {
@@ -198,7 +198,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	}
 
 	public E_Item getItem() {
-		return E_Item.values[item];
+		return hasItem() ? E_Item.values[item] : null;
 	}
 
 	public void setItem(E_Item item) {
@@ -334,10 +334,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
+		return id;
 	}
 
 	@Override

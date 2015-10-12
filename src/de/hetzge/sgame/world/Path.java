@@ -20,6 +20,18 @@ public class Path {
 		return gridPositions.size();
 	}
 
+	public void removeFirst() {
+		if (!gridPositions.isEmpty()) {
+			gridPositions.remove(0);
+		}
+	}
+
+	public void removeLast() {
+		if (!gridPositions.isEmpty()) {
+			gridPositions.remove(gridPositions.size() - 1);
+		}
+	}
+
 	public short[] getXPath() {
 		short[] xPath = new short[pathSize()];
 		int i = 0;
@@ -36,6 +48,16 @@ public class Path {
 			yPath[i++] = gridPosition.getGridY();
 		}
 		return yPath;
+	}
+
+	public Path reverse() {
+		Path newPath = new Path();
+		ListIterator<GridPosition> listIterator = listIterator(pathSize());
+		while (listIterator.hasPrevious()) {
+			GridPosition previous = listIterator.previous();
+			newPath.add(previous);
+		}
+		return newPath;
 	}
 
 	@Override

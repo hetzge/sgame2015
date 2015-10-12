@@ -11,7 +11,9 @@ public final class Constant {
 	public static final short HALF_TILE_SIZE = TILE_SIZE / 2;
 	public static final List<String> IMAGE_FILE_ENDINGS = Arrays.asList("png", "jpg");
 	public static final int DEFAULT_MAX_ITEMS = 8;
-	public static final short MINE_VALUE = 10000;
+	public static final short MINE_VALUE = 100;
+	public static final int ICON_WIDTH = 12;
+	public static final int ICON_HEIGHT = 12;
 
 	private Constant() {
 	}

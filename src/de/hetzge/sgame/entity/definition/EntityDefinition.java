@@ -10,6 +10,7 @@ import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.entity.job.main.MinerJob;
 import de.hetzge.sgame.entity.job.main.NoJob;
+import de.hetzge.sgame.entity.job.main.WorkstationJob;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
@@ -89,24 +90,26 @@ public abstract class EntityDefinition {
 
 	public static class Miner extends EntityDefinition {
 		public Miner() {
-			jobSupplier = (entity) -> new MinerJob();
+			moveable = true;
+			jobSupplier = entity -> new MinerJob();
 		}
 	}
 
 	public static class Provider extends EntityDefinition {
 		public Provider() {
 			Map<E_Item, Integer> provides = new HashMap<>();
-			provides.put(E_Item.WOOD, 200);
+			provides.put(E_Item.WOOD, 2);
 			mineProvides = provides;
-			jobSupplier = (entity) -> new MineProviderJob(entity);
+			jobSupplier = entity -> new MineProviderJob(entity);
 		}
 	}
 
 	public static class Workstation extends EntityDefinition {
 		public Workstation() {
 			Map<E_Item, Integer> needs = new HashMap<>();
-			needs.put(E_Item.WOOD, 10);
+			needs.put(E_Item.WOOD, 3);
 			this.needs = needs;
+			jobSupplier = entity -> new WorkstationJob(entity);
 		}
 	}
 
@@ -136,7 +139,7 @@ public abstract class EntityDefinition {
 
 	public Container createDefaultNeedContainer(int entityId) {
 		Container container = new Container(entityId);
-		for (Entry<E_Item, Integer> entry : provides.entrySet()) {
+		for (Entry<E_Item, Integer> entry : needs.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
 			container.set(item, 0, value);

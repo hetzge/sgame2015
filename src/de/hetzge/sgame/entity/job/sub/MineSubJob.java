@@ -1,5 +1,6 @@
 package de.hetzge.sgame.entity.job.sub;
 
+import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
@@ -23,6 +24,7 @@ public class MineSubJob extends EntityJob {
 		mineCounter += mineSpeed;
 		if (mineCounter > Constant.MINE_VALUE) {
 			entity.setItem(item);
+			entity.setActivity(E_Activity.CARRY);
 			entity.popJob();
 		}
 	}

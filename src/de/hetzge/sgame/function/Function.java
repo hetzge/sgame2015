@@ -42,9 +42,10 @@ public class Function {
 		// }
 		// }
 
-		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 20, (short) 20, (short) 2, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.PROVIDER, (short) 10, (short) 10, (short) 1, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.MINER, (short) 0, (short) 0, 0, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.PROVIDER, (short) 5, (short) 5, (short) 1, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 10, (short) 2, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 2, (short) 3, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 1, 0, (byte) 0);
 		// for (int i = 0; i < 100; i++) {
 		// App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
 		// }
