@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.hetzge.sgame.entity.Entity;
 
@@ -149,6 +150,10 @@ public class Container implements Serializable {
 			return 0;
 		}
 		return value.amount;
+	}
+
+	public synchronized Set<E_Item> getItems() {
+		return items.keySet();
 	}
 
 	public synchronized void set(E_Item item, int amount, int max) {

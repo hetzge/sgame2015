@@ -13,7 +13,9 @@ import com.badlogic.gdx.math.MathUtils;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.misc.Constant;
+import de.hetzge.sgame.world.ContainerGrid;
 import de.hetzge.sgame.world.World;
 
 public class WorldRenderer implements IF_Renderer {
@@ -55,6 +57,16 @@ public class WorldRenderer implements IF_Renderer {
 			for (short x = minX; x < maxX; x++) {
 				for (short y = minY; y < maxY; y++) {
 					renderCollision(world, x, y);
+				}
+			}
+		}
+
+		ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
+		for (short x = minX; x < maxX; x++) {
+			for (short y = minY; y < maxY; y++) {
+				Container container = containerGrid.get(x, y);
+				if (container != null) {
+					App.itemRenderer.renderContainer(container, x, y);
 				}
 			}
 		}

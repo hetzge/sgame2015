@@ -12,7 +12,10 @@ import de.hetzge.sgame.game.LibGdxApplication;
 import de.hetzge.sgame.game.Updater;
 import de.hetzge.sgame.graphic.Ressources;
 import de.hetzge.sgame.network.Network;
+import de.hetzge.sgame.render.EntityRenderer;
+import de.hetzge.sgame.render.ItemRenderer;
 import de.hetzge.sgame.render.Renderer;
+import de.hetzge.sgame.render.WorldRenderer;
 import de.hetzge.sgame.setting.Settings;
 
 public final class App {
@@ -29,6 +32,10 @@ public final class App {
 	public static final RessourceFunction ressourceFunction = new RessourceFunction();
 	public static final EntityFunction entityFunction = new EntityFunction();
 	public static final WorldFunction worldFunction = new WorldFunction();
+
+	public static final WorldRenderer worldRenderer = new WorldRenderer();
+	public static final EntityRenderer entityRenderer = new EntityRenderer();
+	public static final ItemRenderer itemRenderer = new ItemRenderer();
 
 	public static final FSTConfiguration fstConfiguration = FSTConfiguration.getDefaultConfiguration();
 

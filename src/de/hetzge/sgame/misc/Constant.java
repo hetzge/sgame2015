@@ -12,8 +12,8 @@ public final class Constant {
 	public static final List<String> IMAGE_FILE_ENDINGS = Arrays.asList("png", "jpg");
 	public static final int DEFAULT_MAX_ITEMS = 8;
 	public static final short MINE_VALUE = 100;
-	public static final int ICON_WIDTH = 12;
-	public static final int ICON_HEIGHT = 12;
+	public static final int ITEM_WIDTH = 12;
+	public static final int ITEM_HEIGHT = 12;
 
 	private Constant() {
 	}

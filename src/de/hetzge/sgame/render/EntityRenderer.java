@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
+import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 
@@ -25,10 +28,36 @@ public class EntityRenderer implements IF_Renderer {
 		int offsetY = (entityHeight - regionHeight) / 2;
 		getSpriteBatch().draw(keyFrame, renderX + offsetX, -renderY - offsetY);
 
+		renderItems(entity);
 		renderItem(entity);
 		renderId(entity);
 		renderPath(entity);
 		renderRegistration(entity);
+	}
+
+	public void renderItems(Entity entity) {
+		EntityJob job = entity.getJob();
+		if (job instanceof IF_RenderItemsJob) {
+			IF_RenderItemsJob renderItemsJob = (IF_RenderItemsJob) job;
+			Container left = renderItemsJob.getRenderLeftContainer();
+			Container right = renderItemsJob.getRenderRightContainer();
+
+			short doorX = entity.getDoorX();
+			short doorY = entity.getDoorY();
+
+			float doorXLeft = doorX * Constant.TILE_SIZE;
+			float doorYLeft = doorY * Constant.TILE_SIZE - Constant.TILE_SIZE - Constant.HALF_TILE_SIZE;
+
+			float doorXRight = doorXLeft + Constant.TILE_SIZE;
+			float doorYRight = doorYLeft;
+
+			if (left != null) {
+				App.itemRenderer.renderContainer(left, doorXLeft, doorYLeft);
+			}
+			if (right != null) {
+				App.itemRenderer.renderContainer(left, doorXRight, doorYRight);
+			}
+		}
 	}
 
 	public void renderItem(Entity entity) {

@@ -2,9 +2,10 @@ package de.hetzge.sgame.entity.job.main;
 
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
 import de.hetzge.sgame.item.Container;
 
-public class WorkstationJob extends EntityJob {
+public class WorkstationJob extends EntityJob implements IF_RenderItemsJob {
 
 	private final Container container;
 	private Entity worker;
@@ -36,6 +37,16 @@ public class WorkstationJob extends EntityJob {
 
 	public boolean hasWorker() {
 		return worker != null;
+	}
+
+	@Override
+	public Container getRenderLeftContainer() {
+		return container;
+	}
+
+	@Override
+	public Container getRenderRightContainer() {
+		return null;
 	}
 
 }

@@ -12,16 +12,13 @@ public class Renderer {
 
 	private FPSLogger fpsLogger = new FPSLogger();
 
-	private final WorldRenderer worldRenderer = new WorldRenderer();
-	private final EntityRenderer entityRenderer = new EntityRenderer();
-
 	public void render() {
 		World world = App.game.getWorld();
 
-		worldRenderer.render(world);
-		List<Entity> visibleEntities = worldRenderer.getVisibleEntities();
+		App.worldRenderer.render(world);
+		List<Entity> visibleEntities = App.worldRenderer.getVisibleEntities();
 		for (Entity entity : visibleEntities) {
-			entityRenderer.render(entity);
+			App.entityRenderer.render(entity);
 		}
 
 		fpsLogger.log();

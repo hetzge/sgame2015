@@ -44,10 +44,10 @@ public class RessourceFunction {
 		Texture texture = new Texture(Gdx.files.internal("asset/icons/icons.png"));
 		TextureRegion[] items = new TextureRegion[E_Item.values.length];
 
-		items[E_Item.BREAD.ordinal()] = new TextureRegion(texture, 1 * Constant.ICON_WIDTH, 1 * Constant.ICON_HEIGHT, Constant.ICON_WIDTH, Constant.ICON_HEIGHT);
-		items[E_Item.FISCH.ordinal()] = new TextureRegion(texture, 2 * Constant.ICON_WIDTH, 2 * Constant.ICON_HEIGHT, Constant.ICON_WIDTH, Constant.ICON_HEIGHT);
-		items[E_Item.STONE.ordinal()] = new TextureRegion(texture, 3 * Constant.ICON_WIDTH, 3 * Constant.ICON_HEIGHT, Constant.ICON_WIDTH, Constant.ICON_HEIGHT);
-		items[E_Item.WOOD.ordinal()] = new TextureRegion(texture, 4 * Constant.ICON_WIDTH, 4 * Constant.ICON_HEIGHT, Constant.ICON_WIDTH, Constant.ICON_HEIGHT);
+		items[E_Item.BREAD.ordinal()] = new TextureRegion(texture, 1 * Constant.ITEM_WIDTH, 1 * Constant.ITEM_HEIGHT, Constant.ITEM_WIDTH, Constant.ITEM_HEIGHT);
+		items[E_Item.FISCH.ordinal()] = new TextureRegion(texture, 2 * Constant.ITEM_WIDTH, 2 * Constant.ITEM_HEIGHT, Constant.ITEM_WIDTH, Constant.ITEM_HEIGHT);
+		items[E_Item.STONE.ordinal()] = new TextureRegion(texture, 3 * Constant.ITEM_WIDTH, 3 * Constant.ITEM_HEIGHT, Constant.ITEM_WIDTH, Constant.ITEM_HEIGHT);
+		items[E_Item.WOOD.ordinal()] = new TextureRegion(texture, 4 * Constant.ITEM_WIDTH, 4 * Constant.ITEM_HEIGHT, Constant.ITEM_WIDTH, Constant.ITEM_HEIGHT);
 
 		return items;
 	}

@@ -98,7 +98,7 @@ public abstract class EntityDefinition {
 	public static class Provider extends EntityDefinition {
 		public Provider() {
 			Map<E_Item, Integer> provides = new HashMap<>();
-			provides.put(E_Item.WOOD, 2);
+			provides.put(E_Item.WOOD, 10);
 			mineProvides = provides;
 			jobSupplier = entity -> new MineProviderJob(entity);
 		}

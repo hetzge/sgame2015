@@ -11,6 +11,7 @@ import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.frame.IF_FrameEvent;
 import de.hetzge.sgame.game.Players;
 import de.hetzge.sgame.game.event.EventPlayerHandshake;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.network.IF_ConnectionEvent;
 import de.hetzge.sgame.network.IF_Event;
 import de.hetzge.sgame.setting.GameSettings;
@@ -44,11 +45,17 @@ public class Function {
 
 		App.entityFunction.createEntity(E_EntityType.PROVIDER, (short) 5, (short) 5, (short) 1, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 10, (short) 2, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 30, (short) 4, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 2, (short) 3, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 1, 0, (byte) 0);
 		// for (int i = 0; i < 100; i++) {
 		// App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
 		// }
+
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.WOOD, 4);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.STONE, 4);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.FISCH, 4);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.BREAD, 2);
 
 	}
 
