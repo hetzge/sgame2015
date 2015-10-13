@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.world.IF_GridEntity;
 
 public class Container implements Serializable {
 
@@ -16,7 +18,7 @@ public class Container implements Serializable {
 		private int amount;
 	}
 
-	private final Entity entity;
+	private final IF_GridEntity entity;
 
 	private final Map<E_Item, Value> items = new HashMap<>();
 	private final List<Booking> bookings = new LinkedList<>();
@@ -25,7 +27,7 @@ public class Container implements Serializable {
 		this.entity = entity;
 	}
 
-	public synchronized boolean transfer(Booking booking) {
+	public synchronized void transfer(Booking booking) {
 		if (booking.from != this) {
 			throw new IllegalArgumentException("You can only transfer bookings from self container.");
 		}
@@ -37,8 +39,9 @@ public class Container implements Serializable {
 			if (transferSuccessful) {
 				this.bookings.remove(booking);
 				booking.to.bookings.remove(booking);
+			} else {
+				throw new IllegalStateException("Transfer booking failed.");
 			}
-			return transferSuccessful;
 		}
 	}
 
@@ -202,8 +205,20 @@ public class Container implements Serializable {
 		this.bookings.clear();
 	}
 
-	public Entity getEntity() {
+	/*
+	 * TODO bisschen unsauber hier
+	 */
+
+	public IF_GridEntity getObject() {
 		return this.entity;
+	}
+
+	public Entity getEntity() {
+		if (this.entity instanceof Entity) {
+			return (Entity) this.entity;
+		} else {
+			throw new InvalidGameStateException();
+		}
 	}
 
 }

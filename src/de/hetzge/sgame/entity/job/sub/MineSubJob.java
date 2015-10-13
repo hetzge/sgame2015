@@ -1,30 +1,25 @@
 package de.hetzge.sgame.entity.job.sub;
 
-import de.hetzge.sgame.entity.E_Activity;
+import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.Job;
-import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 
 public class MineSubJob extends Job {
 
-	private final MineProviderJob mineProviderJob;
 	private final E_Item item;
-	private short mineCounter;
+	private final int finishMineFrameId;
 
-	public MineSubJob(MineProviderJob mineProviderJob, E_Item item) {
-		this.mineProviderJob = mineProviderJob;
+	public MineSubJob(E_Item item) {
 		this.item = item;
+		this.finishMineFrameId = App.timing.getNextFrameId(Constant.DEFAULT_MINE_TIME_IN_FRAMES);
 	}
 
 	@Override
 	protected void work(Entity entity) {
-		short mineSpeed = entity.getDefinition().getMineSpeed();
-		mineCounter += mineSpeed;
-		if (mineCounter > Constant.MINE_VALUE) {
-			entity.setItem(item);
-			entity.setActivity(E_Activity.CARRY);
+		if (App.timing.isCurrentOrPast(this.finishMineFrameId)) {
+			App.entityFunction.takeItem(entity, this.item);
 			entity.popJob();
 		}
 	}

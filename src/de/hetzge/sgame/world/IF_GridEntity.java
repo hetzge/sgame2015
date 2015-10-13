@@ -12,6 +12,14 @@ public interface IF_GridEntity {
 
 	short getHeight();
 
+	public default GridPosition getDoorGridPosition() {
+		return getRegisteredGridPosition();
+	}
+
+	public default GridPosition getRegisteredGridPosition() {
+		return new GridPosition(getRegisteredX(), getRegisteredY());
+	}
+
 	public default int getGridOffsetX() {
 		short width = getWidth();
 		return Util.offset(width);

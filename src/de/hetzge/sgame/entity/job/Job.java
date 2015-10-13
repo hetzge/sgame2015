@@ -50,6 +50,18 @@ public abstract class Job implements Serializable {
 		}
 	}
 
+	public void pauseSmall() {
+		pause(10);
+	}
+
+	public void pauseMedium() {
+		pause(50);
+	}
+
+	public void pauseLong() {
+		pause(100);
+	}
+
 	public void pause(int frames) {
 		this.pauseTillFrame = App.timing.getNextFrameId(frames);
 	}

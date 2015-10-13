@@ -13,23 +13,23 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	private final short height;
 
 	public CollisionGrid(short width, short height) {
-		collision = new BitSet(width * height);
+		this.collision = new BitSet(width * height);
 		this.width = width;
 		this.height = height;
 	}
 
 	@Override
 	public short getWidth() {
-		return width;
+		return this.width;
 	}
 
 	@Override
 	public short getHeight() {
-		return height;
+		return this.height;
 	}
 
 	public void set(short x, short y) {
-		collision.set(index(x, y));
+		this.collision.set(index(x, y));
 	}
 
 	public void set(GridPosition gridPosition) {
@@ -37,7 +37,7 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	}
 
 	public void unset(short x, short y) {
-		collision.clear(index(x, y));
+		this.collision.clear(index(x, y));
 	}
 
 	public void unset(GridPosition gridPosition) {
@@ -45,7 +45,7 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	}
 
 	public boolean is(short x, short y) {
-		return collision.get(index(x, y));
+		return this.collision.get(index(x, y));
 	}
 
 	public boolean is(GridPosition gridPosition) {
@@ -78,8 +78,12 @@ public class CollisionGrid implements IF_Grid, Serializable {
 		eachEntityGridPosition(new GridEntity(x, y, width, height), this::set);
 	}
 
+	public void unsetCollision(IF_GridEntity gridEntity) {
+		eachEntityGridPosition(gridEntity, this::unset);
+	}
+
 	public void unsetCollision(short x, short y, short width, short height) {
-		eachEntityGridPosition(new GridEntity(x, y, width, height), this::unset);
+		unsetCollision(new GridEntity(x, y, width, height));
 	}
 
 }

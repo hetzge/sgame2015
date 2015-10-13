@@ -34,6 +34,7 @@ public class MinerJob extends EntityJob {
 				// bring home
 				if (this.entity.hasPath()) {
 					// walk
+					pauseMedium();
 				} else {
 					// check if is at workstation
 					if (isEntityAtWorkstationDoor()) {
@@ -63,6 +64,7 @@ public class MinerJob extends EntityJob {
 				} else {
 					if (this.entity.hasPath()) {
 						// walk
+						pauseMedium();
 					} else {
 						Entity mineEntity = this.booking.getFrom().getEntity();
 						if (mineEntity != null) {
@@ -129,9 +131,8 @@ public class MinerJob extends EntityJob {
 	private void startWorking(Entity mineEntity) {
 		EntityJob mineEntityJob = mineEntity.getJob();
 		if (mineEntityJob instanceof MineProviderJob) {
-			MineProviderJob mineProviderJob = (MineProviderJob) mineEntityJob;
 			E_Item item = this.booking.getItem();
-			addChild(new MineSubJob(mineProviderJob, item));
+			addChild(new MineSubJob(item));
 		} else {
 			throw new InvalidGameStateException();
 		}
@@ -144,20 +145,7 @@ public class MinerJob extends EntityJob {
 	}
 
 	private void dropItem() {
-		if (this.booking != null) {
-			if (this.entity.hasItem()) {
-				GridPosition gridPosition = this.entity.getGridPosition();
-				Container worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
-				this.booking.changeTo(worldContainer);
-				boolean successful = this.booking.transfer();
-				if (!successful) {
-					throw new InvalidGameStateException();
-				}
-				this.entity.setItem(null);
-			} else {
-				this.booking.rollback();
-			}
-		}
+		App.entityFunction.dropItem(this.entity, this.booking);
 	}
 
 	private boolean isEntityAtWorkstationDoor() {

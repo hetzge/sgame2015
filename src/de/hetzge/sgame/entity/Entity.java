@@ -166,6 +166,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		return (short) (getGridY() + doorOffsetY);
 	}
 
+	@Override
 	public GridPosition getDoorGridPosition() {
 		return new GridPosition(getDoorX(), getDoorY());
 	}

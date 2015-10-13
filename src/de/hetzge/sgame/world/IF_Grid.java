@@ -30,7 +30,7 @@ public interface IF_Grid {
 		return x >= 0 && x < getWidth() && y >= 0 && y < getHeight();
 	}
 
-	public default <T extends IF_GridEntity> void eachEntityGridPosition(T gridEntity, Consumer<GridPosition> consumer) {
+	public default void eachEntityGridPosition(IF_GridEntity gridEntity, Consumer<GridPosition> consumer) {
 		eachEntityGridPosition(gridEntity, gridEntity.getRegisteredX(), gridEntity.getRegisteredY(), consumer);
 	}
 

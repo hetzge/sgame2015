@@ -64,7 +64,7 @@ public class RessourceFunction {
 		TextureRegion[][] textureRegions = TextureRegion.split(testTexture, 16, 16);
 
 		Animation idleWestAnimation = new Animation(1, new TextureRegion[] { textureRegions[1][0] });
-		Animation ideSouthAnimation = new Animation(1, new TextureRegion[] { textureRegions[1][1] });
+		Animation idleSouthAnimation = new Animation(1, new TextureRegion[] { textureRegions[1][1] });
 		Animation idleNorthAnimation = new Animation(1, new TextureRegion[] { textureRegions[1][2] });
 		TextureRegion idleWestTextureRegion = new TextureRegion(textureRegions[1][0]);
 		idleWestTextureRegion.flip(true, false);
@@ -73,20 +73,38 @@ public class RessourceFunction {
 		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.PROVIDER).hashGraphicKey(), test1Animation);
 		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.WORKSTATION).hashGraphicKey(), test1Animation);
 
-		result.put(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, E_EntityType.MINER).hashGraphicKey(), idleEastAnimation);
-		result.put(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, E_EntityType.MINER).hashGraphicKey(), idleNorthAnimation);
-		result.put(new GraphicKey(E_Orientation.WEST, E_Activity.IDLE, E_EntityType.MINER).hashGraphicKey(), idleWestAnimation);
-		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.MINER).hashGraphicKey(), ideSouthAnimation);
+		// MINER
 
-		loadLine(result, textureRegions, 2, E_Activity.WALKING);
-		loadLine(result, textureRegions, 3, E_Activity.CARRY);
-		loadLine(result, textureRegions, 7, E_Activity.WORKING);
-		loadLine(result, textureRegions, 13, E_Activity.DESTROY);
+		E_EntityType entityType = E_EntityType.MINER;
+
+		result.put(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, entityType).hashGraphicKey(), idleEastAnimation);
+		result.put(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleNorthAnimation);
+		result.put(new GraphicKey(E_Orientation.WEST, E_Activity.IDLE, entityType).hashGraphicKey(), idleWestAnimation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleSouthAnimation);
+
+		loadLine(result, textureRegions, 2, E_Activity.WALKING, entityType);
+		loadLine(result, textureRegions, 3, E_Activity.CARRY, entityType);
+		loadLine(result, textureRegions, 7, E_Activity.WORKING, entityType);
+		loadLine(result, textureRegions, 13, E_Activity.DESTROY, entityType);
+
+		// CARRIER
+
+		entityType = E_EntityType.CARRIER;
+
+		result.put(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, entityType).hashGraphicKey(), idleEastAnimation);
+		result.put(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleNorthAnimation);
+		result.put(new GraphicKey(E_Orientation.WEST, E_Activity.IDLE, entityType).hashGraphicKey(), idleWestAnimation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleSouthAnimation);
+
+		loadLine(result, textureRegions, 2, E_Activity.WALKING, entityType);
+		loadLine(result, textureRegions, 3, E_Activity.CARRY, entityType);
+		loadLine(result, textureRegions, 7, E_Activity.WORKING, entityType);
+		loadLine(result, textureRegions, 13, E_Activity.DESTROY, entityType);
 
 		return result;
 	}
 
-	private void loadLine(IntMap<Animation> result, TextureRegion[][] textureRegions, int line, E_Activity activity) {
+	private void loadLine(IntMap<Animation> result, TextureRegion[][] textureRegions, int line, E_Activity activity, E_EntityType entityType) {
 		final float FRAME_TIME = 0.5f;
 
 		Animation walkEastAnimation = new Animation(FRAME_TIME, new TextureRegion[] { textureRegions[line][0], textureRegions[line][1] });
@@ -94,10 +112,10 @@ public class RessourceFunction {
 		Animation walkWestAnimation = new Animation(FRAME_TIME, new TextureRegion[] { textureRegions[line][4], textureRegions[line][5] });
 		Animation walkSouthAnimation = new Animation(FRAME_TIME, new TextureRegion[] { textureRegions[line][6], textureRegions[line][7] });
 
-		result.put(new GraphicKey(E_Orientation.EAST, activity, E_EntityType.MINER).hashGraphicKey(), walkEastAnimation);
-		result.put(new GraphicKey(E_Orientation.NORTH, activity, E_EntityType.MINER).hashGraphicKey(), walkNorthAnimation);
-		result.put(new GraphicKey(E_Orientation.WEST, activity, E_EntityType.MINER).hashGraphicKey(), walkWestAnimation);
-		result.put(new GraphicKey(E_Orientation.SOUTH, activity, E_EntityType.MINER).hashGraphicKey(), walkSouthAnimation);
+		result.put(new GraphicKey(E_Orientation.EAST, activity, entityType).hashGraphicKey(), walkEastAnimation);
+		result.put(new GraphicKey(E_Orientation.NORTH, activity, entityType).hashGraphicKey(), walkNorthAnimation);
+		result.put(new GraphicKey(E_Orientation.WEST, activity, entityType).hashGraphicKey(), walkWestAnimation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, activity, entityType).hashGraphicKey(), walkSouthAnimation);
 	}
 
 }

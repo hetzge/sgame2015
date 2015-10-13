@@ -45,8 +45,8 @@ public class Booking {
 		this.to.removeBooking(this);
 	}
 
-	public boolean transfer() {
-		return this.from.transfer(this);
+	public void transfer() {
+		this.from.transfer(this);
 	}
 
 	@Override

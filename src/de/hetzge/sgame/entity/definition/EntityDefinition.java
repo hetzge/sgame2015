@@ -1,17 +1,21 @@
 package de.hetzge.sgame.entity.definition;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.entity.job.main.CarrierJob;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.entity.job.main.MinerJob;
 import de.hetzge.sgame.entity.job.main.WorkstationJob;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.item.Receipt;
 import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
@@ -31,6 +35,7 @@ public abstract class EntityDefinition {
 	protected Map<E_Item, Integer> provides = new HashMap<>();
 	protected Map<E_Item, Integer> needs = new HashMap<>();
 	protected Function<Entity, EntityJob> jobSupplier = (entity) -> Constant.NO_JOB;
+	protected List<Receipt> receipts = Collections.emptyList();
 
 	public boolean isMoveable() {
 		return this.moveable;
@@ -72,6 +77,10 @@ public abstract class EntityDefinition {
 		return this.destroyTimeInFrames;
 	}
 
+	public List<Receipt> getReceipts() {
+		return this.receipts;
+	}
+
 	public boolean doProvide(E_Item item) {
 		return this.provides.containsKey(item);
 	}
@@ -82,37 +91,6 @@ public abstract class EntityDefinition {
 
 	public EntityJob createJob(Entity entity) {
 		return this.jobSupplier.apply(entity);
-	}
-
-	public static class Dummy extends EntityDefinition {
-		public Dummy() {
-			this.moveable = true;
-		}
-	}
-
-	public static class Miner extends EntityDefinition {
-		public Miner() {
-			this.moveable = true;
-			this.jobSupplier = entity -> new MinerJob(entity);
-		}
-	}
-
-	public static class Provider extends EntityDefinition {
-		public Provider() {
-			Map<E_Item, Integer> provides = new HashMap<>();
-			provides.put(E_Item.WOOD, 10);
-			this.mineProvides = provides;
-			this.jobSupplier = entity -> new MineProviderJob(entity);
-		}
-	}
-
-	public static class Workstation extends EntityDefinition {
-		public Workstation() {
-			Map<E_Item, Integer> needs = new HashMap<>();
-			needs.put(E_Item.WOOD, 3);
-			this.needs = needs;
-			this.jobSupplier = entity -> new WorkstationJob(entity);
-		}
 	}
 
 	public Container createDefaultMineProvideContainer(Entity entity) {
@@ -147,6 +125,44 @@ public abstract class EntityDefinition {
 			container.set(item, 0, value);
 		}
 		return container;
+	}
+
+	public static class Dummy extends EntityDefinition {
+		public Dummy() {
+			this.moveable = true;
+		}
+	}
+
+	public static class Miner extends EntityDefinition {
+		public Miner() {
+			this.moveable = true;
+			this.jobSupplier = entity -> new MinerJob(entity);
+		}
+	}
+
+	public static class Provider extends EntityDefinition {
+		public Provider() {
+			Map<E_Item, Integer> provides = new HashMap<>();
+			provides.put(E_Item.WOOD, 10);
+			this.mineProvides = provides;
+			this.jobSupplier = entity -> new MineProviderJob(entity);
+		}
+	}
+
+	public static class Workstation extends EntityDefinition {
+		public Workstation() {
+			Map<E_Item, Integer> needs = new HashMap<>();
+			needs.put(E_Item.WOOD, 3);
+			this.needs = needs;
+			this.jobSupplier = entity -> new WorkstationJob(entity);
+		}
+	}
+
+	public static class Carrier extends EntityDefinition {
+		public Carrier() {
+			this.moveable = true;
+			this.jobSupplier = entity -> new CarrierJob(entity);
+		}
 	}
 
 }
