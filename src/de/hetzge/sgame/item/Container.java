@@ -35,7 +35,7 @@ public class Container implements Serializable {
 		synchronized (booking.to) {
 			boolean transferSuccessful = this.transfer(booking.item, booking.amount, booking.to, true);
 			if (transferSuccessful) {
-				bookings.remove(booking);
+				this.bookings.remove(booking);
 				booking.to.bookings.remove(booking);
 			}
 			return transferSuccessful;
@@ -54,14 +54,24 @@ public class Container implements Serializable {
 			if (!this.can(item) || !to.can(item) || !this.has(item) || (booking ? !this.hasBooking(item, amount, this, to) : !to.canAddAmount(item, amount)) || (booking ? !this.hasBooking(item, amount, this, to) : !this.hasAmountAvailable(item, amount))) {
 				return false;
 			}
-			Value value = items.get(item);
+			Value value = this.items.get(item);
 			value.amount -= amount;
 
 			Value toValue = to.items.get(item);
+			if (toValue == null) {
+				to.createUnlimitedDefaultValue(item);
+				toValue = to.items.get(item);
+			}
 			toValue.amount += amount;
 		}
 
 		return true;
+	}
+
+	private void createUnlimitedDefaultValue(E_Item item) {
+		Value newValue = new Value();
+		newValue.max = Integer.MAX_VALUE;
+		this.items.put(item, newValue);
 	}
 
 	private boolean hasBooking(E_Item item, int amount, Container from, Container to) {
@@ -69,7 +79,7 @@ public class Container implements Serializable {
 	}
 
 	private boolean hasBooking(Booking booking) {
-		return bookings.contains(booking);
+		return this.bookings.contains(booking);
 	}
 
 	public synchronized Booking book(E_Item item, int amount, Container to) {
@@ -93,11 +103,11 @@ public class Container implements Serializable {
 	}
 
 	protected synchronized void addBooking(Booking booking) {
-		bookings.add(booking);
+		this.bookings.add(booking);
 	}
 
 	protected synchronized void removeBooking(Booking booking) {
-		bookings.remove(booking);
+		this.bookings.remove(booking);
 	}
 
 	public synchronized boolean hasAmountAvailable(E_Item item, int amount) {
@@ -105,7 +115,7 @@ public class Container implements Serializable {
 	}
 
 	public synchronized boolean canAddAmount(E_Item item, int amount) {
-		Value value = items.get(item);
+		Value value = this.items.get(item);
 		return this.can(item) && this.amount(item) + this.bookedToAmount(item) + amount <= value.max;
 	}
 
@@ -114,7 +124,7 @@ public class Container implements Serializable {
 	 */
 	private int bookedFromAmount(E_Item item) {
 		int amount = 0;
-		for (Booking booking : bookings) {
+		for (Booking booking : this.bookings) {
 			if (booking.from == this && booking.item.equals(item)) {
 				amount += booking.amount;
 			}
@@ -128,7 +138,7 @@ public class Container implements Serializable {
 	 */
 	private int bookedToAmount(E_Item item) {
 		int amount = 0;
-		for (Booking booking : bookings) {
+		for (Booking booking : this.bookings) {
 			if (booking.to == this && booking.item.equals(item)) {
 				amount += booking.amount;
 			}
@@ -137,7 +147,7 @@ public class Container implements Serializable {
 	}
 
 	public synchronized boolean can(E_Item item) {
-		return items.get(item) != null;
+		return this.items.get(item) != null;
 	}
 
 	public synchronized boolean has(E_Item item) {
@@ -145,7 +155,7 @@ public class Container implements Serializable {
 	}
 
 	public synchronized int amount(E_Item item) {
-		Value value = items.get(item);
+		Value value = this.items.get(item);
 		if (value == null) {
 			return 0;
 		}
@@ -153,7 +163,7 @@ public class Container implements Serializable {
 	}
 
 	public synchronized Set<E_Item> getItems() {
-		return items.keySet();
+		return this.items.keySet();
 	}
 
 	public synchronized void set(E_Item item, int amount, int max) {
@@ -177,23 +187,23 @@ public class Container implements Serializable {
 	}
 
 	private Value getOrCreateValue(E_Item item) {
-		Value value = items.get(item);
+		Value value = this.items.get(item);
 		if (value == null) {
 			value = new Value();
-			items.put(item, value);
+			this.items.put(item, value);
 		}
 		return value;
 	}
 
 	public synchronized void unchain() {
-		for (Booking booking : bookings) {
+		for (Booking booking : this.bookings) {
 			booking.to.removeBooking(booking);
 		}
-		bookings.clear();
+		this.bookings.clear();
 	}
 
 	public Entity getEntity() {
-		return entity;
+		return this.entity;
 	}
 
 }

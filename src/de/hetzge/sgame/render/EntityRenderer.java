@@ -33,6 +33,7 @@ public class EntityRenderer implements IF_Renderer {
 		renderId(entity);
 		renderPath(entity);
 		renderRegistration(entity);
+		renderDoor(entity);
 	}
 
 	public void renderItems(Entity entity) {
@@ -99,6 +100,17 @@ public class EntityRenderer implements IF_Renderer {
 			float renderY = entity.getRenderY();
 			getShapeRenderer().setColor(Color.RED);
 			getShapeRenderer().line(renderX, -renderY, registeredX * Constant.TILE_SIZE, -registeredY * Constant.TILE_SIZE);
+		}
+	}
+
+	public void renderDoor(Entity entity) {
+		if (App.game.getLocalGameState().isShowDoors()) {
+			if (!entity.getDefinition().isMoveable()) {
+				short doorX = entity.getDoorX();
+				short doorY = entity.getDoorY();
+				getShapeRenderer().setColor(Color.GREEN);
+				getShapeRenderer().rect(doorX * Constant.TILE_SIZE, -doorY * Constant.TILE_SIZE, Constant.TILE_SIZE, Constant.TILE_SIZE);
+			}
 		}
 	}
 }

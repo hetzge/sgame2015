@@ -44,6 +44,9 @@ public class IngameInputProcessor implements InputProcessor {
 		case Keys.F5:
 			localGameState.toggleShowWorldOwner();
 			break;
+		case Keys.F6:
+			localGameState.toggleShowDoors();
+			break;
 		case Keys.DEL:
 			// TEMP
 			Entity entity = App.game.getEntityManager().get(0);

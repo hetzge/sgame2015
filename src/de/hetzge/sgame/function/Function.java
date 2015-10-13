@@ -47,7 +47,8 @@ public class Function {
 		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 10, (short) 2, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 30, (short) 4, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 2, (short) 3, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 1, 0, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 1, (short) 0, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.MINER, (short) 4, (short) 2, (short) 5, (byte) 0);
 		// for (int i = 0; i < 100; i++) {
 		// App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
 		// }

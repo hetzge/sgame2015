@@ -30,24 +30,24 @@ public class MinerJob extends EntityJob {
 	@Override
 	protected void work() {
 		if (hasWorkstation()) {
-			if (entity.hasItem()) {
+			if (this.entity.hasItem()) {
 				// bring home
-				if (entity.hasPath()) {
+				if (this.entity.hasPath()) {
 					// walk
 				} else {
 					// check if is at workstation
 					if (isEntityAtWorkstationDoor()) {
 						// make transfer complete
 						if (hasBooking()) {
-							entity.unsetItem();
-							booking.getFrom().transfer(booking);
+							this.entity.unsetItem();
+							this.booking.getFrom().transfer(this.booking);
 							unsetBooking();
 						} else {
 							throw new InvalidGameStateException("No transfer without booking.");
 						}
 					} else {
-						GridPosition doorGridPosition = workstation.getDoorGridPosition();
-						Path path = App.entityFunction.findPath(entity, doorGridPosition);
+						GridPosition doorGridPosition = this.workstation.getDoorGridPosition();
+						Path path = App.entityFunction.findPath(this.entity, doorGridPosition);
 						if (path != null) {
 							setPath(path);
 						} else {
@@ -61,16 +61,16 @@ public class MinerJob extends EntityJob {
 				if (!hasBooking()) {
 					findMineEntityAndBookAndGoto();
 				} else {
-					if (entity.hasPath()) {
+					if (this.entity.hasPath()) {
 						// walk
 					} else {
-						Entity mineEntity = booking.getFrom().getEntity();
+						Entity mineEntity = this.booking.getFrom().getEntity();
 						if (mineEntity != null) {
 							startWorking(mineEntity);
 						} else {
 							// remove invalid booking
-							booking.rollback();
-							booking = null;
+							this.booking.rollback();
+							this.booking = null;
 						}
 					}
 				}
@@ -87,14 +87,14 @@ public class MinerJob extends EntityJob {
 			if (job instanceof WorkstationJob) {
 				WorkstationJob workstationJob = (WorkstationJob) job;
 				if (!workstationJob.hasWorker()) {
-					workstationJob.setWorker(entity);
+					workstationJob.setWorker(this.entity);
 					setWorkstation(entityToTest);
 					return true;
 				}
 			}
 			return false;
 		};
-		App.entityFunction.findEntity(entity, searchPredicate);
+		App.entityFunction.findEntity(this.entity, searchPredicate);
 	}
 
 	private void findMineEntityAndBookAndGoto() {
@@ -102,7 +102,7 @@ public class MinerJob extends EntityJob {
 			EntityJob job = entityToTest.getJob();
 			if (job instanceof MineProviderJob) {
 				MineProviderJob mineProviderJob = (MineProviderJob) job;
-				for (E_Item item : items) {
+				for (E_Item item : this.items) {
 					Container from = mineProviderJob.getContainer();
 					boolean hasItem = from.has(item);
 					if (hasItem) {
@@ -119,10 +119,10 @@ public class MinerJob extends EntityJob {
 			return false;
 		};
 
-		Path path = App.entityFunction.findPath(entity, searchPredicate);
+		Path path = App.entityFunction.findPath(this.entity, searchPredicate);
 
 		if (path != null) {
-			entity.setPath(path);
+			this.entity.setPath(path);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class MinerJob extends EntityJob {
 		EntityJob mineEntityJob = mineEntity.getJob();
 		if (mineEntityJob instanceof MineProviderJob) {
 			MineProviderJob mineProviderJob = (MineProviderJob) mineEntityJob;
-			E_Item item = booking.getItem();
+			E_Item item = this.booking.getItem();
 			addChild(new MineSubJob(mineProviderJob, item));
 		} else {
 			throw new InvalidGameStateException();
@@ -140,25 +140,34 @@ public class MinerJob extends EntityJob {
 	private void setPath(Path path) {
 		short[] xPath = path.getXPath();
 		short[] yPath = path.getYPath();
-		entity.setPath(xPath, yPath);
+		this.entity.setPath(xPath, yPath);
 	}
 
 	private void dropItem() {
-		GridPosition gridPosition = entity.getGridPosition();
-		Container worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
-		booking.changeTo(worldContainer);
-		booking.transfer();
-		entity.setItem(null);
+		if (this.booking != null) {
+			if (this.entity.hasItem()) {
+				GridPosition gridPosition = this.entity.getGridPosition();
+				Container worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
+				this.booking.changeTo(worldContainer);
+				boolean successful = this.booking.transfer();
+				if (!successful) {
+					throw new InvalidGameStateException();
+				}
+				this.entity.setItem(null);
+			} else {
+				this.booking.rollback();
+			}
+		}
 	}
 
 	private boolean isEntityAtWorkstationDoor() {
-		GridPosition doorGridPosition = workstation.getDoorGridPosition();
-		GridPosition gridPosition = entity.getGridPosition();
+		GridPosition doorGridPosition = this.workstation.getDoorGridPosition();
+		GridPosition gridPosition = this.entity.getGridPosition();
 		return gridPosition.equals(doorGridPosition);
 	}
 
 	public void unsetWorkstation() {
-		workstation = null;
+		this.workstation = null;
 	}
 
 	public void setWorkstation(Entity workstation) {
@@ -167,7 +176,7 @@ public class MinerJob extends EntityJob {
 
 	public WorkstationJob getWorkstationJob() {
 		if (hasWorkstation()) {
-			EntityJob workstationEntityJob = workstation.getJob();
+			EntityJob workstationEntityJob = this.workstation.getJob();
 			if (workstationEntityJob instanceof WorkstationJob) {
 				WorkstationJob workstationJob = (WorkstationJob) workstationEntityJob;
 				return workstationJob;
@@ -180,15 +189,23 @@ public class MinerJob extends EntityJob {
 	}
 
 	public boolean hasWorkstation() {
-		return workstation != null;
+		return this.workstation != null;
 	}
 
 	public boolean hasBooking() {
-		return booking != null;
+		return this.booking != null;
 	}
 
 	public void unsetBooking() {
-		booking = null;
+		this.booking = null;
 	}
 
+	@Override
+	public void destroy() {
+		dropItem();
+		WorkstationJob workstationJob = getWorkstationJob();
+		if (workstationJob != null) {
+			workstationJob.unsetWorker();
+		}
+	}
 }

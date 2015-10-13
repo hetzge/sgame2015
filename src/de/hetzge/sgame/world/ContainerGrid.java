@@ -3,6 +3,7 @@ package de.hetzge.sgame.world;
 import java.io.Serializable;
 
 import de.hetzge.sgame.item.Container;
+import de.hetzge.sgame.item.ContainerWithoutLimit;
 
 public class ContainerGrid implements IF_Grid, Serializable {
 
@@ -15,7 +16,7 @@ public class ContainerGrid implements IF_Grid, Serializable {
 		this.width = width;
 		this.height = height;
 
-		containers = new Container[width * height];
+		this.containers = new Container[width * height];
 	}
 
 	public Container get(GridPosition gridPosition) {
@@ -23,9 +24,9 @@ public class ContainerGrid implements IF_Grid, Serializable {
 	}
 
 	public Container get(short x, short y) {
-		Container container = containers[index(x, y)];
+		Container container = this.containers[index(x, y)];
 		if (container == null) {
-			containers[index(x, y)] = new Container(null);
+			this.containers[index(x, y)] = new ContainerWithoutLimit(null);
 			container = get(x, y);
 		}
 		return container;
@@ -33,12 +34,12 @@ public class ContainerGrid implements IF_Grid, Serializable {
 
 	@Override
 	public short getWidth() {
-		return width;
+		return this.width;
 	}
 
 	@Override
 	public short getHeight() {
-		return height;
+		return this.height;
 	}
 
 }

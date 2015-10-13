@@ -1,6 +1,7 @@
 package de.hetzge.sgame.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -59,8 +60,14 @@ public class EntityManager {
 		return result;
 	}
 
-	public Iterable<Entity> getRemoveEntities() {
-		return this.removeEntities;
+	public Iterable<Entity> flushRemoveEntities() {
+		if (this.removeEntities.isEmpty()) {
+			return Collections.emptyList();
+		} else {
+			Iterable<Entity> result = new ArrayList<>(this.removeEntities);
+			this.removeEntities.clear();
+			return result;
+		}
 	}
 
 	public Iterable<Entity> getEntities() {

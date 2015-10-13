@@ -19,6 +19,7 @@ public class LocalGameState {
 	private boolean showRegistrations = false;
 	private boolean showIds = false;
 	private boolean showWorldOwner = false;
+	private boolean showDoors = false;
 
 	public boolean hasSelection() {
 		return !this.selection.isEmpty();
@@ -124,6 +125,18 @@ public class LocalGameState {
 
 	public void toggleShowWorldOwner() {
 		this.showWorldOwner = !this.showWorldOwner;
+	}
+
+	public boolean isShowDoors() {
+		return this.showDoors;
+	}
+
+	public void setShowDoors(boolean showDoors) {
+		this.showDoors = showDoors;
+	}
+
+	public void toggleShowDoors() {
+		this.showDoors = !this.showDoors;
 	}
 
 	public E_CommandMode getCommandMode() {

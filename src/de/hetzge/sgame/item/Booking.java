@@ -23,39 +23,40 @@ public class Booking {
 	}
 
 	public Container getFrom() {
-		return from;
+		return this.from;
 	}
 
 	public Container getTo() {
-		return to;
+		return this.to;
 	}
 
 	public void changeTo(Container container) {
-		to.removeBooking(this);
-		to = container;
+		this.to.removeBooking(this);
+		this.to = container;
+		container.addBooking(this);
 	}
 
 	public E_Item getItem() {
-		return item;
+		return this.item;
 	}
 
 	public void rollback() {
-		from.removeBooking(this);
-		to.removeBooking(this);
+		this.from.removeBooking(this);
+		this.to.removeBooking(this);
 	}
 
 	public boolean transfer() {
-		return from.transfer(this);
+		return this.from.transfer(this);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + amount;
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((item == null) ? 0 : item.hashCode());
-		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		result = prime * result + this.amount;
+		result = prime * result + ((this.from == null) ? 0 : this.from.hashCode());
+		result = prime * result + ((this.item == null) ? 0 : this.item.hashCode());
+		result = prime * result + ((this.to == null) ? 0 : this.to.hashCode());
 		return result;
 	}
 
@@ -71,28 +72,28 @@ public class Booking {
 			return false;
 		}
 		Booking other = (Booking) obj;
-		if (amount != other.amount) {
+		if (this.amount != other.amount) {
 			return false;
 		}
-		if (from == null) {
+		if (this.from == null) {
 			if (other.from != null) {
 				return false;
 			}
-		} else if (!from.equals(other.from)) {
+		} else if (!this.from.equals(other.from)) {
 			return false;
 		}
-		if (item == null) {
+		if (this.item == null) {
 			if (other.item != null) {
 				return false;
 			}
-		} else if (!item.equals(other.item)) {
+		} else if (!this.item.equals(other.item)) {
 			return false;
 		}
-		if (to == null) {
+		if (this.to == null) {
 			if (other.to != null) {
 				return false;
 			}
-		} else if (!to.equals(other.to)) {
+		} else if (!this.to.equals(other.to)) {
 			return false;
 		}
 		return true;

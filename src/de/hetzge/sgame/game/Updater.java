@@ -12,7 +12,7 @@ import de.hetzge.sgame.world.EntityGrid;
 
 public class Updater {
 
-	private static final int DO_JOB_EVERY_XTH_FRAMES = 10;
+	private static final int DO_JOB_EVERY_XTH_FRAMES = 1;
 
 	public void update() {
 		updateEntities();
@@ -20,7 +20,7 @@ public class Updater {
 
 	private void updateEntities() {
 		EntityManager entityManager = App.game.getEntityManager();
-		Iterable<Entity> removeEntities = entityManager.getRemoveEntities();
+		Iterable<Entity> removeEntities = entityManager.flushRemoveEntities();
 		for (Entity entity : removeEntities) {
 			App.entityFunction.removeEntity(entity);
 		}
