@@ -12,44 +12,50 @@ public class World implements IF_Grid, Serializable {
 	private final CollisionGrid fixedCollisionMap;
 	private final TileGrid tileGrid;
 	private final ContainerGrid containerGrid;
+	private final OwnerGrid ownerGrid;
 
 	public World(short width, short height) {
 		this.width = width;
 		this.height = height;
 
-		fixedCollisionMap = new CollisionGrid(width, height);
-		tileGrid = new TileGrid(width, height);
-		containerGrid = new ContainerGrid(width, height);
+		this.fixedCollisionMap = new CollisionGrid(width, height);
+		this.tileGrid = new TileGrid(width, height);
+		this.containerGrid = new ContainerGrid(width, height);
+		this.ownerGrid = new OwnerGrid(width, height);
 	}
 
 	@Override
 	public short getWidth() {
-		return width;
+		return this.width;
 	}
 
 	@Override
 	public short getHeight() {
-		return height;
+		return this.height;
 	}
 
 	public CollisionGrid getFixedCollisionGrid() {
-		return fixedCollisionMap;
+		return this.fixedCollisionMap;
 	}
 
 	public TileGrid getTileGrid() {
-		return tileGrid;
+		return this.tileGrid;
 	}
 
 	public ContainerGrid getContainerGrid() {
-		return containerGrid;
+		return this.containerGrid;
+	}
+
+	public OwnerGrid getOwnerGrid() {
+		return this.ownerGrid;
 	}
 
 	public int getPixelWidth() {
-		return width * Constant.TILE_SIZE;
+		return this.width * Constant.TILE_SIZE;
 	}
 
 	public int getPixelHeight() {
-		return height * Constant.TILE_SIZE;
+		return this.height * Constant.TILE_SIZE;
 	}
 
 }

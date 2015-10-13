@@ -10,9 +10,12 @@ import java.util.function.Predicate;
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
+import de.hetzge.sgame.entity.job.main.DestroyJob;
+import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.CollisionGrid;
 import de.hetzge.sgame.world.EntityGrid;
@@ -21,6 +24,19 @@ import de.hetzge.sgame.world.Path;
 import de.hetzge.sgame.world.World;
 
 public class EntityFunction {
+
+	public void destroyEntity(Entity entity) {
+		Logger.info("destroy entity " + entity.getId());
+		entity.setOwner(Constant.DEATH_PLAYER_ID);
+		entity.setActivity(E_Activity.DESTROY);
+		entity.setJob(new DestroyJob(entity));
+	}
+
+	public void removeEntity(Entity entity) {
+		Logger.info("remove entity " + entity.getId());
+		App.game.getEntityManager().remove(entity);
+		App.game.getEntityGrid().unset(entity);
+	}
 
 	public void createEntity(E_EntityType entityType, short x, short y, int entityId, byte playerId) {
 		EntityDefinition definition = entityType.getEntityDefinition();
@@ -330,8 +346,8 @@ public class EntityFunction {
 
 		@Override
 		public boolean test(Entity entityToTest) {
-			if (searchPredicate.test(entityToTest)) {
-				entity = entityToTest;
+			if (this.searchPredicate.test(entityToTest)) {
+				this.entity = entityToTest;
 				return true;
 			} else {
 				return false;
@@ -339,7 +355,7 @@ public class EntityFunction {
 		}
 
 		public Entity getEntity() {
-			return entity;
+			return this.entity;
 		}
 
 	}

@@ -9,15 +9,12 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.entity.job.main.MinerJob;
-import de.hetzge.sgame.entity.job.main.NoJob;
 import de.hetzge.sgame.entity.job.main.WorkstationJob;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
-
-	private static final EntityJob NO_JOB = new NoJob(null);
 
 	protected boolean moveable = false;
 	protected short width = 1;
@@ -29,69 +26,74 @@ public abstract class EntityDefinition {
 	protected short doorOffsetX = 0;
 	protected short doorOffsetY = 1;
 	protected int updateEveryFrames = 100; // TODO
+	protected int destroyTimeInFrames = 250;
 	protected Map<E_Item, Integer> mineProvides = new HashMap<>();
 	protected Map<E_Item, Integer> provides = new HashMap<>();
 	protected Map<E_Item, Integer> needs = new HashMap<>();
-	protected Function<Entity, EntityJob> jobSupplier = (entity) -> NO_JOB;
+	protected Function<Entity, EntityJob> jobSupplier = (entity) -> Constant.NO_JOB;
 
 	public boolean isMoveable() {
-		return moveable;
+		return this.moveable;
 	}
 
 	public short getWidth() {
-		return width;
+		return this.width;
 	}
 
 	public short getHeight() {
-		return height;
+		return this.height;
 	}
 
 	public int getEnergie() {
-		return energie;
+		return this.energie;
 	}
 
 	public int getBuildTime() {
-		return buildTime;
+		return this.buildTime;
 	}
 
 	public float getSpeed() {
-		return speed;
+		return this.speed;
 	}
 
 	public short getMineSpeed() {
-		return mineSpeed;
+		return this.mineSpeed;
 	}
 
 	public short getDoorOffsetX() {
-		return doorOffsetX;
+		return this.doorOffsetX;
 	}
 
 	public short getDoorOffsetY() {
-		return doorOffsetY;
+		return this.doorOffsetY;
+	}
+
+	public int getDestroyTimeInFrames() {
+		return this.destroyTimeInFrames;
 	}
 
 	public boolean doProvide(E_Item item) {
-		return provides.containsKey(item);
+		return this.provides.containsKey(item);
 	}
 
 	public boolean doNeeds(E_Item item) {
-		return needs.containsKey(item);
+		return this.needs.containsKey(item);
 	}
 
 	public EntityJob createJob(Entity entity) {
-		return jobSupplier.apply(entity);
+		return this.jobSupplier.apply(entity);
 	}
 
 	public static class Dummy extends EntityDefinition {
 		public Dummy() {
-			moveable = true;
+			this.moveable = true;
 		}
 	}
 
 	public static class Miner extends EntityDefinition {
 		public Miner() {
-			moveable = true;
-			jobSupplier = entity -> new MinerJob(entity);
+			this.moveable = true;
+			this.jobSupplier = entity -> new MinerJob(entity);
 		}
 	}
 
@@ -99,8 +101,8 @@ public abstract class EntityDefinition {
 		public Provider() {
 			Map<E_Item, Integer> provides = new HashMap<>();
 			provides.put(E_Item.WOOD, 10);
-			mineProvides = provides;
-			jobSupplier = entity -> new MineProviderJob(entity);
+			this.mineProvides = provides;
+			this.jobSupplier = entity -> new MineProviderJob(entity);
 		}
 	}
 
@@ -109,13 +111,13 @@ public abstract class EntityDefinition {
 			Map<E_Item, Integer> needs = new HashMap<>();
 			needs.put(E_Item.WOOD, 3);
 			this.needs = needs;
-			jobSupplier = entity -> new WorkstationJob(entity);
+			this.jobSupplier = entity -> new WorkstationJob(entity);
 		}
 	}
 
 	public Container createDefaultMineProvideContainer(Entity entity) {
 		Container container = new Container(entity);
-		for (Entry<E_Item, Integer> entry : mineProvides.entrySet()) {
+		for (Entry<E_Item, Integer> entry : this.mineProvides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
 			container.set(item, value);
@@ -125,7 +127,7 @@ public abstract class EntityDefinition {
 
 	public Container createDefaultProvideContainer(Entity entity) {
 		Container container = new Container(entity);
-		for (Entry<E_Item, Integer> entry : provides.entrySet()) {
+		for (Entry<E_Item, Integer> entry : this.provides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
 			if (value == 0) {
@@ -139,7 +141,7 @@ public abstract class EntityDefinition {
 
 	public Container createDefaultNeedContainer(Entity entity) {
 		Container container = new Container(entity);
-		for (Entry<E_Item, Integer> entry : needs.entrySet()) {
+		for (Entry<E_Item, Integer> entry : this.needs.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
 			container.set(item, 0, value);

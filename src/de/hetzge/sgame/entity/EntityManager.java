@@ -16,24 +16,29 @@ public class EntityManager {
 
 	private final IntMap<Entity> entitiesById = new IntMap<>();
 	private final Set<Entity> entities = new TreeSet<>(new Entity.IdComparator());
+	private final Set<Entity> removeEntities = new TreeSet<>(new Entity.IdComparator());
 
 	public void register(Entity entity) {
 		int entityId = entity.getId();
-		if (entitiesById.containsKey(entityId)) {
+		if (this.entitiesById.containsKey(entityId)) {
 			throw new InvalidGameStateException("Try to register entity with already registered id.");
 		}
-		entitiesById.put(entity.getId(), entity);
-		entities.add(entity);
+		this.entitiesById.put(entity.getId(), entity);
+		this.entities.add(entity);
+	}
+
+	public void registerRemove(Entity entity) {
+		this.removeEntities.add(entity);
 	}
 
 	public void remove(Entity entity) {
 		int entityId = entity.getId();
-		entitiesById.remove(entityId);
-		entities.remove(entity);
+		this.entitiesById.remove(entityId);
+		this.entities.remove(entity);
 	}
 
 	public Entity get(int entityId) {
-		Entity entity = entitiesById.get(entityId);
+		Entity entity = this.entitiesById.get(entityId);
 		if (entity == null) {
 			if (entityId == Constant.NO_ENTITY_ID) {
 				return null;
@@ -54,12 +59,16 @@ public class EntityManager {
 		return result;
 	}
 
+	public Iterable<Entity> getRemoveEntities() {
+		return this.removeEntities;
+	}
+
 	public Iterable<Entity> getEntities() {
-		return entities;
+		return this.entities;
 	}
 
 	public int getNextId() {
-		return nextId++;
+		return this.nextId++;
 	}
 
 }

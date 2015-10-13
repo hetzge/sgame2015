@@ -18,46 +18,47 @@ public class LocalGameState {
 	private boolean showCollisions = false;
 	private boolean showRegistrations = false;
 	private boolean showIds = false;
+	private boolean showWorldOwner = false;
 
 	public boolean hasSelection() {
-		return !selection.isEmpty();
+		return !this.selection.isEmpty();
 	}
 
 	public void clearSelection() {
-		selection.clear();
+		this.selection.clear();
 	}
 
 	public Set<Entity> getSelection() {
-		return selection;
+		return this.selection;
 	}
 
 	public List<Entity> getSelection(Predicate<Entity> predicate) {
-		return selection.stream().filter(predicate).collect(Collectors.toList());
+		return this.selection.stream().filter(predicate).collect(Collectors.toList());
 	}
 
 	public void addSelection(Entity entity) {
-		selection.add(entity);
+		this.selection.add(entity);
 	}
 
 	public void addSelection(List<Entity> entities) {
-		selection.addAll(entities);
+		this.selection.addAll(entities);
 	}
 
 	public void setSelection(List<Entity> entities) {
 		clearSelection();
-		selection.addAll(entities);
+		this.selection.addAll(entities);
 	}
 
 	public int getSelectionSize() {
-		return selection.size();
+		return this.selection.size();
 	}
 
 	public boolean hasEntityTypeToBuild() {
-		return entityTypeToBuild != null;
+		return this.entityTypeToBuild != null;
 	}
 
 	public E_EntityType getEntityTypeToBuild() {
-		return entityTypeToBuild;
+		return this.entityTypeToBuild;
 	}
 
 	public void setEntityTypeToBuild(E_EntityType entityTypeToBuild) {
@@ -66,7 +67,7 @@ public class LocalGameState {
 	}
 
 	public boolean isShowPaths() {
-		return showPaths;
+		return this.showPaths;
 	}
 
 	public void setShowPaths(boolean showPaths) {
@@ -78,7 +79,7 @@ public class LocalGameState {
 	}
 
 	public boolean isShowCollisions() {
-		return showCollisions;
+		return this.showCollisions;
 	}
 
 	public void setShowCollisions(boolean showCollisions) {
@@ -90,7 +91,7 @@ public class LocalGameState {
 	}
 
 	public boolean isShowRegistrations() {
-		return showRegistrations;
+		return this.showRegistrations;
 	}
 
 	public void setShowRegistrations(boolean showRegistrations) {
@@ -102,7 +103,7 @@ public class LocalGameState {
 	}
 
 	public boolean isShowIds() {
-		return showIds;
+		return this.showIds;
 	}
 
 	public void setShowIds(boolean showIds) {
@@ -111,6 +112,18 @@ public class LocalGameState {
 
 	public void toggleShowIds() {
 		this.showIds = !this.showIds;
+	}
+
+	public boolean isShowWorldOwner() {
+		return this.showWorldOwner;
+	}
+
+	public void setShowWorldOwner(boolean showWorldOwner) {
+		this.showWorldOwner = showWorldOwner;
+	}
+
+	public void toggleShowWorldOwner() {
+		this.showWorldOwner = !this.showWorldOwner;
 	}
 
 	public E_CommandMode getCommandMode() {

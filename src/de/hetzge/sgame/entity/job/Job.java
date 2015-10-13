@@ -1,43 +1,56 @@
 package de.hetzge.sgame.entity.job;
 
+import java.io.Serializable;
+
+import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
 
-public abstract class Job {
+public abstract class Job implements Serializable {
 
 	private Job child;
+	private int pauseTillFrame = 0;
 
 	protected abstract void work(Entity entity);
 
+	public void destroy() {
+		// override
+	}
+
 	public void doWork(Entity entity) {
-		if (child != null) {
-			child.doWork(entity);
+		if (this.child != null) {
+			this.child.doWork(entity);
 		} else {
-			work(entity);
+			if (App.timing.isCurrentOrPast(this.pauseTillFrame)) {
+				work(entity);
+			}
 		}
 	}
 
 	public void pop() {
-		if (child != null) {
-			if (child.child == null) {
-				child = null;
+		if (this.child != null) {
+			if (this.child.child == null) {
+				this.child = null;
 			}
 		}
 	}
 
 	public void setChild(Job job) {
-		child = job;
+		this.child = job;
 	}
 
 	public void unsetChild() {
-		child = null;
+		this.child = null;
 	}
 
 	public void addChild(Job job) {
-		if (child == null) {
-			child = job;
+		if (this.child == null) {
+			this.child = job;
 		} else {
-			child.addChild(job);
+			this.child.addChild(job);
 		}
 	}
 
+	public void pause(int frames) {
+		this.pauseTillFrame = App.timing.getNextFrameId(frames);
+	}
 }

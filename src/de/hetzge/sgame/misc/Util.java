@@ -24,6 +24,10 @@ public final class Util {
 		return x + y * width;
 	}
 
+	public static int index(int x, int y, short width) {
+		return x + y * width;
+	}
+
 	public static String toString(short x, short y) {
 		return "(" + x + "|" + y + ")";
 	}

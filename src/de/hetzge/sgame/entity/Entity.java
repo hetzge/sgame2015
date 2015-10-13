@@ -47,7 +47,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		this.id = id;
 		this.entityType = (byte) entityType.ordinal();
 		this.owner = owner;
-		job = getDefinition().createJob(this);
+		this.job = getDefinition().createJob(this);
 	}
 
 	public void setWorldX(short x) {
@@ -86,7 +86,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	public float getWorldX() {
 		if (getDefinition().isMoveable()) {
-			return x;
+			return this.x;
 		} else {
 			return getGridX() * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 		}
@@ -94,7 +94,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	public float getWorldY() {
 		if (getDefinition().isMoveable()) {
-			return y;
+			return this.y;
 		} else {
 			return getGridY() * Constant.TILE_SIZE + Constant.TILE_SIZE;
 		}
@@ -104,7 +104,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		if (getDefinition().isMoveable()) {
 			return (short) (getWorldX() / Constant.TILE_SIZE);
 		} else {
-			return (short) x;
+			return (short) this.x;
 		}
 	}
 
@@ -112,7 +112,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		if (getDefinition().isMoveable()) {
 			return (short) (getWorldY() / Constant.TILE_SIZE);
 		} else {
-			return (short) y;
+			return (short) this.y;
 		}
 	}
 
@@ -121,26 +121,26 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	}
 
 	public void setRegisteredGridPosition(short x, short y) {
-		registeredX = x;
-		registeredY = y;
+		this.registeredX = x;
+		this.registeredY = y;
 	}
 
 	@Override
 	public short getRegisteredX() {
-		return registeredX;
+		return this.registeredX;
 	}
 
 	@Override
 	public short getRegisteredY() {
-		return registeredY;
+		return this.registeredY;
 	}
 
 	public boolean isOwnedByGaia() {
-		return owner == Constant.GAIA_PLAYER_ID;
+		return this.owner == Constant.GAIA_PLAYER_ID;
 	}
 
 	public byte getOwner() {
-		return owner;
+		return this.owner;
 	}
 
 	public void setOwner(byte owner) {
@@ -148,7 +148,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	}
 
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	/*- #################################################
@@ -178,12 +178,12 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	 * A job represents the ki of a entity and stores job specific data.
 	 */
 	public EntityJob getJob() {
-		return job;
+		return this.job;
 	}
 
 	public void popJob() {
-		if (job != null) {
-			job.pop();
+		if (this.job != null) {
+			this.job.pop();
 		}
 	}
 	/*
@@ -194,11 +194,11 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	 * A entity can carry a single item at a moment which is represented by the item ordinal.
 	 */
 	public boolean hasItem() {
-		return item != -1;
+		return this.item != -1;
 	}
 
 	public E_Item getItem() {
-		return hasItem() ? E_Item.values[item] : null;
+		return hasItem() ? E_Item.values[this.item] : null;
 	}
 
 	public void setItem(E_Item item) {
@@ -228,39 +228,39 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	}
 
 	public short getNextX() {
-		return pathXs[nextWaypointPointer];
+		return this.pathXs[this.nextWaypointPointer];
 	}
 
 	public short getNextY() {
-		return pathYs[nextWaypointPointer];
+		return this.pathYs[this.nextWaypointPointer];
 	}
 
 	public short getPathGoalX() {
-		return pathXs[pathXs.length - 1];
+		return this.pathXs[this.pathXs.length - 1];
 	}
 
 	public short getPathGoalY() {
-		return pathYs[pathYs.length - 1];
+		return this.pathYs[this.pathYs.length - 1];
 	}
 
 	public void nextWaypoint() {
-		if (nextWaypointPointer + 1 < pathXs.length) {
-			nextWaypointPointer++;
+		if (this.nextWaypointPointer + 1 < this.pathXs.length) {
+			this.nextWaypointPointer++;
 		}
 	}
 
 	public boolean isNextEndOfPath() {
-		return nextWaypointPointer == pathXs.length - 1;
+		return this.nextWaypointPointer == this.pathXs.length - 1;
 	}
 
 	public boolean hasPath() {
-		return pathXs != null && pathYs != null;
+		return this.pathXs != null && this.pathYs != null;
 	}
 
 	public void unsetPath() {
-		nextWaypointPointer = 0;
-		pathXs = null;
-		pathYs = null;
+		this.nextWaypointPointer = 0;
+		this.pathXs = null;
+		this.pathYs = null;
 	}
 
 	public void setPath(Path path) {
@@ -270,7 +270,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	public void setPath(short[] pathXs, short[] pathYs) {
 		this.pathXs = pathXs;
 		this.pathYs = pathYs;
-		nextWaypointPointer = 0;
+		this.nextWaypointPointer = 0;
 	}
 
 	public E_Orientation getOrientationToNext() {
@@ -285,12 +285,12 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	 */
 
 	public EntityDefinition getDefinition() {
-		return E_EntityType.values[entityType].getEntityDefinition();
+		return E_EntityType.values[this.entityType].getEntityDefinition();
 	}
 
 	@Override
 	public E_Orientation getOrientation() {
-		return E_Orientation.values[orientation];
+		return E_Orientation.values[this.orientation];
 	}
 
 	public IF_GraphicKey setOrientation(E_Orientation orientation) {
@@ -300,7 +300,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	@Override
 	public E_Activity getActivity() {
-		return E_Activity.values[activity];
+		return E_Activity.values[this.activity];
 	}
 
 	public IF_GraphicKey setActivity(E_Activity activity) {
@@ -310,7 +310,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	@Override
 	public E_EntityType getEntityType() {
-		return E_EntityType.values[entityType];
+		return E_EntityType.values[this.entityType];
 	}
 
 	public IF_GraphicKey setEntityType(E_EntityType entityType) {
@@ -318,27 +318,32 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		return this;
 	}
 
+	public void setJob(EntityJob job) {
+		this.job.destroy();
+		this.job = job;
+	}
+
 	public void move(E_Orientation orientation) {
 		setOrientation(orientation);
 		float speed = getDefinition().getSpeed();
 		float frameDelta = App.timing.getFrameDelta();
-		x += orientation.getOffsetX() * speed * frameDelta;
-		y += orientation.getOffsetY() * speed * frameDelta;
+		this.x += orientation.getOffsetX() * speed * frameDelta;
+		this.y += orientation.getOffsetY() * speed * frameDelta;
 	}
 
 	@Override
 	public int hashGraphicKey() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + activity;
-		result = prime * result + entityType;
-		result = prime * result + orientation;
+		result = prime * result + this.activity;
+		result = prime * result + this.entityType;
+		result = prime * result + this.orientation;
 		return result;
 	}
 
 	@Override
 	public int hashCode() {
-		return id;
+		return this.id;
 	}
 
 	@Override
@@ -350,7 +355,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Entity other = (Entity) obj;
-		if (id != other.id)
+		if (this.id != other.id)
 			return false;
 		return true;
 	}

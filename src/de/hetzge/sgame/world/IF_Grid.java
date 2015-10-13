@@ -18,6 +18,10 @@ public interface IF_Grid {
 		return Util.index(x, y, getWidth());
 	}
 
+	public default int index(int x, int y) {
+		return Util.index(x, y, getWidth());
+	}
+
 	public default boolean isOnGrid(GridPosition gridPosition) {
 		return isOnGrid(gridPosition.getGridX(), gridPosition.getGridY());
 	}

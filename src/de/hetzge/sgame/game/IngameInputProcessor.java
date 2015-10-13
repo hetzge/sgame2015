@@ -11,7 +11,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
@@ -41,6 +40,16 @@ public class IngameInputProcessor implements InputProcessor {
 			break;
 		case Keys.F4:
 			localGameState.toggleShowIds();
+			break;
+		case Keys.F5:
+			localGameState.toggleShowWorldOwner();
+			break;
+		case Keys.DEL:
+			// TEMP
+			Entity entity = App.game.getEntityManager().get(0);
+			App.entityFunction.destroyEntity(entity);
+
+			break;
 		}
 
 		return false;

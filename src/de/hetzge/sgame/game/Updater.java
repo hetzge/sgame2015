@@ -5,20 +5,34 @@ import java.util.Arrays;
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.entity.EntityManager;
 import de.hetzge.sgame.game.event.request.EventRequestGoto;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.EntityGrid;
 
 public class Updater {
 
+	private static final int DO_JOB_EVERY_XTH_FRAMES = 10;
+
 	public void update() {
 		updateEntities();
 	}
 
 	private void updateEntities() {
-		Iterable<Entity> entities = App.game.getEntityManager().getEntities();
+		EntityManager entityManager = App.game.getEntityManager();
+		Iterable<Entity> removeEntities = entityManager.getRemoveEntities();
+		for (Entity entity : removeEntities) {
+			App.entityFunction.removeEntity(entity);
+		}
+
+		Iterable<Entity> entities = entityManager.getEntities();
 		for (Entity entity : entities) {
-			entity.getJob().doWork(entity);
+			if (App.timing.isXthFrame(DO_JOB_EVERY_XTH_FRAMES)) {
+				entity.getJob().doWork(entity);
+			}
+		}
+
+		for (Entity entity : entities) {
 			E_Activity activity = entity.getActivity();
 			switch (activity) {
 			case IDLE:
@@ -33,6 +47,8 @@ public class Updater {
 			case CARRY:
 				updateEntityWalking(entity);
 				break;
+			case DESTROY:
+				updateEntityDestroy(entity);
 			default:
 				break;
 			}
@@ -112,6 +128,10 @@ public class Updater {
 	}
 
 	private void updateEntityWorking(Entity entity) {
+
+	}
+
+	private void updateEntityDestroy(Entity entity) {
 
 	}
 

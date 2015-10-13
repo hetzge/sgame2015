@@ -61,6 +61,14 @@ public class WorldRenderer implements IF_Renderer {
 			}
 		}
 
+		if (App.game.getLocalGameState().isShowWorldOwner()) {
+			for (short x = minX; x < maxX; x++) {
+				for (short y = minY; y < maxY; y++) {
+					renderWorldOwner(world, x, y);
+				}
+			}
+		}
+
 		ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
 		for (short x = minX; x < maxX; x++) {
 			for (short y = minY; y < maxY; y++) {
@@ -71,7 +79,7 @@ public class WorldRenderer implements IF_Renderer {
 			}
 		}
 
-		visibleEntities = entitiesToRender;
+		this.visibleEntities = entitiesToRender;
 	}
 
 	public void renderTile(World world, short x, short y) {
@@ -88,8 +96,15 @@ public class WorldRenderer implements IF_Renderer {
 		}
 	}
 
+	public void renderWorldOwner(World world, short x, short y) {
+		byte ownership = world.getOwnerGrid().getOwnership(x, y);
+		if (ownership != Constant.GAIA_PLAYER_ID) {
+			getBitmapFont().draw(getSpriteBatch(), "" + ownership, x * Constant.TILE_SIZE, -y * Constant.TILE_SIZE);
+		}
+	}
+
 	public List<Entity> getVisibleEntities() {
-		return visibleEntities;
+		return this.visibleEntities;
 	}
 
 }

@@ -81,6 +81,7 @@ public class RessourceFunction {
 		loadLine(result, textureRegions, 2, E_Activity.WALKING);
 		loadLine(result, textureRegions, 3, E_Activity.CARRY);
 		loadLine(result, textureRegions, 7, E_Activity.WORKING);
+		loadLine(result, textureRegions, 13, E_Activity.DESTROY);
 
 		return result;
 	}

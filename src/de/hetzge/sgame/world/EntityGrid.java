@@ -19,17 +19,17 @@ public class EntityGrid implements IF_Grid, Serializable {
 		this.width = width;
 		this.height = height;
 
-		entities = new Entity[width * height];
+		this.entities = new Entity[width * height];
 	}
 
 	@Override
 	public short getWidth() {
-		return width;
+		return this.width;
 	}
 
 	@Override
 	public short getHeight() {
-		return height;
+		return this.height;
 	}
 
 	public void swap(Entity entityA, Entity entityB) {
@@ -39,30 +39,36 @@ public class EntityGrid implements IF_Grid, Serializable {
 		short registeredBY = entityB.getRegisteredY();
 		unset(entityA);
 		unset(entityB);
-		set(registeredBX, registeredBY, entityA);
-		set(registeredAX, registeredAY, entityB);
+		set(registeredBX, registeredBY, entityA, false);
+		set(registeredAX, registeredAY, entityB, false);
 	}
 
 	public void set(short x, short y, Entity entity) {
+		set(x, y, entity, true);
+	}
+
+	public void set(short x, short y, Entity entity, boolean unset) {
 		Entity entityOnPosition = get(x, y);
 		if (entityOnPosition != null && !entityOnPosition.equals(entity)) {
 			throw new InvalidGameStateException("Try to move to already used tile.");
 		}
-		unset(entity);
+		if (unset) {
+			unset(entity);
+		}
 		eachEntityGridPosition(entity, x, y, set(entity));
 		entity.setRegisteredGridPosition(x, y);
 	}
 
 	private Consumer<GridPosition> set(Entity entity) {
-		return gridPosition -> entities[index(gridPosition.getGridX(), gridPosition.getGridY())] = entity;
+		return gridPosition -> this.entities[index(gridPosition.getGridX(), gridPosition.getGridY())] = entity;
 	}
 
-	private void unset(Entity entity) {
+	public void unset(Entity entity) {
 		eachEntityGridPosition(entity, this::unset);
 	}
 
-	private void unset(GridPosition gridPosition) {
-		entities[index(gridPosition.getGridX(), gridPosition.getGridY())] = null;
+	public void unset(GridPosition gridPosition) {
+		this.entities[index(gridPosition.getGridX(), gridPosition.getGridY())] = null;
 	}
 
 	public boolean is(short x, short y) {
@@ -86,12 +92,8 @@ public class EntityGrid implements IF_Grid, Serializable {
 		}
 	}
 
-	public void remove(short x, short y) {
-		entities[index(x, y)] = null;
-	}
-
 	public Entity get(short x, short y) {
-		return entities[index(x, y)];
+		return this.entities[index(x, y)];
 	}
 
 	public Entity get(GridPosition gridPosition) {
@@ -104,7 +106,7 @@ public class EntityGrid implements IF_Grid, Serializable {
 
 	public List<Entity> getAllEntities() {
 		List<Entity> result = new LinkedList<>();
-		for (Entity entity : entities) {
+		for (Entity entity : this.entities) {
 			if (entity != null) {
 				result.add(entity);
 			}

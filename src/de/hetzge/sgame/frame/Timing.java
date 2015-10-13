@@ -15,7 +15,7 @@ public class Timing {
 
 	private final static short FRAMES_PER_SECOND = 30;
 	private final static short DEFAULT_NEXT_FRAMES = FRAMES_PER_SECOND;
-	private final static float FRAME_DELTA = 1f / (float)FRAMES_PER_SECOND;
+	private final static float FRAME_DELTA = 1f / FRAMES_PER_SECOND;
 
 	private float stateTime = 0f;
 	private float delta = 0f;
@@ -29,61 +29,73 @@ public class Timing {
 	}
 
 	public void addFrameEvent(IF_FrameEvent frameEvent) {
-		buffer.add(frameEvent);
+		this.buffer.add(frameEvent);
 	}
 
 	private void onFrame() {
 		flushBuffer();
 		long before = System.currentTimeMillis();
-		current.execute();
+		this.current.execute();
 		App.updater.update();
 		long executionTime = System.currentTimeMillis() - before;
-		if (executionTime > frameTimer.getEveryMilliseconds()) {
+		if (executionTime > this.frameTimer.getEveryMilliseconds()) {
 			Logger.warn("frame executiontime is longer then frametime: " + executionTime);
 		}
-		current = current.next();
+		this.current = this.current.next();
 	}
 
 	private void flushBuffer() {
-		int size = buffer.size();
+		int size = this.buffer.size();
 		for (int i = 0; i < size; i++) {
-			IF_FrameEvent frameEvent = buffer.poll();
-			current.addFrameEvent(frameEvent);
+			IF_FrameEvent frameEvent = this.buffer.poll();
+			this.current.addFrameEvent(frameEvent);
 		}
 	}
 
 	public void startFrameTimer() {
-		frameTimer.start();
+		this.frameTimer.start();
 	}
 
 	public void stopFrameTimer() {
-		frameTimer.stop();
+		this.frameTimer.stop();
 	}
 
 	public void update() {
 		Util.sleep(10);
-		frameTimer.call();
-		delta = Gdx.graphics.getDeltaTime();
-		stateTime += delta; 
+		this.frameTimer.call();
+		this.delta = Gdx.graphics.getDeltaTime();
+		this.stateTime += this.delta;
+	}
+
+	public boolean isCurrentOrPast(int frameId) {
+		return getCurrentFrameId() >= frameId;
+	}
+
+	public int getCurrentFrameId() {
+		return this.current.getId();
+	}
+
+	public boolean isXthFrame(int xth) {
+		return getCurrentFrameId() % xth == 0;
 	}
 
 	public int getNextFrameId(int frames) {
-		return current.getId() + frames;
+		return getCurrentFrameId() + frames;
 	}
 
 	public int getDefaultNextFrameId() {
-		return current.getId() + DEFAULT_NEXT_FRAMES;
+		return getCurrentFrameId() + DEFAULT_NEXT_FRAMES;
 	}
 
 	public float getDelta() {
-		return delta;
+		return this.delta;
 	}
 
-	public float getFrameDelta(){
+	public float getFrameDelta() {
 		return FRAME_DELTA;
 	}
-	
+
 	public float getStateTime() {
-		return stateTime;
+		return this.stateTime;
 	}
 }
