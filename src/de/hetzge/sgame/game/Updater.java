@@ -7,12 +7,11 @@ import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.EntityManager;
 import de.hetzge.sgame.game.event.request.EventRequestGoto;
+import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.EntityGrid;
 
 public class Updater {
-
-	private static final int DO_JOB_EVERY_XTH_FRAMES = 1;
 
 	public void update() {
 		updateEntities();
@@ -27,7 +26,7 @@ public class Updater {
 
 		Iterable<Entity> entities = entityManager.getEntities();
 		for (Entity entity : entities) {
-			if (App.timing.isXthFrame(DO_JOB_EVERY_XTH_FRAMES)) {
+			if (App.timing.isXthFrame(Constant.DO_JOB_EVERY_XTH_FRAMES)) {
 				entity.getJob().doWork(entity);
 			}
 		}

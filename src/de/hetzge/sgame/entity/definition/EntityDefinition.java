@@ -1,5 +1,6 @@
 package de.hetzge.sgame.entity.definition;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +11,13 @@ import java.util.function.Function;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.CarrierJob;
+import de.hetzge.sgame.entity.job.main.FactoryJob;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.entity.job.main.MinerJob;
 import de.hetzge.sgame.entity.job.main.WorkstationJob;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.item.Ingredient;
 import de.hetzge.sgame.item.Receipt;
 import de.hetzge.sgame.misc.Constant;
 
@@ -27,6 +30,7 @@ public abstract class EntityDefinition {
 	protected int buildTime = 3000;
 	protected float speed = 30f;
 	protected short mineSpeed = 1;
+	protected E_Item mineItem = E_Item.WOOD;
 	protected short doorOffsetX = 0;
 	protected short doorOffsetY = 1;
 	protected int updateEveryFrames = 100; // TODO
@@ -63,6 +67,10 @@ public abstract class EntityDefinition {
 
 	public short getMineSpeed() {
 		return this.mineSpeed;
+	}
+
+	public E_Item getMineItem() {
+		return this.mineItem;
 	}
 
 	public short getDoorOffsetX() {
@@ -137,6 +145,7 @@ public abstract class EntityDefinition {
 		public Miner() {
 			this.moveable = true;
 			this.jobSupplier = entity -> new MinerJob(entity);
+			this.mineItem = E_Item.WOOD;
 		}
 	}
 
@@ -162,6 +171,13 @@ public abstract class EntityDefinition {
 		public Carrier() {
 			this.moveable = true;
 			this.jobSupplier = entity -> new CarrierJob(entity);
+		}
+	}
+
+	public static class Factory extends EntityDefinition {
+		public Factory() {
+			this.jobSupplier = entity -> new FactoryJob(entity);
+			this.receipts = Arrays.asList(new Receipt(Arrays.asList(new Ingredient(E_Item.WOOD, 1)), E_Item.WOOD));
 		}
 	}
 

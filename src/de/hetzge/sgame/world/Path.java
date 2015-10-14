@@ -9,33 +9,33 @@ public class Path {
 	private final List<GridPosition> gridPositions = new LinkedList<>();
 
 	public void add(GridPosition gridPosition) {
-		gridPositions.add(gridPosition);
+		this.gridPositions.add(gridPosition);
 	}
 
 	public ListIterator<GridPosition> listIterator(int index) {
-		return gridPositions.listIterator(index);
+		return this.gridPositions.listIterator(index);
 	}
 
 	public int pathSize() {
-		return gridPositions.size();
+		return this.gridPositions.size();
 	}
 
 	public void removeFirst() {
-		if (!gridPositions.isEmpty()) {
-			gridPositions.remove(0);
+		if (!this.gridPositions.isEmpty()) {
+			this.gridPositions.remove(0);
 		}
 	}
 
 	public void removeLast() {
-		if (!gridPositions.isEmpty()) {
-			gridPositions.remove(gridPositions.size() - 1);
+		if (!this.gridPositions.isEmpty()) {
+			this.gridPositions.remove(this.gridPositions.size() - 1);
 		}
 	}
 
 	public short[] getXPath() {
 		short[] xPath = new short[pathSize()];
 		int i = 0;
-		for (GridPosition gridPosition : gridPositions) {
+		for (GridPosition gridPosition : this.gridPositions) {
 			xPath[i++] = gridPosition.getGridX();
 		}
 		return xPath;
@@ -44,7 +44,7 @@ public class Path {
 	public short[] getYPath() {
 		short[] yPath = new short[pathSize()];
 		int i = 0;
-		for (GridPosition gridPosition : gridPositions) {
+		for (GridPosition gridPosition : this.gridPositions) {
 			yPath[i++] = gridPosition.getGridY();
 		}
 		return yPath;
@@ -62,7 +62,7 @@ public class Path {
 
 	@Override
 	public String toString() {
-		return "Path [gridPositions=" + gridPositions + "]";
+		return "Path [gridPositions=" + this.gridPositions + "]";
 	}
 
 }

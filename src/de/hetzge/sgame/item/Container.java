@@ -122,6 +122,12 @@ public class Container implements Serializable {
 		return this.can(item) && this.amount(item) + this.bookedToAmount(item) + amount <= value.max;
 	}
 
+	// TODO test this
+	public synchronized int getMissingAmount(E_Item item) {
+		Value value = this.items.get(item);
+		return value != null ? value.max - (value.amount + bookedToAmount(item)) : 0;
+	}
+
 	/**
 	 * Returns the amount of a given item is booked from this container.
 	 */

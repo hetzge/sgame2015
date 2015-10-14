@@ -258,7 +258,7 @@ public class EntityFunction {
 			return entityOnGridPositon != null ? searchPredicate.test(entityOnGridPositon) : false;
 		};
 
-		return rate(entity.getGridPosition(), endOfPathPredicate, collisionPredicate);
+		return rate(entity.getDoorGridPosition(), endOfPathPredicate, collisionPredicate);
 	}
 
 	private RatingMap ratePath(GridPosition start, GridPosition goal, Predicate<GridPosition> endOfPathPredicate, CollisionPredicate collisionPredicate) {
@@ -280,7 +280,6 @@ public class EntityFunction {
 	private RatingMap rate(GridPosition beginAtGridPosition, Predicate<GridPosition> endOfPathPredicate, CollisionPredicate collisionPredicate) {
 		World world = App.game.getWorld();
 
-		final short MAX_RATING = 1000;
 		short rating = 0;
 		RatingMap ratings = new RatingMap();
 		List<GridPosition> nexts = new LinkedList<>();
@@ -312,10 +311,11 @@ public class EntityFunction {
 				}
 			}
 			rating++;
-			if (rating >= MAX_RATING) {
+			if (rating >= Constant.MAX_A_STAR_DEPTH) {
 				Logger.warn("Stoped pathfinding because reached max rating.");
 				return null;
 			}
+
 			nexts = nextNexts;
 			if (nexts.isEmpty()) {
 				return null;
@@ -329,6 +329,7 @@ public class EntityFunction {
 		GridPosition next = new GridPosition(start);
 		GridPosition nextNext = null;
 		path.add(next);
+		int i = 0;
 		while (!next.equals(goal)) {
 			for (E_Orientation orientation : E_Orientation.values) {
 				GridPosition around = next.getAround(orientation);
@@ -342,6 +343,12 @@ public class EntityFunction {
 			}
 			next = nextNext;
 			path.add(next);
+			i++;
+
+			// TODO temp
+			if (i > 100000) {
+				System.out.println("X");
+			}
 		}
 
 		Logger.info("Found path: " + path);

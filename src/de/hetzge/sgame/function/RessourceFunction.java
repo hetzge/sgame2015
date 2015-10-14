@@ -72,6 +72,8 @@ public class RessourceFunction {
 
 		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.PROVIDER).hashGraphicKey(), test1Animation);
 		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.WORKSTATION).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.FACTORY).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.WORKING, E_EntityType.FACTORY).hashGraphicKey(), test1Animation);
 
 		// MINER
 

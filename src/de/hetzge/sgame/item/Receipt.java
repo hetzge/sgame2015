@@ -58,19 +58,4 @@ public class Receipt {
 		return this.result;
 	}
 
-	private static class Ingredient {
-		private final E_Item item;
-		private final int amount;
-
-		public Ingredient(E_Item item, int amount) {
-			this.item = item;
-			this.amount = amount;
-		}
-
-		public boolean available(Container container) {
-			return container.hasAmountAvailable(this.item, this.amount);
-		}
-
-	}
-
 }

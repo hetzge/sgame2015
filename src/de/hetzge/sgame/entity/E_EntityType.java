@@ -4,7 +4,7 @@ import de.hetzge.sgame.entity.definition.EntityDefinition;
 
 public enum E_EntityType {
 
-	DUMMY(new EntityDefinition.Dummy()), MINER(new EntityDefinition.Miner()), PROVIDER(new EntityDefinition.Provider()), WORKSTATION(new EntityDefinition.Workstation()), CARRIER(new EntityDefinition.Carrier());
+	DUMMY(new EntityDefinition.Dummy()), MINER(new EntityDefinition.Miner()), PROVIDER(new EntityDefinition.Provider()), WORKSTATION(new EntityDefinition.Workstation()), CARRIER(new EntityDefinition.Carrier()), FACTORY(new EntityDefinition.Factory());
 
 	public final static E_EntityType[] values = values();
 

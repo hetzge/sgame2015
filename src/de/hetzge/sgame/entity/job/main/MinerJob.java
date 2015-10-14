@@ -1,8 +1,5 @@
 package de.hetzge.sgame.entity.job.main;
 
-import java.util.Arrays;
-import java.util.List;
-
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
@@ -17,7 +14,6 @@ import de.hetzge.sgame.world.Path;
 
 public class MinerJob extends EntityJob {
 
-	private List<E_Item> items = Arrays.asList(E_Item.values);
 	private Entity workstation = null;
 	private Booking booking = null;
 
@@ -103,20 +99,20 @@ public class MinerJob extends EntityJob {
 		SearchPredicate searchPredicate = entityToTest -> {
 			EntityJob job = entityToTest.getJob();
 			if (job instanceof MineProviderJob) {
+				E_Item item = this.entity.getDefinition().getMineItem();
 				MineProviderJob mineProviderJob = (MineProviderJob) job;
-				for (E_Item item : this.items) {
-					Container from = mineProviderJob.getContainer();
-					boolean hasItem = from.has(item);
-					if (hasItem) {
-						WorkstationJob workstationJob = getWorkstationJob();
-						Container to = workstationJob.getContainer();
-						Booking booking = from.book(item, 1, to);
-						if (booking != null) {
-							this.booking = booking;
-							return true;
-						}
+				Container from = mineProviderJob.getContainer();
+				boolean hasItem = from.has(item);
+				if (hasItem) {
+					WorkstationJob workstationJob = getWorkstationJob();
+					Container to = workstationJob.getContainer();
+					Booking booking = from.book(item, 1, to);
+					if (booking != null) {
+						this.booking = booking;
+						return true;
 					}
 				}
+
 			}
 			return false;
 		};

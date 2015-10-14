@@ -156,14 +156,24 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	 */
 	public short getDoorX() {
 		EntityDefinition definition = getDefinition();
-		short doorOffsetX = definition.getDoorOffsetX();
-		return (short) (getGridX() + doorOffsetX);
+		boolean moveable = definition.isMoveable();
+		if (moveable) {
+			return getGridX();
+		} else {
+			short doorOffsetX = definition.getDoorOffsetX();
+			return (short) (getGridX() + doorOffsetX);
+		}
 	}
 
 	public short getDoorY() {
 		EntityDefinition definition = getDefinition();
-		short doorOffsetY = definition.getDoorOffsetY();
-		return (short) (getGridY() + doorOffsetY);
+		boolean moveable = definition.isMoveable();
+		if (moveable) {
+			return getGridY();
+		} else {
+			short doorOffsetY = definition.getDoorOffsetY();
+			return (short) (getGridY() + doorOffsetY);
+		}
 	}
 
 	@Override
@@ -317,6 +327,10 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	public IF_GraphicKey setEntityType(E_EntityType entityType) {
 		this.entityType = (byte) entityType.ordinal();
 		return this;
+	}
+
+	public boolean isEntityType(E_EntityType entityType) {
+		return getEntityType() == entityType;
 	}
 
 	public void setJob(EntityJob job) {

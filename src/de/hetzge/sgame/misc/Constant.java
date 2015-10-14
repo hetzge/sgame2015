@@ -18,9 +18,11 @@ public final class Constant {
 	public static final int ITEM_HEIGHT = 12;
 	public static final short DEFAULT_MINE_TIME_IN_FRAMES = 100;
 	public static final int DEFAULT_PRODUCTION_TIME_IN_FRAMES = 100;
-
 	public static final NoJob NO_JOB = new NoJob(null);
-	// public static final DestroyJob DESTROY_JOB = new DestroyJob(null);
+
+	// performance
+	public static final int MAX_A_STAR_DEPTH = 100;
+	public static final int DO_JOB_EVERY_XTH_FRAMES = 1;
 
 	private Constant() {
 	}
