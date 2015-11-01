@@ -37,14 +37,14 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 
 		Container provides = this.providerJob.getProvides();
 		Container needs = this.consumerJob.getNeeds();
-		if (isWorkingAt()) {
+		if (!isWorkingAt()) {
 			// start
 			for (Receipt receipt : receipts) {
 				E_Item result = receipt.getResult();
 				boolean canAddAmount = provides.canAddAmount(result, 1);
 				if (canAddAmount) {
 					if (receipt.possible(needs)) {
-						App.timing.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
+						this.finishProductFrameId = App.timing.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
 						this.workingAt = receipt;
 						this.entity.setActivity(E_Activity.WORKING);
 						break;
@@ -70,7 +70,7 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 	}
 
 	public boolean isWorkingAt() {
-		return this.workingAt == null;
+		return this.workingAt != null;
 	}
 
 	public void unsetWorkingAt() {

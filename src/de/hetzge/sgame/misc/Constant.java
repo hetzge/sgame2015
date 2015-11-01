@@ -17,7 +17,7 @@ public final class Constant {
 	public static final int ITEM_WIDTH = 12;
 	public static final int ITEM_HEIGHT = 12;
 	public static final short DEFAULT_MINE_TIME_IN_FRAMES = 100;
-	public static final int DEFAULT_PRODUCTION_TIME_IN_FRAMES = 100;
+	public static final int DEFAULT_PRODUCTION_TIME_IN_FRAMES = 500;
 	public static final NoJob NO_JOB = new NoJob(null);
 
 	// performance

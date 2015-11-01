@@ -1,10 +1,19 @@
 package de.hetzge.sgame.entity;
 
 import de.hetzge.sgame.entity.definition.EntityDefinition;
+import de.hetzge.sgame.item.E_Item;
 
 public enum E_EntityType {
 
-	DUMMY(new EntityDefinition.Dummy()), MINER(new EntityDefinition.Miner()), PROVIDER(new EntityDefinition.Provider()), WORKSTATION(new EntityDefinition.Workstation()), CARRIER(new EntityDefinition.Carrier()), FACTORY(new EntityDefinition.Factory());
+	WORKER_LUMBERJACK(new EntityDefinition.Miner(E_Item.WOOD)), WORKER_MASON(new EntityDefinition.Miner(E_Item.STONE)),
+
+	TREE(new EntityDefinition.Provider(E_Item.WOOD)), CAIRN(new EntityDefinition.Provider(E_Item.STONE)),
+
+	BUILDING_LUMBERJACK(new EntityDefinition.Workstation(E_Item.WOOD)), BUILDING_QUARRY(new EntityDefinition.Workstation(E_Item.STONE)),
+
+	CARRIER(new EntityDefinition.Carrier()),
+
+	FACTORY(new EntityDefinition.Factory());
 
 	public final static E_EntityType[] values = values();
 

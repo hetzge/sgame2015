@@ -3,6 +3,8 @@ package de.hetzge.sgame.misc;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hetzge.sgame.world.GridPosition;
+
 public enum E_Orientation {
 
 	SOUTH((byte) 0, (byte) 1), WEST((byte) -1, (byte) 0), NORTH((byte) 0, (byte) -1), EAST((byte) 1, (byte) 0);
@@ -19,11 +21,15 @@ public enum E_Orientation {
 	}
 
 	public byte getOffsetX() {
-		return offsetX;
+		return this.offsetX;
 	}
 
 	public byte getOffsetY() {
-		return offsetY;
+		return this.offsetY;
+	}
+
+	public static E_Orientation orientationTo(GridPosition from, GridPosition to) {
+		return orientationTo(from.getGridX(), from.getGridY(), to.getGridX(), to.getGridY());
 	}
 
 	public static E_Orientation orientationTo(int fromX, int fromY, int toX, int toY) {

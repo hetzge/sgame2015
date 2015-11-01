@@ -5,14 +5,14 @@ import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
 import de.hetzge.sgame.item.Container;
 
-public class WorkstationJob extends EntityJob implements IF_RenderItemsJob {
+public class WorkstationJob extends EntityJob implements IF_RenderItemsJob, IF_ProviderJob {
 
-	private final Container container;
+	private final ProviderJob providerJob;
 	private Entity worker;
 
 	public WorkstationJob(Entity entity) {
 		super(entity);
-		container = entity.getDefinition().createDefaultNeedContainer(entity);
+		this.providerJob = new ProviderJob(entity);
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class WorkstationJob extends EntityJob implements IF_RenderItemsJob {
 	}
 
 	public Container getContainer() {
-		return container;
+		return this.providerJob.getProvides();
 	}
 
 	public void setWorker(Entity worker) {
@@ -28,25 +28,30 @@ public class WorkstationJob extends EntityJob implements IF_RenderItemsJob {
 	}
 
 	public Entity getWorker() {
-		return worker;
+		return this.worker;
 	}
 
 	public void unsetWorker() {
-		worker = null;
+		this.worker = null;
 	}
 
 	public boolean hasWorker() {
-		return worker != null;
+		return this.worker != null;
 	}
 
 	@Override
 	public Container getRenderLeftContainer() {
-		return container;
+		return getContainer();
 	}
 
 	@Override
 	public Container getRenderRightContainer() {
 		return null;
+	}
+
+	@Override
+	public ProviderJob getProviderJob() {
+		return this.providerJob;
 	}
 
 }

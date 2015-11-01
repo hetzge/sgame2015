@@ -7,7 +7,9 @@ import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
-import de.hetzge.sgame.function.EntityFunction.SearchPredicate;
+import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
+import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
+import de.hetzge.sgame.function.OnMapPredicate.ProvideItemAvailablePredicate;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
@@ -29,54 +31,38 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 		for (E_Item item : items) {
 			int missingAmount = this.needs.getMissingAmount(item);
 			if (missingAmount > 0) {
-				// search for item
-				final SearchResult searchResult = new SearchResult();
-				SearchPredicate searchPredicate = searchEntity -> {
-					if (!searchResult.hasCarrier()) {
-						if (searchEntity.isEntityType(E_EntityType.CARRIER)) {
-							CarrierJob carrierJob = getCarrierJob(searchEntity);
-							boolean hasNoBooking = !carrierJob.hasBooking();
-							if (hasNoBooking) {
-								searchResult.carrier = searchEntity;
-								if (searchResult.isComplete()) {
-									return true;
-								}
-							}
-						}
-					}
-					if (!searchResult.hasBooking()) {
-						EntityJob job = searchEntity.getJob();
-						if (job instanceof IF_ProviderJob) {
-							IF_ProviderJob if_ProviderJob = (IF_ProviderJob) job;
-							ProviderJob providerJob = if_ProviderJob.getProviderJob();
-							Container provides = providerJob.getProvides();
-							if (provides.has(item)) {
-								Booking booking = provides.book(item, 1, this.needs);
-								searchResult.booking = booking;
-								if (searchResult.isComplete()) {
-									return true;
-								}
-							}
+				EntityPredicate searchCarrierPredicate = searchEntity -> {
+					if (searchEntity.isEntityType(E_EntityType.CARRIER)) {
+						CarrierJob carrierJob = getCarrierJob(searchEntity);
+						boolean hasNoBooking = !carrierJob.hasBooking();
+						if (hasNoBooking) {
+							return true;
 						}
 					}
 					return false;
 				};
-				App.entityFunction.findEntity(this.entity, searchPredicate);
-				if (searchResult.isComplete()) {
-					CarrierJob carrierJob = getCarrierJob(searchResult.carrier);
-					carrierJob.setBooking(searchResult.booking);
-					foundItemCount++;
-				} else if (!searchResult.isComplete() && searchResult.hasBooking()) {
-					searchResult.booking.rollback();
+				ProvideItemAvailablePredicate provideItemAvailablePredicate = new ProvideItemAvailablePredicate(item);
+				EntityOnMapPredicate entityOnMapPredicate = new EntityOnMapPredicate(searchCarrierPredicate);
+
+				App.entityFunction.iterateMap(this.entity, provideItemAvailablePredicate);
+				App.entityFunction.iterateMap(this.entity, entityOnMapPredicate);
+
+				Container provideContainer = provideItemAvailablePredicate.getProvideContainer();
+				Entity carrierEntity = entityOnMapPredicate.getEntity();
+
+				if (provideContainer != null && carrierEntity != null) {
+					if (provideContainer.hasAmountAvailable(item, 1)) {
+						Booking booking = provideContainer.book(item, 1, this.needs);
+						CarrierJob carrierJob = getCarrierJob(carrierEntity);
+						carrierJob.setBooking(booking);
+						foundItemCount++;
+					}
 				}
 			}
 		}
 		if (foundItemCount == 0) {
-			pauseVeryLong();
+			pauseMedium();
 		}
-
-		// TODO search world container
-
 	}
 
 	private CarrierJob getCarrierJob(Entity carrierEntity) {
@@ -91,23 +77,6 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 
 	public Container getNeeds() {
 		return this.needs;
-	}
-
-	private static class SearchResult {
-		private Booking booking;
-		private Entity carrier;
-
-		public boolean hasBooking() {
-			return this.booking != null;
-		}
-
-		public boolean hasCarrier() {
-			return this.carrier != null;
-		}
-
-		public boolean isComplete() {
-			return hasBooking() && hasCarrier();
-		}
 	}
 
 	@Override

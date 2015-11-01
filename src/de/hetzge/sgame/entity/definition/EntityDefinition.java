@@ -30,7 +30,7 @@ public abstract class EntityDefinition {
 	protected int buildTime = 3000;
 	protected float speed = 30f;
 	protected short mineSpeed = 1;
-	protected E_Item mineItem = E_Item.WOOD;
+	protected E_Item mineItem = null;
 	protected short doorOffsetX = 0;
 	protected short doorOffsetY = 1;
 	protected int updateEveryFrames = 100; // TODO
@@ -117,9 +117,9 @@ public abstract class EntityDefinition {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
 			if (value == 0) {
-				container.set(item, value, Constant.DEFAULT_MAX_ITEMS);
+				container.set(item, 0, Constant.DEFAULT_MAX_ITEMS);
 			} else {
-				container.set(item, value);
+				container.set(item, 0, value);
 			}
 		}
 		return container;
@@ -142,27 +142,28 @@ public abstract class EntityDefinition {
 	}
 
 	public static class Miner extends EntityDefinition {
-		public Miner() {
+		public Miner(E_Item item) {
 			this.moveable = true;
 			this.jobSupplier = entity -> new MinerJob(entity);
-			this.mineItem = E_Item.WOOD;
+			this.mineItem = item;
 		}
 	}
 
 	public static class Provider extends EntityDefinition {
-		public Provider() {
+		public Provider(E_Item item) {
 			Map<E_Item, Integer> provides = new HashMap<>();
-			provides.put(E_Item.WOOD, 10);
+			provides.put(item, Constant.DEFAULT_MAX_ITEMS);
 			this.mineProvides = provides;
 			this.jobSupplier = entity -> new MineProviderJob(entity);
 		}
 	}
 
 	public static class Workstation extends EntityDefinition {
-		public Workstation() {
-			Map<E_Item, Integer> needs = new HashMap<>();
-			needs.put(E_Item.WOOD, 3);
-			this.needs = needs;
+		public Workstation(E_Item item) {
+			Map<E_Item, Integer> provides = new HashMap<>();
+			provides.put(item, Constant.DEFAULT_MAX_ITEMS);
+			this.provides = provides;
+			this.mineItem = item;
 			this.jobSupplier = entity -> new WorkstationJob(entity);
 		}
 	}
@@ -176,8 +177,15 @@ public abstract class EntityDefinition {
 
 	public static class Factory extends EntityDefinition {
 		public Factory() {
+			HashMap<E_Item, Integer> needs = new HashMap<>();
+			needs.put(E_Item.WOOD, 8);
+			needs.put(E_Item.STONE, 8);
+			HashMap<E_Item, Integer> provides = new HashMap<>();
+			provides.put(E_Item.FISCH, 8);
+			this.needs = needs;
+			this.provides = provides;
 			this.jobSupplier = entity -> new FactoryJob(entity);
-			this.receipts = Arrays.asList(new Receipt(Arrays.asList(new Ingredient(E_Item.WOOD, 1)), E_Item.WOOD));
+			this.receipts = Arrays.asList(new Receipt(Arrays.asList(new Ingredient(E_Item.WOOD, 2), new Ingredient(E_Item.STONE, 2)), E_Item.FISCH));
 		}
 	}
 

@@ -15,6 +15,7 @@ import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.entity.job.main.DestroyJob;
+import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
@@ -210,14 +211,14 @@ public class EntityFunction {
 	 */
 	public Path findPath(Entity entity, GridPosition goal, CollisionPredicate collisionPredicate) {
 		GridPosition start = entity.getGridPosition();
-		RatingMap ratings = ratePath(start, goal, start::equals, collisionPredicate);
+		RatingMap ratings = rate(start, goal, start::equals, collisionPredicate);
 		return ratings != null ? evaluatePath(start, goal, ratings) : null;
 	}
 
 	/**
 	 * Finds a path to a unknown goal defined by <code>searchPredicate</code>
 	 */
-	public Path findPath(Entity entity, SearchPredicate searchPredicate) {
+	public Path findPath(Entity entity, OnMapPredicate searchPredicate) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
 		return findPath(entity, fixedCollisionGrid::is, searchPredicate);
@@ -226,9 +227,9 @@ public class EntityFunction {
 	/**
 	 * Finds a path to a unknown goal defined by <code>searchPredicate</code>
 	 */
-	public Path findPath(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
-		GridPosition start = entity.getGridPosition();
-		RatingMap ratings = rateSearch(entity, collisionPredicate, searchPredicate);
+	public Path findPath(Entity entity, CollisionPredicate collisionPredicate, OnMapPredicate searchPredicate) {
+		GridPosition start = entity.getDoorGridPosition();
+		RatingMap ratings = rate(entity, collisionPredicate, searchPredicate);
 		Path path = ratings != null ? evaluatePath(ratings.goal, start, ratings) : null;
 		if (path != null) {
 			path.removeFirst();
@@ -238,30 +239,21 @@ public class EntityFunction {
 		}
 	}
 
-	public Entity findEntity(Entity entity, SearchPredicate searchPredicate) {
+	public void iterateMap(Entity entity, OnMapPredicate searchPredicate) {
 		World world = App.game.getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
-		return findEntity(entity, fixedCollisionGrid::is, searchPredicate);
+		iterateMap(entity, fixedCollisionGrid::is, searchPredicate);
 	}
 
-	public Entity findEntity(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
-		EntitySearchPredicate entitySearchPredicate = new EntitySearchPredicate(searchPredicate);
-		findPath(entity, collisionPredicate, entitySearchPredicate);
-		return entitySearchPredicate.getEntity();
+	public void iterateMap(Entity entity, CollisionPredicate collisionPredicate, OnMapPredicate searchPredicate) {
+		rate(entity, collisionPredicate, searchPredicate);
 	}
 
-	private RatingMap rateSearch(Entity entity, CollisionPredicate collisionPredicate, SearchPredicate searchPredicate) {
-		EntityGrid entityGrid = App.game.getEntityGrid();
-
-		Predicate<GridPosition> endOfPathPredicate = (gridPosition) -> {
-			Entity entityOnGridPositon = entityGrid.get(gridPosition);
-			return entityOnGridPositon != null ? searchPredicate.test(entityOnGridPositon) : false;
-		};
-
-		return rate(entity.getDoorGridPosition(), endOfPathPredicate, collisionPredicate);
+	private RatingMap rate(Entity entity, CollisionPredicate collisionPredicate, OnMapPredicate searchPredicate) {
+		return rate(entity.getDoorGridPosition(), searchPredicate, collisionPredicate);
 	}
 
-	private RatingMap ratePath(GridPosition start, GridPosition goal, Predicate<GridPosition> endOfPathPredicate, CollisionPredicate collisionPredicate) {
+	private RatingMap rate(GridPosition start, GridPosition goal, OnMapPredicate searchPredicate, CollisionPredicate collisionPredicate) {
 		boolean isStartIsGoal = start.equals(goal);
 		if (isStartIsGoal) {
 			return null;
@@ -274,10 +266,10 @@ public class EntityFunction {
 			return null;
 		}
 
-		return rate(goal, endOfPathPredicate, collisionPredicate);
+		return rate(goal, searchPredicate, collisionPredicate);
 	}
 
-	private RatingMap rate(GridPosition beginAtGridPosition, Predicate<GridPosition> endOfPathPredicate, CollisionPredicate collisionPredicate) {
+	private RatingMap rate(GridPosition beginAtGridPosition, OnMapPredicate endOfPathPredicate, CollisionPredicate collisionPredicate) {
 		World world = App.game.getWorld();
 
 		short rating = 0;
@@ -312,7 +304,7 @@ public class EntityFunction {
 			}
 			rating++;
 			if (rating >= Constant.MAX_A_STAR_DEPTH) {
-				Logger.warn("Stoped pathfinding because reached max rating.");
+				Logger.trace("Stoped pathfinding because reached max rating.");
 				return null;
 			}
 
@@ -343,11 +335,10 @@ public class EntityFunction {
 			}
 			next = nextNext;
 			path.add(next);
-			i++;
 
-			// TODO temp
-			if (i > 100000) {
-				System.out.println("X");
+			i++;
+			if (i > Constant.MAX_A_STAR_DEPTH * 2) {
+				throw new InvalidGameStateException("Try to evaluate impossible path (start: " + start + ", gaol: " + goal + ")");
 			}
 		}
 
@@ -360,36 +351,13 @@ public class EntityFunction {
 		private GridPosition goal;
 	}
 
-	public static interface CollisionPredicate extends Predicate<GridPosition> {
+	public static interface CollisionPredicate extends OnMapPredicate {
 	}
 
-	public static interface SearchPredicate extends Predicate<Entity> {
-
+	public static interface EntityPredicate extends Predicate<Entity> {
 	}
 
-	public static class EntitySearchPredicate implements SearchPredicate {
-
-		private Entity entity;
-		private final SearchPredicate searchPredicate;
-
-		public EntitySearchPredicate(SearchPredicate searchPredicate) {
-			this.searchPredicate = searchPredicate;
-		}
-
-		@Override
-		public boolean test(Entity entityToTest) {
-			if (this.searchPredicate.test(entityToTest)) {
-				this.entity = entityToTest;
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public Entity getEntity() {
-			return this.entity;
-		}
-
+	public static interface ProviderPredicate extends Predicate<Container> {
 	}
 
 }

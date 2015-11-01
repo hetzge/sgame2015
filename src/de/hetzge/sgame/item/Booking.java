@@ -5,8 +5,9 @@ public class Booking {
 	final int amount;
 	final Container from;
 	Container to;
+	boolean hide;
 
-	Booking(E_Item item, int amount, Container from, Container to) {
+	Booking(E_Item item, int amount, Container from, Container to, boolean hide) {
 		if (item == null || from == null || to == null) {
 			throw new IllegalArgumentException("Invalid null parameter. No null values allowed: item->" + item + ", from->" + from + ", to->" + to);
 		}
@@ -20,6 +21,11 @@ public class Booking {
 		this.amount = amount;
 		this.from = from;
 		this.to = to;
+		this.hide = hide;
+	}
+
+	Booking(E_Item item, int amount, Container from, Container to) {
+		this(item, amount, from, to, false);
 	}
 
 	public Container getFrom() {
@@ -28,6 +34,14 @@ public class Booking {
 
 	public Container getTo() {
 		return this.to;
+	}
+
+	public void hide() {
+		this.hide = true;
+	}
+
+	public void show() {
+		this.hide = false;
 	}
 
 	public void changeTo(Container container) {

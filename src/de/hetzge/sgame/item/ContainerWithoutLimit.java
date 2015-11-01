@@ -1,11 +1,11 @@
 package de.hetzge.sgame.item;
 
-import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.world.IF_GridEntity;
 
 public class ContainerWithoutLimit extends Container {
 
-	public ContainerWithoutLimit(Entity entity) {
-		super(entity);
+	public ContainerWithoutLimit(IF_GridEntity gridEntity) {
+		super(gridEntity);
 	}
 
 	@Override

@@ -70,14 +70,32 @@ public class RessourceFunction {
 		idleWestTextureRegion.flip(true, false);
 		Animation idleEastAnimation = new Animation(1, new TextureRegion[] { idleWestTextureRegion });
 
-		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.PROVIDER).hashGraphicKey(), test1Animation);
-		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.WORKSTATION).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.TREE).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.DESTROY, E_EntityType.TREE).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.CAIRN).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.DESTROY, E_EntityType.CAIRN).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.BUILDING_LUMBERJACK).hashGraphicKey(), test1Animation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.BUILDING_QUARRY).hashGraphicKey(), test1Animation);
 		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, E_EntityType.FACTORY).hashGraphicKey(), test1Animation);
 		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.WORKING, E_EntityType.FACTORY).hashGraphicKey(), test1Animation);
 
-		// MINER
+		// LUMBERJACK
 
-		E_EntityType entityType = E_EntityType.MINER;
+		E_EntityType entityType = E_EntityType.WORKER_LUMBERJACK;
+
+		result.put(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, entityType).hashGraphicKey(), idleEastAnimation);
+		result.put(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleNorthAnimation);
+		result.put(new GraphicKey(E_Orientation.WEST, E_Activity.IDLE, entityType).hashGraphicKey(), idleWestAnimation);
+		result.put(new GraphicKey(E_Orientation.SOUTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleSouthAnimation);
+
+		loadLine(result, textureRegions, 2, E_Activity.WALKING, entityType);
+		loadLine(result, textureRegions, 3, E_Activity.CARRY, entityType);
+		loadLine(result, textureRegions, 7, E_Activity.WORKING, entityType);
+		loadLine(result, textureRegions, 13, E_Activity.DESTROY, entityType);
+
+		// MASON
+
+		entityType = E_EntityType.WORKER_MASON;
 
 		result.put(new GraphicKey(E_Orientation.EAST, E_Activity.IDLE, entityType).hashGraphicKey(), idleEastAnimation);
 		result.put(new GraphicKey(E_Orientation.NORTH, E_Activity.IDLE, entityType).hashGraphicKey(), idleNorthAnimation);

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 
-public class GridPosition implements IF_GridPosition, Serializable {
+public class GridPosition implements IF_GridPosition, IF_GridEntity, Serializable {
 
 	private short x = (short) 0;
 	private short y = (short) 0;
@@ -24,12 +24,12 @@ public class GridPosition implements IF_GridPosition, Serializable {
 
 	@Override
 	public short getGridX() {
-		return x;
+		return this.x;
 	}
 
 	@Override
 	public short getGridY() {
-		return y;
+		return this.y;
 	}
 
 	public GridPosition setX(short x) {
@@ -53,19 +53,39 @@ public class GridPosition implements IF_GridPosition, Serializable {
 	}
 
 	public float getCenteredRealX() {
-		return x * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+		return this.x * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 	}
 
 	public float getCenteredRealY() {
-		return y * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+		return this.y * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+	}
+
+	@Override
+	public short getRegisteredX() {
+		return getGridX();
+	}
+
+	@Override
+	public short getRegisteredY() {
+		return getGridY();
+	}
+
+	@Override
+	public short getWidth() {
+		return 1;
+	}
+
+	@Override
+	public short getHeight() {
+		return 1;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
+		result = prime * result + this.x;
+		result = prime * result + this.y;
 		return result;
 	}
 
@@ -78,16 +98,16 @@ public class GridPosition implements IF_GridPosition, Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		GridPosition other = (GridPosition) obj;
-		if (x != other.x)
+		if (this.x != other.x)
 			return false;
-		if (y != other.y)
+		if (this.y != other.y)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "GridPosition [x=" + x + ", y=" + y + "]";
+		return "GridPosition [x=" + this.x + ", y=" + this.y + "]";
 	}
 
 }

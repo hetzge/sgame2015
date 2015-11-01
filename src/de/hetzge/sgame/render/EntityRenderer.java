@@ -56,7 +56,7 @@ public class EntityRenderer implements IF_Renderer {
 				App.itemRenderer.renderContainer(left, doorXLeft, doorYLeft);
 			}
 			if (right != null) {
-				App.itemRenderer.renderContainer(left, doorXRight, doorYRight);
+				App.itemRenderer.renderContainer(right, doorXRight, doorYRight);
 			}
 		}
 	}

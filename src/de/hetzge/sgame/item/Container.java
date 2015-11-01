@@ -18,13 +18,13 @@ public class Container implements Serializable {
 		private int amount;
 	}
 
-	private final IF_GridEntity entity;
+	private final IF_GridEntity gridEntity;
 
 	private final Map<E_Item, Value> items = new HashMap<>();
 	private final List<Booking> bookings = new LinkedList<>();
 
-	public Container(Entity entity) {
-		this.entity = entity;
+	public Container(IF_GridEntity gridEntity) {
+		this.gridEntity = gridEntity;
 	}
 
 	public synchronized void transfer(Booking booking) {
@@ -114,7 +114,7 @@ public class Container implements Serializable {
 	}
 
 	public synchronized boolean hasAmountAvailable(E_Item item, int amount) {
-		return this.has(item) && this.amount(item) - this.bookedFromAmount(item) >= amount;
+		return this.has(item) && this.amount(item) - this.bookedFromAmount(item, false) >= amount;
 	}
 
 	public synchronized boolean canAddAmount(E_Item item, int amount) {
@@ -131,11 +131,13 @@ public class Container implements Serializable {
 	/**
 	 * Returns the amount of a given item is booked from this container.
 	 */
-	private int bookedFromAmount(E_Item item) {
+	private int bookedFromAmount(E_Item item, boolean hidden) {
 		int amount = 0;
 		for (Booking booking : this.bookings) {
-			if (booking.from == this && booking.item.equals(item)) {
-				amount += booking.amount;
+			if (!hidden || booking.hide) {
+				if (booking.from == this && booking.item.equals(item)) {
+					amount += booking.amount;
+				}
 			}
 		}
 		return amount;
@@ -161,6 +163,10 @@ public class Container implements Serializable {
 
 	public synchronized boolean has(E_Item item) {
 		return this.amount(item) > 0;
+	}
+
+	public synchronized int amountWithoutHidden(E_Item item) {
+		return amount(item) - bookedFromAmount(item, true);
 	}
 
 	public synchronized int amount(E_Item item) {
@@ -211,17 +217,40 @@ public class Container implements Serializable {
 		this.bookings.clear();
 	}
 
+	/**
+	 * A container is empty if there are no bookings and every {@link Value}s
+	 * amount is 0.
+	 */
+	public synchronized boolean isEmpty() {
+		if (!this.bookings.isEmpty()) {
+			return false;
+		}
+		for (Value value : this.items.values()) {
+			if (value.amount != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @see Container#isEmpty()
+	 */
+	public synchronized boolean isNotEmpty() {
+		return !isEmpty();
+	}
+
 	/*
 	 * TODO bisschen unsauber hier
 	 */
 
 	public IF_GridEntity getObject() {
-		return this.entity;
+		return this.gridEntity;
 	}
 
 	public Entity getEntity() {
-		if (this.entity instanceof Entity) {
-			return (Entity) this.entity;
+		if (this.gridEntity instanceof Entity) {
+			return (Entity) this.gridEntity;
 		} else {
 			throw new InvalidGameStateException();
 		}

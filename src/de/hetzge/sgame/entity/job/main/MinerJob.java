@@ -5,7 +5,8 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.sub.MineSubJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
-import de.hetzge.sgame.function.EntityFunction.SearchPredicate;
+import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
+import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
@@ -37,7 +38,7 @@ public class MinerJob extends EntityJob {
 						// make transfer complete
 						if (hasBooking()) {
 							this.entity.unsetItem();
-							this.booking.getFrom().transfer(this.booking);
+							this.booking.transfer();
 							unsetBooking();
 						} else {
 							throw new InvalidGameStateException("No transfer without booking.");
@@ -51,6 +52,7 @@ public class MinerJob extends EntityJob {
 							// item fallen lassen
 							unsetWorkstation();
 							dropItem();
+							unsetBooking();
 						}
 					}
 				}
@@ -80,23 +82,32 @@ public class MinerJob extends EntityJob {
 	}
 
 	private void findWorkstation() {
-		SearchPredicate searchPredicate = entityToTest -> {
+		EntityPredicate searchPredicate = entityToTest -> {
 			EntityJob job = entityToTest.getJob();
-			if (job instanceof WorkstationJob) {
-				WorkstationJob workstationJob = (WorkstationJob) job;
-				if (!workstationJob.hasWorker()) {
-					workstationJob.setWorker(this.entity);
-					setWorkstation(entityToTest);
-					return true;
-				}
+			if (!(job instanceof WorkstationJob)) {
+				return false;
 			}
-			return false;
+
+			WorkstationJob workstationJob = (WorkstationJob) job;
+			if (workstationJob.hasWorker()) {
+				return false;
+			}
+
+			E_Item WorkstationItem = workstationJob.getEntity().getDefinition().getMineItem();
+			E_Item minerItem = this.entity.getDefinition().getMineItem();
+			if (minerItem != WorkstationItem) {
+				return false;
+			}
+
+			workstationJob.setWorker(this.entity);
+			setWorkstation(entityToTest);
+			return true;
 		};
-		App.entityFunction.findEntity(this.entity, searchPredicate);
+		App.entityFunction.iterateMap(this.entity, new EntityOnMapPredicate(searchPredicate));
 	}
 
 	private void findMineEntityAndBookAndGoto() {
-		SearchPredicate searchPredicate = entityToTest -> {
+		EntityPredicate searchPredicate = entityToTest -> {
 			EntityJob job = entityToTest.getJob();
 			if (job instanceof MineProviderJob) {
 				E_Item item = this.entity.getDefinition().getMineItem();
@@ -117,7 +128,7 @@ public class MinerJob extends EntityJob {
 			return false;
 		};
 
-		Path path = App.entityFunction.findPath(this.entity, searchPredicate);
+		Path path = App.entityFunction.findPath(this.entity, new EntityOnMapPredicate(searchPredicate));
 
 		if (path != null) {
 			this.entity.setPath(path);
@@ -127,8 +138,7 @@ public class MinerJob extends EntityJob {
 	private void startWorking(Entity mineEntity) {
 		EntityJob mineEntityJob = mineEntity.getJob();
 		if (mineEntityJob instanceof MineProviderJob) {
-			E_Item item = this.booking.getItem();
-			addChild(new MineSubJob(item));
+			addChild(new MineSubJob(this.entity, this.booking));
 		} else {
 			throw new InvalidGameStateException();
 		}

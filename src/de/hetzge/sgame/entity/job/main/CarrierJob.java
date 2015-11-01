@@ -31,6 +31,7 @@ public class CarrierJob extends EntityJob {
 					if (reachedTo) {
 						// transfer
 						this.booking.transfer();
+						this.entity.unsetItem();
 						unsetBooking();
 					} else {
 						// goto to
@@ -50,6 +51,7 @@ public class CarrierJob extends EntityJob {
 					GridPosition fromDoorGridPosition = from.getObject().getDoorGridPosition();
 					boolean reachedFrom = gridPosition.equals(fromDoorGridPosition);
 					if (reachedFrom) {
+						this.booking.hide();
 						E_Item item = this.booking.getItem();
 						App.entityFunction.takeItem(this.entity, item);
 					} else {

@@ -43,23 +43,32 @@ public class Function {
 		// }
 		// }
 
-		App.entityFunction.createEntity(E_EntityType.PROVIDER, (short) 5, (short) 5, (short) 1, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 10, (short) 2, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.WORKSTATION, (short) 10, (short) 30, (short) 4, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 2, (short) 3, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.MINER, (short) 1, (short) 1, (short) 0, (byte) 0);
-		App.entityFunction.createEntity(E_EntityType.MINER, (short) 4, (short) 2, (short) 5, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.TREE, (short) 5, (short) 5, (short) 1, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.TREE, (short) 5, (short) 4, (short) 8, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.TREE, (short) 5, (short) 3, (short) 9, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CAIRN, (short) 6, (short) 5, (short) 10, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CAIRN, (short) 6, (short) 4, (short) 11, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CAIRN, (short) 6, (short) 3, (short) 12, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.BUILDING_QUARRY, (short) 10, (short) 10, (short) 2, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.BUILDING_LUMBERJACK, (short) 10, (short) 30, (short) 4, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.WORKER_MASON, (short) 1, (short) 2, (short) 3, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.WORKER_LUMBERJACK, (short) 1, (short) 1, (short) 0, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.WORKER_LUMBERJACK, (short) 12, (short) 3, (short) 5, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.FACTORY, (short) 15, (short) 15, (short) 7, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.CARRIER, (short) 12, (short) 12, (short) 6, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CARRIER, (short) 12, (short) 13, (short) 13, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CARRIER, (short) 12, (short) 14, (short) 14, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CARRIER, (short) 12, (short) 15, (short) 15, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.CARRIER, (short) 12, (short) 16, (short) 16, (byte) 0);
 
 		// for (int i = 0; i < 100; i++) {
 		// App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
 		// }
 
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.WOOD, 4);
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.STONE, 4);
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.FISCH, 4);
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.BREAD, 2);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.WOOD, 8);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.STONE, 8);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.FISCH, 8);
+		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.BREAD, 8);
 
 	}
 

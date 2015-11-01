@@ -32,7 +32,7 @@ public class ItemRenderer implements IF_Renderer {
 			float xOffset = round * 6 * (orientation.getOffsetX() + nextOrientation.getOffsetX());
 			float yOffset = round * 6 * (orientation.getOffsetY() + nextOrientation.getOffsetY());
 
-			int amount = container.amount(item);
+			int amount = container.amountWithoutHidden(item);
 			renderItems(item, amount, worldX + xOffset, worldY + yOffset);
 			i++;
 		}
