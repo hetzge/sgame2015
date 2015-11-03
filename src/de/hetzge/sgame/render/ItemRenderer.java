@@ -15,7 +15,7 @@ public class ItemRenderer implements IF_Renderer {
 
 	public void renderContainer(Container container, short gridX, short gridY) {
 		float worldX = gridX * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
-		float worldY = gridY * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+		float worldY = gridY * Constant.TILE_SIZE - Constant.TILE_SIZE;
 		renderContainer(container, worldX, worldY);
 	}
 
@@ -34,6 +34,7 @@ public class ItemRenderer implements IF_Renderer {
 
 			int amount = container.amountWithoutHidden(item);
 			renderItems(item, amount, worldX + xOffset, worldY + yOffset);
+			renderItems(item, amount, worldX, worldY);
 			i++;
 		}
 	}

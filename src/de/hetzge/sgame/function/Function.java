@@ -43,7 +43,7 @@ public class Function {
 		// }
 		// }
 
-		App.entityFunction.createEntity(E_EntityType.TREE, (short) 5, (short) 5, (short) 1, (byte) 0);
+		App.entityFunction.createEntity(E_EntityType.TREE, (short) 0, (short) 0, (short) 1, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.TREE, (short) 5, (short) 4, (short) 8, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.TREE, (short) 5, (short) 3, (short) 9, (byte) 0);
 		App.entityFunction.createEntity(E_EntityType.CAIRN, (short) 6, (short) 5, (short) 10, (byte) 0);
@@ -65,10 +65,10 @@ public class Function {
 		// App.game.getLocalGameState().addSelection(App.game.getEntityManager().get(i));
 		// }
 
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.WOOD, 8);
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.STONE, 8);
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.FISCH, 8);
-		App.game.getWorld().getContainerGrid().get((short) 5, (short) 7).set(E_Item.BREAD, 8);
+		App.game.getWorld().getContainerGrid().get((short) 3, (short) 3).set(E_Item.WOOD, 8);
+		App.game.getWorld().getContainerGrid().get((short) 3, (short) 3).set(E_Item.STONE, 8);
+		App.game.getWorld().getContainerGrid().get((short) 3, (short) 3).set(E_Item.FISCH, 8);
+		App.game.getWorld().getContainerGrid().get((short) 3, (short) 3).set(E_Item.BREAD, 8);
 
 	}
 

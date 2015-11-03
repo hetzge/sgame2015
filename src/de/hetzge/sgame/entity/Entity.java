@@ -26,8 +26,8 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	private float x;
 	private float y;
 
-	private short registeredX;
-	private short registeredY;
+	private short registeredX = -1;
+	private short registeredY = -1;
 
 	private byte orientation = 0;
 	private byte activity = 0;
@@ -363,15 +363,19 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Entity other = (Entity) obj;
-		if (this.id != other.id)
+		if (this.id != other.id) {
 			return false;
+		}
 		return true;
 	}
 
