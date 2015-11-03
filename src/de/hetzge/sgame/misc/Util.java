@@ -42,4 +42,12 @@ public final class Util {
 		return null;
 	}
 
+	public static short worldToGrid(float world) {
+		return (short) Math.floor(world / Constant.TILE_SIZE);
+	}
+
+	public static float gridToWorld(short grid) {
+		return grid * Constant.TILE_SIZE;
+	}
+
 }

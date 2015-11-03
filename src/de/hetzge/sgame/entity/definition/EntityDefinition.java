@@ -23,6 +23,7 @@ import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
 
+	protected boolean selectable = false;
 	protected boolean moveable = false;
 	protected short width = 1;
 	protected short height = 1;
@@ -40,6 +41,10 @@ public abstract class EntityDefinition {
 	protected Map<E_Item, Integer> needs = new HashMap<>();
 	protected Function<Entity, EntityJob> jobSupplier = (entity) -> Constant.NO_JOB;
 	protected List<Receipt> receipts = Collections.emptyList();
+
+	public boolean isSelectable() {
+		return this.selectable;
+	}
 
 	public boolean isMoveable() {
 		return this.moveable;

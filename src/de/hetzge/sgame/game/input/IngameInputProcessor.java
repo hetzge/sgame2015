@@ -1,8 +1,4 @@
-package de.hetzge.sgame.game;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+package de.hetzge.sgame.game.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,14 +6,14 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.game.event.request.EventRequestGoto;
-import de.hetzge.sgame.misc.Constant;
+import de.hetzge.sgame.game.LocalGameState;
 
 public class IngameInputProcessor implements InputProcessor {
+
+	private MouseEventPosition mouseDownEventPosition;
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -65,24 +61,16 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
+		this.mouseDownEventPosition = new MouseEventPosition(x, y);
+		App.game.getLocalGameState().getInputMode().onMouseDown(button, this.mouseDownEventPosition);
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-
-		if (button == Input.Buttons.LEFT) {
-			LocalGameState localGameState = App.game.getLocalGameState();
-			boolean hasSelection = localGameState.hasSelection();
-			if (hasSelection) {
-				Vector2 worldPosition = App.libGdxApplication.unproject(x, y);
-				Set<Entity> selectionEntities = localGameState.getSelection();
-				List<Integer> selectionEntityIds = selectionEntities.stream().map(Entity::getId).collect(Collectors.toList());
-				EventRequestGoto eventRequestGoto = new EventRequestGoto(selectionEntityIds, (short) (worldPosition.x / Constant.TILE_SIZE), (short) (worldPosition.y / Constant.TILE_SIZE));
-				App.network.sendOrSelf(eventRequestGoto);
-			}
-		}
-
+		MouseEventPosition mouseEventPosition = new MouseEventPosition(x, y);
+		App.game.getLocalGameState().getInputMode().onMouseUp(button, this.mouseDownEventPosition, mouseEventPosition);
+		this.mouseDownEventPosition = null;
 		return false;
 	}
 

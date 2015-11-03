@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.misc.Util;
 
@@ -32,6 +33,14 @@ public interface IF_Grid {
 
 	public default void eachEntityGridPosition(IF_GridEntity gridEntity, Consumer<GridPosition> consumer) {
 		eachEntityGridPosition(gridEntity, gridEntity.getRegisteredX(), gridEntity.getRegisteredY(), consumer);
+	}
+
+	public default short toGridX(float value) {
+		return (short) Math.min(Math.max(value / Constant.TILE_SIZE, 0), getWidth() - 1);
+	}
+
+	public default short toGridY(float value) {
+		return (short) Math.min(Math.max(value / Constant.TILE_SIZE, 0), getHeight() - 1);
 	}
 
 	/**

@@ -22,6 +22,10 @@ public class WorldRenderer implements IF_Renderer {
 
 	private List<Entity> visibleEntities = Collections.emptyList();
 
+	public void render() {
+		render(App.game.getWorld());
+	}
+
 	public void render(World world) {
 		OrthographicCamera camera = getCamera();
 

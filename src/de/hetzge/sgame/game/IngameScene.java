@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.game.input.IngameInputProcessor;
 
 public class IngameScene implements Screen {
 

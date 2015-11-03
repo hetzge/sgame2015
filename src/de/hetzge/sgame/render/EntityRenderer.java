@@ -1,8 +1,12 @@
 package de.hetzge.sgame.render;
 
+import java.util.List;
+import java.util.Set;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
@@ -11,8 +15,21 @@ import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
+import de.hetzge.sgame.misc.Util;
 
 public class EntityRenderer implements IF_Renderer {
+
+	public void render() {
+		List<Entity> entities = App.worldRenderer.getVisibleEntities();
+		for (Entity entity : entities) {
+			render(entity);
+		}
+
+		Set<Entity> selection = App.game.getLocalGameState().getSelection();
+		for (Entity entity : selection) {
+			App.entityRenderer.renderSelected(entity);
+		}
+	}
 
 	public void render(Entity entity) {
 		float stateTime = App.timing.getStateTime();
@@ -34,6 +51,15 @@ public class EntityRenderer implements IF_Renderer {
 		renderPath(entity);
 		renderRegistration(entity);
 		renderDoor(entity);
+	}
+
+	public void renderSelected(Entity entity) {
+		float worldX = entity.getWorldX();
+		float worldY = entity.getWorldY();
+		float width = Util.gridToWorld(entity.getDefinition().getWidth());
+		ShapeRenderer shapeRenderer = getShapeRenderer();
+		shapeRenderer.setColor(Color.RED);
+		shapeRenderer.line(worldX, -worldY, worldX + width, -worldY);
 	}
 
 	public void renderItems(Entity entity) {

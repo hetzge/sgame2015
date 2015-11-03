@@ -42,39 +42,39 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 
 	@Override
 	public void create() {
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		spriteBatch = new SpriteBatch();
-		shapeRenderer = new ShapeRenderer();
-		shapeRenderer.setAutoShapeType(true);
+		this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.spriteBatch = new SpriteBatch();
+		this.shapeRenderer = new ShapeRenderer();
+		this.shapeRenderer.setAutoShapeType(true);
 		switchGameScene(E_GameScene.LOAD);
 	}
 
 	@Override
 	public void render() {
-		camera.update();
-		spriteBatch.setProjectionMatrix(camera.combined);
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		spriteBatch.begin();
-		shapeRenderer.begin();
+		this.camera.update();
+		this.spriteBatch.setProjectionMatrix(this.camera.combined);
+		this.shapeRenderer.setProjectionMatrix(this.camera.combined);
+		this.spriteBatch.begin();
+		this.shapeRenderer.begin();
 		super.render();
-		spriteBatch.end();
-		shapeRenderer.end();
+		this.spriteBatch.end();
+		this.shapeRenderer.end();
 	}
 
 	public OrthographicCamera getCamera() {
-		return camera;
+		return this.camera;
 	}
 
 	public SpriteBatch getSpriteBatch() {
-		return spriteBatch;
+		return this.spriteBatch;
 	}
 
 	public ShapeRenderer getShapeRenderer() {
-		return shapeRenderer;
+		return this.shapeRenderer;
 	}
-	
+
 	public Vector2 unproject(int x, int y) {
-		Vector3 project = camera.unproject(new Vector3(x, y, 0));
+		Vector3 project = this.camera.unproject(new Vector3(x, y, 0));
 		return new Vector2(project.x, -project.y + Constant.TILE_SIZE);
 	}
 

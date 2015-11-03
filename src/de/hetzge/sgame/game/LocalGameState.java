@@ -8,8 +8,14 @@ import java.util.stream.Collectors;
 
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.game.input.E_Cursor;
+import de.hetzge.sgame.game.input.IF_InputMode;
+import de.hetzge.sgame.game.input.InputModeCommandUnits;
 
 public class LocalGameState {
+
+	private E_Cursor cursor = E_Cursor.DEFAULT;
+	private IF_InputMode inputMode = new InputModeCommandUnits();
 
 	private final Set<Entity> selection = new HashSet<>();
 	private E_EntityType entityTypeToBuild = null;
@@ -20,6 +26,22 @@ public class LocalGameState {
 	private boolean showIds = false;
 	private boolean showWorldOwner = false;
 	private boolean showDoors = false;
+
+	public void setCursor(E_Cursor cursor) {
+		this.cursor = cursor;
+	}
+
+	public E_Cursor getCursor() {
+		return this.cursor;
+	}
+
+	public IF_InputMode getInputMode() {
+		return this.inputMode;
+	}
+
+	public void setInputMode(IF_InputMode inputMode) {
+		this.inputMode = inputMode;
+	}
 
 	public boolean hasSelection() {
 		return !this.selection.isEmpty();

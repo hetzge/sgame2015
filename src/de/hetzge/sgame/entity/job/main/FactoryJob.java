@@ -42,13 +42,11 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 			for (Receipt receipt : receipts) {
 				E_Item result = receipt.getResult();
 				boolean canAddAmount = provides.canAddAmount(result, 1);
-				if (canAddAmount) {
-					if (receipt.possible(needs)) {
-						this.finishProductFrameId = App.timing.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
-						this.workingAt = receipt;
-						this.entity.setActivity(E_Activity.WORKING);
-						break;
-					}
+				if (canAddAmount && receipt.possible(needs)) {
+					this.finishProductFrameId = App.timing.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
+					this.workingAt = receipt;
+					this.entity.setActivity(E_Activity.WORKING);
+					break;
 				}
 			}
 		} else if (App.timing.isCurrentOrPast(this.finishProductFrameId)) {
@@ -66,6 +64,8 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 
 			this.entity.setActivity(E_Activity.IDLE);
 			unsetWorkingAt();
+		} else {
+			pauseMedium();
 		}
 	}
 

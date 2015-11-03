@@ -22,7 +22,7 @@ public final class Constant {
 
 	// performance
 	public static final int MAX_A_STAR_DEPTH = 100;
-	public static final int DO_JOB_EVERY_XTH_FRAMES = 1;
+	public static final int DO_JOB_EVERY_XTH_FRAMES = 10;
 
 	private Constant() {
 	}
