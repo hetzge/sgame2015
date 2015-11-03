@@ -1,5 +1,7 @@
 package de.hetzge.sgame.game.input;
 
+import org.pmw.tinylog.Logger;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
@@ -68,6 +70,10 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
+		if (this.mouseDownEventPosition == null) {
+			Logger.debug("Abort touchUp caused by missing touchDown");
+			return false;
+		}
 		MouseEventPosition mouseEventPosition = new MouseEventPosition(x, y);
 		App.game.getLocalGameState().getInputMode().onMouseUp(button, this.mouseDownEventPosition, mouseEventPosition);
 		this.mouseDownEventPosition = null;

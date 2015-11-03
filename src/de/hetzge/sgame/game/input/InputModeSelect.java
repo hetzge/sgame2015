@@ -18,8 +18,6 @@ public class InputModeSelect implements IF_InputMode {
 	@Override
 	public void onMouseUp(int button, MouseEventPosition downPosition, MouseEventPosition upPosition) {
 		if (button == Input.Buttons.LEFT) {
-			System.out.println("LEFT");
-
 			int downX = downPosition.getGridX();
 			int downY = downPosition.getGridY();
 			int upX = upPosition.getGridX();
@@ -29,8 +27,6 @@ public class InputModeSelect implements IF_InputMode {
 			int startY = Math.min(downY, upY);
 			int endX = Math.max(downX, upX);
 			int endY = Math.max(downY, upY);
-
-			System.out.println("(" + startX + "|" + startY + ") (" + endX + "|" + endY + ")");
 
 			List<Entity> selection = new LinkedList<>();
 
@@ -49,8 +45,6 @@ public class InputModeSelect implements IF_InputMode {
 					}
 				}
 			}
-
-			System.out.println(selection.size());
 
 			App.game.getLocalGameState().setSelection(selection);
 		}

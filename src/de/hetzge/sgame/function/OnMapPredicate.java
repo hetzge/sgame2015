@@ -53,7 +53,13 @@ public interface OnMapPredicate extends Predicate<GridPosition> {
 					}
 				}
 			}
-			return App.game.getWorld().getContainerGrid().hasItemAvailable(gridPosition, this.item);
+
+			ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
+			boolean hasItemAvailable = containerGrid.hasItemAvailable(gridPosition, this.item);
+			if (hasItemAvailable) {
+				provideContainer = containerGrid.get(gridPosition);
+			}
+			return hasItemAvailable;
 		}
 
 		public Container getProvideContainer() {
