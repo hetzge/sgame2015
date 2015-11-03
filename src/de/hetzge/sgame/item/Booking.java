@@ -1,10 +1,12 @@
 package de.hetzge.sgame.item;
 
+import de.hetzge.sgame.error.InvalidGameStateException;
+
 public class Booking {
 	final E_Item item;
 	final int amount;
 	final Container from;
-	Container to;
+	final Container to;
 	boolean hide;
 
 	Booking(E_Item item, int amount, Container from, Container to, boolean hide) {
@@ -44,10 +46,30 @@ public class Booking {
 		this.hide = false;
 	}
 
-	public void changeTo(Container container) {
-		this.to.removeBooking(this);
-		this.to = container;
-		container.addBooking(this);
+	public Booking createWithOtherFrom(Container newFrom) {
+		rollback();
+		Booking changeBooking = this.from.book(this.item, this.amount, newFrom);
+		if (changeBooking == null) {
+			throw new InvalidGameStateException();
+		}
+		changeBooking.transfer();
+
+		Booking booking = newFrom.book(this.item, this.amount, this.to);
+		if (booking == null) {
+			throw new InvalidGameStateException();
+		} else {
+			return booking;
+		}
+	}
+
+	public Booking createWithOtherTo(Container newTo) {
+		rollback();
+		Booking booking = this.from.book(this.item, this.amount, newTo);
+		if (booking == null) {
+			throw new InvalidGameStateException();
+		} else {
+			return booking;
+		}
 	}
 
 	public E_Item getItem() {

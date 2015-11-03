@@ -5,16 +5,18 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.item.ContainerWithoutLimit;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
-public class CarrierJob extends EntityJob {
+public class CarrierJob extends EntityJob implements IF_ItemJob {
 
 	private Booking booking;
+	private final Container container;
 
 	public CarrierJob(Entity entity) {
 		super(entity);
+		this.container = new ContainerWithoutLimit(entity);
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class CarrierJob extends EntityJob {
 							this.entity.setPath(path);
 						} else {
 							// failed
-							App.entityFunction.dropItem(this.entity, this.booking);
+							dropItem();
 							unsetBooking();
 							pauseLong();
 						}
@@ -52,8 +54,7 @@ public class CarrierJob extends EntityJob {
 					boolean reachedFrom = gridPosition.equals(fromDoorGridPosition);
 					if (reachedFrom) {
 						this.booking.hide();
-						E_Item item = this.booking.getItem();
-						App.entityFunction.takeItem(this.entity, item);
+						takeItem();
 					} else {
 						// goto
 						Path path = App.entityFunction.findPath(this.entity, fromDoorGridPosition);
@@ -81,8 +82,19 @@ public class CarrierJob extends EntityJob {
 		return this.booking != null;
 	}
 
+	@Override
 	public void setBooking(Booking booking) {
 		this.booking = booking;
+	}
+
+	@Override
+	public Container getContainer() {
+		return this.container;
+	}
+
+	@Override
+	public Booking getBooking() {
+		return this.booking;
 	}
 
 }

@@ -9,20 +9,21 @@ import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
+import de.hetzge.sgame.item.ContainerWithoutLimit;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
-public class MinerJob extends EntityJob {
+public class MinerJob extends EntityJob implements IF_ItemJob {
 
 	private Entity workstation = null;
 	private Booking booking = null;
+	private final Container container;
 
 	public MinerJob(Entity entity) {
 		super(entity);
+		this.container = new ContainerWithoutLimit(entity);
 	}
-
-	// TODO sleep
 
 	@Override
 	protected void work() {
@@ -138,7 +139,7 @@ public class MinerJob extends EntityJob {
 	private void startWorking(Entity mineEntity) {
 		EntityJob mineEntityJob = mineEntity.getJob();
 		if (mineEntityJob instanceof MineProviderJob) {
-			addChild(new MineSubJob(this.entity, this.booking));
+			addChild(new MineSubJob(this.entity, this));
 		} else {
 			throw new InvalidGameStateException();
 		}
@@ -148,10 +149,6 @@ public class MinerJob extends EntityJob {
 		short[] xPath = path.getXPath();
 		short[] yPath = path.getYPath();
 		this.entity.setPath(xPath, yPath);
-	}
-
-	private void dropItem() {
-		App.entityFunction.dropItem(this.entity, this.booking);
 	}
 
 	private boolean isEntityAtWorkstationDoor() {
@@ -195,6 +192,21 @@ public class MinerJob extends EntityJob {
 	}
 
 	@Override
+	public Container getContainer() {
+		return this.container;
+	}
+
+	@Override
+	public Booking getBooking() {
+		return this.booking;
+	}
+
+	@Override
+	public void setBooking(Booking booking) {
+		this.booking = booking;
+	}
+
+	@Override
 	public void destroy() {
 		dropItem();
 		WorkstationJob workstationJob = getWorkstationJob();
@@ -202,4 +214,5 @@ public class MinerJob extends EntityJob {
 			workstationJob.unsetWorker();
 		}
 	}
+
 }

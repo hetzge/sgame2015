@@ -13,11 +13,6 @@ import de.hetzge.sgame.world.IF_GridEntity;
 
 public class Container implements Serializable {
 
-	private class Value implements Serializable {
-		private int max;
-		private int amount;
-	}
-
 	private final IF_GridEntity gridEntity;
 
 	private final Map<E_Item, Value> items = new HashMap<>();
@@ -90,10 +85,10 @@ public class Container implements Serializable {
 			throw new IllegalArgumentException("Only positive amounts can be booked");
 		}
 		synchronized (to) {
-			if (!this.has(item) || !this.hasAmountAvailable(item, amount)) {
+			if (!this.hasAmountAvailable(item, amount)) {
 				return null;
 			}
-			if (!to.can(item) || !to.canAddAmount(item, amount)) {
+			if (!to.canAddAmount(item, amount)) {
 				return null;
 			}
 
@@ -254,6 +249,11 @@ public class Container implements Serializable {
 		} else {
 			throw new InvalidGameStateException();
 		}
+	}
+
+	private class Value implements Serializable {
+		private int max;
+		private int amount;
 	}
 
 }

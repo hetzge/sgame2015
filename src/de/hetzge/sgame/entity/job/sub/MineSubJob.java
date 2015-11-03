@@ -4,9 +4,9 @@ import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.entity.job.main.IF_ItemJob;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.GridPosition;
@@ -14,11 +14,12 @@ import de.hetzge.sgame.world.GridPosition;
 public class MineSubJob extends EntityJob {
 
 	private final int finishMineFrameId;
-	private final Booking booking;
+	private final IF_ItemJob itemJob;
 
-	public MineSubJob(Entity entity, Booking booking) {
+	public MineSubJob(Entity entity, IF_ItemJob itemJob) {
 		super(entity);
-		this.booking = booking;
+		this.itemJob = itemJob;
+		Booking booking = itemJob.getBooking();
 		GridPosition entityGridPosition = entity.getGridPosition();
 		GridPosition mineFromGridPosition = booking.getFrom().getEntity().getGridPosition();
 		E_Orientation orientationTo = E_Orientation.orientationTo(entityGridPosition, mineFromGridPosition);
@@ -30,19 +31,20 @@ public class MineSubJob extends EntityJob {
 	@Override
 	protected void work() {
 		if (App.timing.isCurrentOrPast(this.finishMineFrameId)) {
-			E_Item mineItem = this.entity.getDefinition().getMineItem();
-			App.entityFunction.takeItem(this.entity, mineItem);
-			destroyMineProviderIfEmpty();
+			Container fromContainerBefore = this.itemJob.getBooking().getFrom();
+			this.itemJob.takeItem();
+			destroyMineProviderIfEmpty(fromContainerBefore);
 			this.entity.popJob();
 		}
 	}
 
-	private void destroyMineProviderIfEmpty() {
-		Container fromContainer = this.booking.getFrom();
+	private void destroyMineProviderIfEmpty(Container fromContainer) {
 		boolean isFromContainerEmpty = fromContainer.isEmpty();
 		if (isFromContainerEmpty) {
 			Entity fromEntity = fromContainer.getEntity();
-			App.entityFunction.destroyEntity(fromEntity);
+			if (fromEntity != null) {
+				App.entityFunction.destroyEntity(fromEntity);
+			}
 		}
 	}
 

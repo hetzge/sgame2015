@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.Validate;
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
@@ -16,9 +17,7 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.entity.job.main.DestroyJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
-import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.CollisionGrid;
@@ -29,26 +28,8 @@ import de.hetzge.sgame.world.World;
 
 public class EntityFunction {
 
-	public void dropItem(Entity entity, Booking booking) {
-		if (booking != null) {
-			if (entity.hasItem()) {
-				GridPosition gridPosition = entity.getGridPosition();
-				Container worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
-				booking.changeTo(worldContainer);
-				booking.transfer();
-				entity.unsetItem();
-			} else {
-				booking.rollback();
-			}
-		}
-	}
-
-	public void takeItem(Entity entity, E_Item item) {
-		entity.setItem(item);
-		entity.setActivity(E_Activity.CARRY);
-	}
-
 	public void destroyEntity(Entity entity) {
+		Validate.notNull(entity);
 		Logger.info("destroy entity " + entity.getId());
 		entity.setOwner(Constant.DEATH_PLAYER_ID);
 		entity.setActivity(E_Activity.DESTROY);

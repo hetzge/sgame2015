@@ -157,7 +157,7 @@ public abstract class EntityDefinition {
 	public static class Provider extends EntityDefinition {
 		public Provider(E_Item item) {
 			Map<E_Item, Integer> provides = new HashMap<>();
-			provides.put(item, Constant.DEFAULT_MAX_ITEMS);
+			provides.put(item, 1);
 			this.mineProvides = provides;
 			this.jobSupplier = entity -> new MineProviderJob(entity);
 		}
