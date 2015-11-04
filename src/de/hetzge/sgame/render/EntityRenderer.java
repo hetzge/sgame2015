@@ -38,12 +38,12 @@ public class EntityRenderer implements IF_Renderer {
 		Animation animation = App.ressources.getGraphic(entity);
 		TextureRegion keyFrame = animation.getKeyFrame(stateTime, true);
 		int regionWidth = keyFrame.getRegionWidth();
-		int regionHeight = keyFrame.getRegionHeight();
+		// int regionHeight = keyFrame.getRegionHeight();
 		int entityWidth = entity.getWidth() * Constant.TILE_SIZE;
-		int entityHeight = entity.getHeight() * Constant.TILE_SIZE;
+		// int entityHeight = entity.getHeight() * Constant.TILE_SIZE;
 		int offsetX = (entityWidth - regionWidth) / 2;
-		int offsetY = (entityHeight - regionHeight) / 2;
-		getSpriteBatch().draw(keyFrame, renderX + offsetX, -renderY - offsetY);
+		// int offsetY = (entityHeight - regionHeight) / 2;
+		getSpriteBatch().draw(keyFrame, renderX + offsetX, -renderY);
 
 		renderItems(entity);
 		renderItem(entity);
@@ -54,12 +54,12 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderSelected(Entity entity) {
-		float worldX = entity.getWorldX();
-		float worldY = entity.getWorldY();
+		float renderX = entity.getRenderX();
+		float renderY = entity.getRenderY();
 		float width = Util.gridToWorld(entity.getDefinition().getWidth());
 		ShapeRenderer shapeRenderer = getShapeRenderer();
 		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.line(worldX, -worldY, worldX + width, -worldY);
+		shapeRenderer.line(renderX, -renderY, renderX + width, -renderY);
 	}
 
 	public void renderItems(Entity entity) {

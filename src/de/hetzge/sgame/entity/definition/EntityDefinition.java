@@ -23,7 +23,7 @@ import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
 
-	protected boolean selectable = false;
+	protected boolean selectable = true;
 	protected boolean moveable = false;
 	protected short width = 1;
 	protected short height = 1;
