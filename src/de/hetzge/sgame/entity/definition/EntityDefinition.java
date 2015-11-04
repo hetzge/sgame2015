@@ -23,7 +23,7 @@ import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
 
-	protected boolean selectable = true;
+	protected boolean selectable = false;
 	protected boolean moveable = false;
 	protected short width = 1;
 	protected short height = 1;
@@ -170,6 +170,8 @@ public abstract class EntityDefinition {
 			this.provides = provides;
 			this.mineItem = item;
 			this.jobSupplier = entity -> new WorkstationJob(entity);
+			this.width = 2;
+			this.height = 2;
 		}
 	}
 

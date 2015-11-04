@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.misc.Constant;
@@ -18,6 +20,7 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 	private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
+	private Viewport viewport;
 
 	public static void main(String[] args) {
 		handleArgs(args);
@@ -42,10 +45,13 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 
 	@Override
 	public void create() {
-		this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		int width = Gdx.graphics.getWidth();
+		int height = Gdx.graphics.getHeight();
+		this.camera = new OrthographicCamera(width, height);
 		this.spriteBatch = new SpriteBatch();
 		this.shapeRenderer = new ShapeRenderer();
 		this.shapeRenderer.setAutoShapeType(true);
+		this.viewport = new ScreenViewport(this.camera);
 		switchGameScene(E_GameScene.LOAD);
 	}
 
@@ -59,6 +65,11 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 		super.render();
 		this.spriteBatch.end();
 		this.shapeRenderer.end();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		this.viewport.update(width, height);
 	}
 
 	public OrthographicCamera getCamera() {

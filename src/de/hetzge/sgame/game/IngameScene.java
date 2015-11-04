@@ -16,9 +16,9 @@ public class IngameScene implements Screen {
 	@Override
 	public void show() {
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(ingameInputProcessor);
+		inputMultiplexer.addProcessor(this.ingameInputProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		updateThread.start();
+		this.updateThread.start();
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class IngameScene implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		App.renderer.render();
 
-		ingameInputProcessor.render();
+		this.ingameInputProcessor.render();
 	}
 
 	public void update() {
@@ -55,6 +55,10 @@ public class IngameScene implements Screen {
 
 	@Override
 	public void resume() {
+	}
+
+	public IngameInputProcessor getIngameInputProcessor() {
+		return this.ingameInputProcessor;
 	}
 
 }

@@ -36,11 +36,16 @@ public class WorldFunction {
 			return false;
 		}
 
+		// TODO Hier auch Dimensionen einbeziehen ?
 		if (entityGrid.is(x, y)) {
 			return false;
 		}
 
 		return true;
+	}
+
+	public boolean checkSpace(short x, short y) {
+		return !App.game.getWorld().getFixedCollisionGrid().is(x, y) && !App.game.getEntityGrid().is(x, y);
 	}
 
 	public GridPosition findEmptyGridPositionAround(E_EntityType entityType, short x, short y) {

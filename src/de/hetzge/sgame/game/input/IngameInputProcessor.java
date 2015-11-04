@@ -15,8 +15,6 @@ import de.hetzge.sgame.game.LocalGameState;
 
 public class IngameInputProcessor implements InputProcessor {
 
-	private MouseEventPosition mouseDownEventPosition;
-
 	@Override
 	public boolean keyDown(int keycode) {
 		return false;
@@ -63,20 +61,24 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		this.mouseDownEventPosition = new MouseEventPosition(x, y);
-		App.game.getLocalGameState().getInputMode().onMouseDown(button, this.mouseDownEventPosition);
+		LocalGameState localGameState = App.game.getLocalGameState();
+		MouseEventPosition mouseDownEventPosition = new MouseEventPosition(x, y);
+		localGameState.setMouseDownEventPosition(mouseDownEventPosition);
+		localGameState.getInputMode().onMouseDown(button, mouseDownEventPosition);
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		if (this.mouseDownEventPosition == null) {
+		LocalGameState localGameState = App.game.getLocalGameState();
+		MouseEventPosition mouseDownEventPosition = localGameState.getMouseDownEventPosition();
+		if (mouseDownEventPosition == null) {
 			Logger.debug("Abort touchUp caused by missing touchDown");
 			return false;
 		}
 		MouseEventPosition mouseEventPosition = new MouseEventPosition(x, y);
-		App.game.getLocalGameState().getInputMode().onMouseUp(button, this.mouseDownEventPosition, mouseEventPosition);
-		this.mouseDownEventPosition = null;
+		localGameState.getInputMode().onMouseUp(button, mouseDownEventPosition, mouseEventPosition);
+		localGameState.unsetMouseDownEventPosition();
 		return false;
 	}
 

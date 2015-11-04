@@ -11,9 +11,13 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.game.input.E_Cursor;
 import de.hetzge.sgame.game.input.IF_InputMode;
 import de.hetzge.sgame.game.input.InputModeCommandUnits;
+import de.hetzge.sgame.game.input.MouseEventPosition;
 
 public class LocalGameState {
 
+	private MouseEventPosition mouseDownEventPosition;
+
+	private E_EntityType buildEntityType = null;
 	private E_Cursor cursor = E_Cursor.DEFAULT;
 	private IF_InputMode inputMode = new InputModeCommandUnits();
 
@@ -26,6 +30,26 @@ public class LocalGameState {
 	private boolean showIds = false;
 	private boolean showWorldOwner = false;
 	private boolean showDoors = false;
+
+	public void unsetMouseDownEventPosition() {
+		this.mouseDownEventPosition = null;
+	}
+
+	public void setMouseDownEventPosition(MouseEventPosition mouseDownEventPosition) {
+		this.mouseDownEventPosition = mouseDownEventPosition;
+	}
+
+	public MouseEventPosition getMouseDownEventPosition() {
+		return this.mouseDownEventPosition;
+	}
+
+	public void setBuildEntityType(E_EntityType buildEntityType) {
+		this.buildEntityType = buildEntityType;
+	}
+
+	public E_EntityType getBuildEntityType() {
+		return this.buildEntityType;
+	}
 
 	public void setCursor(E_Cursor cursor) {
 		this.cursor = cursor;

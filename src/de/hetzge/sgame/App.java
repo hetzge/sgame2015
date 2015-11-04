@@ -13,6 +13,7 @@ import de.hetzge.sgame.game.Updater;
 import de.hetzge.sgame.graphic.Ressources;
 import de.hetzge.sgame.network.Network;
 import de.hetzge.sgame.render.EntityRenderer;
+import de.hetzge.sgame.render.InputRenderer;
 import de.hetzge.sgame.render.ItemRenderer;
 import de.hetzge.sgame.render.Renderer;
 import de.hetzge.sgame.render.WorldRenderer;
@@ -35,6 +36,7 @@ public final class App {
 
 	public static final WorldRenderer worldRenderer = new WorldRenderer();
 	public static final EntityRenderer entityRenderer = new EntityRenderer();
+	public static final InputRenderer inputRenderer = new InputRenderer();
 	public static final ItemRenderer itemRenderer = new ItemRenderer();
 
 	public static final FSTConfiguration fstConfiguration = FSTConfiguration.getDefaultConfiguration();

@@ -1,2 +1,9 @@
 - Gröberes Entity Grid für schnellere Suche (eventuell nur für unbewegliche Entities)
-- 
+- Einheiten kommen nicht nachhause wenn sich Weg verlängert (Limitierung)
+
+
+TODOS:
+
+* Entity Info Gui 
+* Haus Entity -> Spawn Träger
+* Bauen

@@ -36,12 +36,12 @@ public class CollisionGrid implements IF_Grid, Serializable {
 		set(gridPosition.getGridX(), gridPosition.getGridY());
 	}
 
-	public void unset(short x, short y) {
-		this.collision.clear(index(x, y));
-	}
-
 	public void unset(GridPosition gridPosition) {
 		unset(gridPosition.getGridX(), gridPosition.getGridY());
+	}
+
+	public void unset(short x, short y) {
+		this.collision.clear(index(x, y));
 	}
 
 	public boolean is(short x, short y) {
