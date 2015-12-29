@@ -6,8 +6,10 @@ import java.util.Map.Entry;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.game.event.FrameEventGoto;
-import de.hetzge.sgame.network.IF_Event;
+import de.hetzge.sgame.game.event.IF_Event;
+import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
@@ -25,8 +27,8 @@ public class EventRequestGoto implements IF_Event {
 
 	@Override
 	public void execute() {
-		List<Entity> entities = App.game.getEntityManager().get(entityIds);
-		Map<Entity, Path> paths = App.entityFunction.findPath(entities, new GridPosition(goalX, goalY));
+		List<Entity> entities = App.game.getEntityManager().get(this.entityIds);
+		Map<Entity, Path> paths = App.entityFunction.findPath(entities, new GridPosition(this.goalX, this.goalY));
 
 		int[] entityIds = new int[paths.size()];
 		short[][] xPaths = new short[paths.size()][];
@@ -43,7 +45,7 @@ public class EventRequestGoto implements IF_Event {
 			i++;
 		}
 
-		App.network.sendAndSelf(new FrameEventGoto(App.timing.getDefaultNextFrameId(), entityIds, xPaths, yPaths));
+		NetworkModule.instance.sendAndSelf(new FrameEventGoto(FrameModule.instance.getDefaultNextFrameId(), entityIds, xPaths, yPaths));
 	}
 
 }

@@ -11,9 +11,10 @@ import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.frame.IF_FrameEvent;
 import de.hetzge.sgame.game.Players;
 import de.hetzge.sgame.game.event.EventPlayerHandshake;
+import de.hetzge.sgame.game.event.IF_ConnectionEvent;
+import de.hetzge.sgame.game.event.IF_Event;
 import de.hetzge.sgame.item.E_Item;
-import de.hetzge.sgame.network.IF_ConnectionEvent;
-import de.hetzge.sgame.network.IF_Event;
+import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.setting.GameSettings;
 import de.hetzge.sgame.setting.PlayerSettings;
 import de.hetzge.sgame.setting.SystemSettings;
@@ -72,33 +73,8 @@ public class Function {
 
 	}
 
-	public void dispatch(Object object, TCPObjectSocket tcpObjectSocket) {
-		if (object instanceof IF_FrameEvent) {
-			IF_FrameEvent frameEvent = (IF_FrameEvent) object;
-			App.timing.addFrameEvent(frameEvent);
-		} else if (object instanceof IF_ConnectionEvent) {
-			IF_ConnectionEvent connectionEvent = (IF_ConnectionEvent) object;
-			Objects.requireNonNull(tcpObjectSocket);
-			connectionEvent.execute(tcpObjectSocket);
-		} else if (object instanceof IF_Event) {
-			IF_Event event = (IF_Event) object;
-			event.execute();
-		} else {
-			Logger.warn("unhandelt object: " + object);
-		}
-	}
-
-	public void send(TCPObjectSocket tcpObjectSocket, Serializable object) {
-		try {
-			tcpObjectSocket.writeObject(object);
-			tcpObjectSocket.flush();
-		} catch (Exception e) {
-			Logger.error(e, "error while sending object");
-		}
-	}
-
 	public void sendHandshake() {
-		App.network.send(new EventPlayerHandshake(App.settings.getSystemSettings().getPlayerName()));
+		NetworkModule.instance.send(new EventPlayerHandshake(App.settings.getSystemSettings().getPlayerName()));
 	}
 
 }

@@ -16,17 +16,19 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/gdx-backend-lwjgl.jar">
+	<classpathentry kind="lib" path="/home/hetzge/private/tools/libgdx/gdx-backend-lwjgl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SGame2015/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/gdx.jar">
+	<classpathentry kind="lib" path="/home/hetzge/private/tools/libgdx/gdx.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SGame2015/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/gdx-backend-lwjgl-natives.jar"/>
-	<classpathentry kind="lib" path="lib/gdx-natives.jar"/>
+	<classpathentry kind="lib" path="/home/hetzge/private/tools/libgdx/gdx-backend-lwjgl-natives.jar"/>
+	<classpathentry kind="lib" path="/home/hetzge/private/tools/libgdx/gdx-natives.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sgame-network"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sgame-frame"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

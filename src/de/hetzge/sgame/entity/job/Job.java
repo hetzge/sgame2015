@@ -2,8 +2,8 @@ package de.hetzge.sgame.entity.job;
 
 import java.io.Serializable;
 
-import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.frame.FrameModule;
 
 public abstract class Job implements Serializable {
 
@@ -20,7 +20,7 @@ public abstract class Job implements Serializable {
 		if (this.child != null) {
 			this.child.doWork(entity);
 		} else {
-			if (App.timing.isCurrentOrPast(this.pauseTillFrame)) {
+			if (FrameModule.instance.isCurrentOrPast(this.pauseTillFrame)) {
 				work(entity);
 			}
 		}
@@ -67,6 +67,6 @@ public abstract class Job implements Serializable {
 	}
 
 	public void pause(int frames) {
-		this.pauseTillFrame = App.timing.getNextFrameId(frames);
+		this.pauseTillFrame = FrameModule.instance.getNextFrameId(frames);
 	}
 }

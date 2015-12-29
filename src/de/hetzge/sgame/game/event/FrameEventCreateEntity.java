@@ -7,6 +7,7 @@ import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.frame.FrameEvent;
 import de.hetzge.sgame.game.event.request.EventRequestCreateEntity;
+import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.world.GridPosition;
 
 public class FrameEventCreateEntity extends FrameEvent {
@@ -38,7 +39,7 @@ public class FrameEventCreateEntity extends FrameEvent {
 				if (freeGridPosition != null) {
 					short newX = freeGridPosition.getGridX();
 					short newY = freeGridPosition.getGridY();
-					App.network.sendOrSelf(new EventRequestCreateEntity(newX, newY, entityType, playerId));
+					NetworkModule.instance.sendOrSelf(new EventRequestCreateEntity(newX, newY, entityType, playerId));
 				} else {
 					Logger.info("Didn't created entity from " + toString() + " caused by no space around found.");
 				}
@@ -53,7 +54,8 @@ public class FrameEventCreateEntity extends FrameEvent {
 
 	@Override
 	public String toString() {
-		return "FrameEventCreateEntity [entityType=" + entityType + ", x=" + x + ", y=" + y + ", entityId=" + entityId + ", playerId=" + playerId + "]";
+		return "FrameEventCreateEntity [entityType=" + entityType + ", x=" + x + ", y=" + y + ", entityId=" + entityId
+				+ ", playerId=" + playerId + "]";
 	}
 
 }

@@ -3,6 +3,7 @@ package de.hetzge.sgame.entity.job.main;
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.frame.FrameModule;
 
 public class DestroyJob extends EntityJob {
 
@@ -11,12 +12,12 @@ public class DestroyJob extends EntityJob {
 	public DestroyJob(Entity entity) {
 		super(entity);
 		int destroyTimeInFrames = entity.getDefinition().getDestroyTimeInFrames();
-		this.removeOnFrameId = App.timing.getNextFrameId(destroyTimeInFrames);
+		this.removeOnFrameId = FrameModule.instance.getNextFrameId(destroyTimeInFrames);
 	}
 
 	@Override
 	protected void work() {
-		if (App.timing.isCurrentOrPast(this.removeOnFrameId)) {
+		if (FrameModule.instance.isCurrentOrPast(this.removeOnFrameId)) {
 			App.game.getEntityManager().registerRemove(this.entity);
 		}
 	}

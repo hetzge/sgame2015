@@ -5,9 +5,11 @@ import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_EntityType;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.game.event.FrameEventCreateEntity;
+import de.hetzge.sgame.game.event.IF_ConnectionEvent;
 import de.hetzge.sgame.misc.Util;
-import de.hetzge.sgame.network.IF_ConnectionEvent;
+import de.hetzge.sgame.network.NetworkModule;
 
 public class EventRequestCreateEntity implements IF_ConnectionEvent {
 
@@ -25,13 +27,14 @@ public class EventRequestCreateEntity implements IF_ConnectionEvent {
 
 	@Override
 	public void execute(TCPObjectSocket tcpObjectSocket) {
-		boolean hasSpace = App.worldFunction.checkSpaceForEntity(entityType, x, y);
+		boolean hasSpace = App.worldFunction.checkSpaceForEntity(this.entityType, this.x, this.y);
 		if (hasSpace) {
 			int nextEntityId = App.game.getEntityManager().getNextId();
-			FrameEventCreateEntity frameEventCreateEntity = new FrameEventCreateEntity(App.timing.getDefaultNextFrameId(), entityType, x, y, nextEntityId, playerId);
-			App.network.sendAndSelf(frameEventCreateEntity);
+			FrameEventCreateEntity frameEventCreateEntity = new FrameEventCreateEntity(
+					FrameModule.instance.getDefaultNextFrameId(), this.entityType, this.x, this.y, nextEntityId, this.playerId);
+			NetworkModule.instance.sendAndSelf(frameEventCreateEntity);
 		} else {
-			Logger.info("There is no space for " + entityType + " at " + Util.toString(x, y));
+			Logger.info("There is no space for " + this.entityType + " at " + Util.toString(this.x, this.y));
 		}
 	}
 

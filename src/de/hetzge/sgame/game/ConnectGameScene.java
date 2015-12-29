@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.network.NetworkModule;
 
 public class ConnectGameScene implements Screen {
 
@@ -28,7 +29,7 @@ public class ConnectGameScene implements Screen {
 		connectGameGui.act();
 		connectGameGui.draw();
 
-		if (!App.network.isConnected()) {
+		if (!NetworkModule.instance.isConnected()) {
 			newGame();
 		}
 		if (App.game.isReadyToStart()) {
@@ -47,18 +48,18 @@ public class ConnectGameScene implements Screen {
 		if (isHost()) {
 			App.function.initGame();
 		}
-		App.network.connect(App.settings.getNetworkSettings());
+		NetworkModule.instance.connect();
 		if (isClient()) {
 			App.function.sendHandshake();
 		}
 	}
 
 	private boolean isHost() {
-		return App.settings.getNetworkSettings().isHost();
+		return NetworkModule.networkSettings.isHost();
 	}
 
 	private boolean isClient() {
-		return App.settings.getNetworkSettings().isClient();
+		return NetworkModule.networkSettings.isClient();
 	}
 
 	@Override

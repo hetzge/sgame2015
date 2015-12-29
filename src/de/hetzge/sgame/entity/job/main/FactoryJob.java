@@ -2,12 +2,12 @@ package de.hetzge.sgame.entity.job.main;
 
 import java.util.List;
 
-import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
@@ -43,13 +43,13 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 				E_Item result = receipt.getResult();
 				boolean canAddAmount = provides.canAddAmount(result, 1);
 				if (canAddAmount && receipt.possible(needs)) {
-					this.finishProductFrameId = App.timing.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
+					this.finishProductFrameId = FrameModule.instance.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
 					this.workingAt = receipt;
 					this.entity.setActivity(E_Activity.WORKING);
 					break;
 				}
 			}
-		} else if (App.timing.isCurrentOrPast(this.finishProductFrameId)) {
+		} else if (FrameModule.instance.isCurrentOrPast(this.finishProductFrameId)) {
 			// finish
 			E_Item build = this.workingAt.build(needs);
 			boolean buildSuccessful = build != null;

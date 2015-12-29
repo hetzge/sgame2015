@@ -341,7 +341,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	public void move(E_Orientation orientation) {
 		setOrientation(orientation);
 		float speed = getDefinition().getSpeed();
-		float frameDelta = App.timing.getFrameDelta();
+		float frameDelta = App.gdxTiming.getDelta();
 		this.x += orientation.getOffsetX() * speed * frameDelta;
 		this.y += orientation.getOffsetY() * speed * frameDelta;
 	}

@@ -6,9 +6,11 @@ import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.EntityManager;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.game.event.request.EventRequestGoto;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
+import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.world.EntityGrid;
 
 public class Updater {
@@ -26,7 +28,7 @@ public class Updater {
 
 		Iterable<Entity> entities = entityManager.getEntities();
 		for (Entity entity : entities) {
-			if (App.timing.isXthFrame(Constant.DO_JOB_EVERY_XTH_FRAMES)) {
+			if (FrameModule.instance.isXthFrame(Constant.DO_JOB_EVERY_XTH_FRAMES)) {
 				entity.getJob().doWork(entity);
 			}
 		}
@@ -89,7 +91,7 @@ public class Updater {
 								return;
 							}
 						} else {
-							// verd‰ngen
+							// verd√§ngen
 							// TODO Sync ?!
 							// entityGrid.swap(entity, entityOnNext);
 							App.entityFunction.goAway(entityOnNext);
@@ -100,8 +102,9 @@ public class Updater {
 						int entityId = entity.getId();
 						short pathGoalX = entity.getPathGoalX();
 						short pathGoalY = entity.getPathGoalY();
-						EventRequestGoto eventRequestGoto = new EventRequestGoto(Arrays.asList(entityId), pathGoalX, pathGoalY);
-						App.network.sendOrSelf(eventRequestGoto);
+						EventRequestGoto eventRequestGoto = new EventRequestGoto(Arrays.asList(entityId), pathGoalX,
+								pathGoalY);
+						NetworkModule.instance.sendOrSelf(eventRequestGoto);
 						return;
 					}
 				}

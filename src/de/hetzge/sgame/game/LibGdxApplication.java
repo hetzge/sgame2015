@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.network.E_NetworkRole;
+import de.hetzge.sgame.network.NetworkModule;
 
 public class LibGdxApplication extends com.badlogic.gdx.Game {
 
@@ -35,7 +36,7 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 	private static void handleArgs(String[] args) {
 		if (args.length >= 1) {
 			E_NetworkRole networkRole = E_NetworkRole.valueOf(args[0]);
-			App.settings.getNetworkSettings().setNetworkRole(networkRole);
+			NetworkModule.networkSettings.setNetworkRole(networkRole);
 		}
 	}
 

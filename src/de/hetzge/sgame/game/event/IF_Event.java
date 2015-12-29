@@ -1,4 +1,4 @@
-package de.hetzge.sgame.network;
+package de.hetzge.sgame.game.event;
 
 import java.io.Serializable;
 

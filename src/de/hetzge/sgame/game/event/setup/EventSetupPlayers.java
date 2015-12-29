@@ -2,7 +2,7 @@ package de.hetzge.sgame.game.event.setup;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.game.Players;
-import de.hetzge.sgame.network.IF_Event;
+import de.hetzge.sgame.game.event.IF_Event;
 
 public class EventSetupPlayers implements IF_Event {
 

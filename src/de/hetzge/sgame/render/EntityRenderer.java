@@ -32,7 +32,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void render(Entity entity) {
-		float stateTime = App.timing.getStateTime();
+		float stateTime = App.gdxTiming.getStateTime();
 		float renderX = entity.getRenderX();
 		float renderY = entity.getRenderY();
 		Animation animation = App.ressources.getGraphic(entity);

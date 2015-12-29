@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.game.event.EventStartGame;
 import de.hetzge.sgame.game.event.setup.EventSetupPlayers;
+import de.hetzge.sgame.network.NetworkModule;
 
 public class ConnectGameGui extends Stage {
 
@@ -20,8 +21,8 @@ public class ConnectGameGui extends Stage {
 				addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						App.network.send(new EventSetupPlayers(App.game.getPlayers()));
-						App.network.sendAndSelf(new EventStartGame());
+						NetworkModule.instance.send(new EventSetupPlayers(App.game.getPlayers()));
+						NetworkModule.instance.sendAndSelf(new EventStartGame());
 					}
 				});
 				setVisible(false);

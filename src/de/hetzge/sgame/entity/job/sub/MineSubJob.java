@@ -5,6 +5,7 @@ import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.IF_ItemJob;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.item.Booking;
 import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.misc.Constant;
@@ -25,12 +26,12 @@ public class MineSubJob extends EntityJob {
 		E_Orientation orientationTo = E_Orientation.orientationTo(entityGridPosition, mineFromGridPosition);
 		entity.setOrientation(orientationTo);
 		entity.setActivity(E_Activity.WORKING);
-		this.finishMineFrameId = App.timing.getNextFrameId(Constant.DEFAULT_MINE_TIME_IN_FRAMES);
+		this.finishMineFrameId = FrameModule.instance.getNextFrameId(Constant.DEFAULT_MINE_TIME_IN_FRAMES);
 	}
 
 	@Override
 	protected void work() {
-		if (App.timing.isCurrentOrPast(this.finishMineFrameId)) {
+		if (FrameModule.instance.isCurrentOrPast(this.finishMineFrameId)) {
 			Container fromContainerBefore = this.itemJob.getBooking().getFrom();
 			this.itemJob.takeItem();
 			destroyMineProviderIfEmpty(fromContainerBefore);

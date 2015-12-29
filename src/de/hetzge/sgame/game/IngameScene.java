@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.game.input.IngameInputProcessor;
 
 public class IngameScene implements Screen {
@@ -33,7 +34,8 @@ public class IngameScene implements Screen {
 	public void update() {
 		boolean running = true;
 		while (running) {
-			App.timing.update();
+			FrameModule.instance.update();
+			App.gdxTiming.update();
 		}
 	}
 

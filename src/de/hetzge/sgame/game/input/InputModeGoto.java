@@ -10,6 +10,7 @@ import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.game.LocalGameState;
 import de.hetzge.sgame.game.event.request.EventRequestGoto;
+import de.hetzge.sgame.network.NetworkModule;
 
 public class InputModeGoto implements IF_InputMode {
 
@@ -28,7 +29,7 @@ public class InputModeGoto implements IF_InputMode {
 				short gridX = upPosition.getGridX();
 				short gridY = upPosition.getGridY();
 				EventRequestGoto eventRequestGoto = new EventRequestGoto(selectionEntityIds, gridX, gridY);
-				App.network.sendOrSelf(eventRequestGoto);
+				NetworkModule.instance.sendOrSelf(eventRequestGoto);
 			}
 		}
 	}
