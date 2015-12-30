@@ -36,7 +36,7 @@ public class AStarConnector {
 			return Float.valueOf(a.distanceTo(goal)).compareTo(b.distanceTo(goal));
 		}) : new ConcurrentLinkedQueue<>();
 
-		rate(start.getGridX(), start.getGridY(), Integer.MAX_VALUE);
+		rate(start, Integer.MAX_VALUE);
 		nexts.add(start);
 		GridPosition next;
 		while ((next = nexts.poll()) != null) {
@@ -47,10 +47,35 @@ public class AStarConnector {
 			}
 			for (E_Orientation orientation : E_Orientation.values) {
 				GridPosition around = next.getAround(orientation);
-				short x = around.getGridX();
-				short y = around.getGridY();
-				if (!alreadyRated(x, y) && !this.collisionPredicate.test(around)) {
-					rate(x, y, nextRating);
+				if (!alreadyRated(around) && !this.collisionPredicate.test(around)) {
+					rate(around, nextRating);
+					nexts.add(around);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public <GOAL> Pair<GOAL, Path> find(GridPosition start, Function<GridPosition, GOAL> searchFunction) {
+		long startTime = System.currentTimeMillis();
+
+		AbstractQueue<GridPosition> nexts = new ConcurrentLinkedQueue<>();
+
+		rate(start, Integer.MAX_VALUE);
+		nexts.add(start);
+		GridPosition next;
+		GOAL goalObject;
+		while ((next = nexts.poll()) != null) {
+			int nextRating = getRating(next) - 1;
+			if ((goalObject = searchFunction.apply(next)) != null) {
+				System.out.println("Step 1: " + (System.currentTimeMillis() - startTime));
+				return Pair.of(goalObject, evaluatePath(start, next));
+			}
+			for (E_Orientation orientation : E_Orientation.values) {
+				GridPosition around = next.getAround(orientation);
+				if (!alreadyRated(around) && !this.collisionPredicate.test(around)) {
+					rate(around, nextRating);
 					nexts.add(around);
 				}
 			}
@@ -78,42 +103,21 @@ public class AStarConnector {
 			path.add(nextNext);
 		}
 
-		System.out.println("Step 2: " + (System.currentTimeMillis() - startTime));
+		System.out.println("Step 2: " + (System.currentTimeMillis() - startTime) + " " + path.pathSize());
 
-		return path;
+		return path.reverse();
 	}
 
-	public <GOAL> Pair<GOAL, Path> find(GridPosition start, Function<GridPosition, GOAL> searchFunction) {
-		long startTime = System.currentTimeMillis();
-
-		AbstractQueue<GridPosition> nexts = new ConcurrentLinkedQueue<>();
-
-		rate(start.getGridX(), start.getGridY(), Integer.MAX_VALUE);
-		nexts.add(start);
-		GridPosition next;
-		GOAL goalObject;
-		while ((next = nexts.poll()) != null) {
-			int nextRating = getRating(next) - 1;
-			if ((goalObject = searchFunction.apply(next)) != null) {
-				System.out.println("Step 1: " + (System.currentTimeMillis() - startTime));
-				return Pair.of(goalObject, evaluatePath(start, next));
-			}
-			for (E_Orientation orientation : E_Orientation.values) {
-				GridPosition around = next.getAround(orientation);
-				short x = around.getGridX();
-				short y = around.getGridY();
-				if (!alreadyRated(x, y) && !this.collisionPredicate.test(around)) {
-					rate(x, y, nextRating);
-					nexts.add(around);
-				}
-			}
-		}
-
-		return null;
+	private void rate(GridPosition gridPosition, int rating) {
+		rate(gridPosition.getGridX(), gridPosition.getGridY(), rating);
 	}
 
 	private void rate(short x, short y, int rating) {
 		this.ratingMap.put(Util.index(x, y, this.areaWidth), rating);
+	}
+
+	private boolean alreadyRated(GridPosition gridPosition) {
+		return alreadyRated(gridPosition.getGridX(), gridPosition.getGridY());
 	}
 
 	private boolean alreadyRated(short x, short y) {
@@ -145,8 +149,8 @@ public class AStarConnector {
 				return null;
 			}
 		});
-		
-		System.out.println(find);
+
+		System.out.println();
 
 		// System.out.println(path);
 

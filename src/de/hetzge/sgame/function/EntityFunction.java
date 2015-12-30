@@ -11,6 +11,7 @@ import org.apache.commons.lang3.Validate;
 import org.pmw.tinylog.Logger;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.astar.AStarConnector;
 import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.E_EntityType;
@@ -115,7 +116,8 @@ public class EntityFunction {
 	}
 
 	private boolean isGoToAble(GridPosition gridPosition) {
-		return !App.game.getEntityGrid().is(gridPosition) && !App.game.getWorld().getFixedCollisionGrid().is(gridPosition);
+		return !App.game.getEntityGrid().is(gridPosition)
+				&& !App.game.getWorld().getFixedCollisionGrid().is(gridPosition);
 	}
 
 	public void gotoGridPosition(Entity entity, short x, short y) {
@@ -192,8 +194,16 @@ public class EntityFunction {
 	 */
 	public Path findPath(Entity entity, GridPosition goal, CollisionPredicate collisionPredicate) {
 		GridPosition start = entity.getGridPosition();
-		RatingMap ratings = rate(start, goal, start::equals, collisionPredicate);
-		return ratings != null ? evaluatePath(start, goal, ratings) : null;
+
+		short worldWidth = App.game.getWorld().getWidth();
+		Path findPath = new AStarConnector(collisionPredicate, worldWidth).findPath(start, goal, true);
+
+		return findPath;
+		
+//		RatingMap ratings = rate(start, goal, start::equals, collisionPredicate);
+//		Path findPath2 = ratings != null ? evaluatePath(start, goal, ratings) : null;
+//
+//		return findPath2;
 	}
 
 	/**
@@ -234,7 +244,8 @@ public class EntityFunction {
 		return rate(entity.getDoorGridPosition(), searchPredicate, collisionPredicate);
 	}
 
-	private RatingMap rate(GridPosition start, GridPosition goal, OnMapPredicate searchPredicate, CollisionPredicate collisionPredicate) {
+	private RatingMap rate(GridPosition start, GridPosition goal, OnMapPredicate searchPredicate,
+			CollisionPredicate collisionPredicate) {
 		boolean isStartIsGoal = start.equals(goal);
 		if (isStartIsGoal) {
 			return null;
@@ -250,7 +261,8 @@ public class EntityFunction {
 		return rate(goal, searchPredicate, collisionPredicate);
 	}
 
-	private RatingMap rate(GridPosition beginAtGridPosition, OnMapPredicate endOfPathPredicate, CollisionPredicate collisionPredicate) {
+	private RatingMap rate(GridPosition beginAtGridPosition, OnMapPredicate endOfPathPredicate,
+			CollisionPredicate collisionPredicate) {
 		World world = App.game.getWorld();
 
 		short rating = 0;
@@ -319,7 +331,8 @@ public class EntityFunction {
 
 			i++;
 			if (i > Constant.MAX_A_STAR_DEPTH * 2) {
-				throw new InvalidGameStateException("Try to evaluate impossible path (start: " + start + ", gaol: " + goal + ")");
+				throw new InvalidGameStateException(
+						"Try to evaluate impossible path (start: " + start + ", gaol: " + goal + ")");
 			}
 		}
 

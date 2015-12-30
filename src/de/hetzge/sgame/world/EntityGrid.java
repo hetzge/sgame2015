@@ -1,8 +1,8 @@
 package de.hetzge.sgame.world;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import de.hetzge.sgame.entity.Entity;
@@ -104,8 +104,8 @@ public class EntityGrid implements IF_Grid, Serializable {
 		return get(x, y) == null;
 	}
 
-	public List<Entity> getAllEntities() {
-		List<Entity> result = new LinkedList<>();
+	public Set<Entity> getAllEntities() {
+		Set<Entity> result = new HashSet<>();
 		for (Entity entity : this.entities) {
 			if (entity != null) {
 				result.add(entity);

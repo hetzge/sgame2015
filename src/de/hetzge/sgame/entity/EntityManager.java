@@ -22,7 +22,7 @@ public class EntityManager {
 	public void register(Entity entity) {
 		int entityId = entity.getId();
 		if (this.entitiesById.containsKey(entityId)) {
-			throw new InvalidGameStateException("Try to register entity with already registered id.");
+			throw new InvalidGameStateException("Try to register entity with already registered id " + entityId);
 		}
 		this.entitiesById.put(entity.getId(), entity);
 		this.entities.add(entity);
