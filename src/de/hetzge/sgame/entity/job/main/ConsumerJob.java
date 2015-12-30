@@ -5,7 +5,6 @@ import java.util.Set;
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.booking.Booking;
 import de.hetzge.sgame.booking.Container;
-import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
@@ -13,10 +12,11 @@ import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.ProvideItemAvailablePredicate;
+import de.hetzge.sgame.item.E_Item;
 
 public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 
-	protected final Container needs;
+	protected final Container<E_Item> needs;
 
 	public ConsumerJob(Entity entity) {
 		super(entity);
@@ -25,10 +25,10 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 
 	@Override
 	protected void work() {
-		Set<IF_Item> items = this.needs.getItems();
+		Set<E_Item> items = this.needs.getItems();
 
 		int foundItemCount = 0;
-		for (IF_Item item : items) {
+		for (E_Item item : items) {
 			int missingAmount = this.needs.getMissingAmount(item);
 			if (missingAmount > 0) {
 				EntityPredicate searchCarrierPredicate = searchEntity -> {
@@ -47,12 +47,12 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 				App.entityFunction.iterateMap(this.entity, provideItemAvailablePredicate);
 				App.entityFunction.iterateMap(this.entity, entityOnMapPredicate);
 
-				Container provideContainer = provideItemAvailablePredicate.getProvideContainer();
+				Container<E_Item> provideContainer = provideItemAvailablePredicate.getProvideContainer();
 				Entity carrierEntity = entityOnMapPredicate.getEntity();
 
 				if (provideContainer != null && carrierEntity != null) {
 					if (provideContainer.hasAmountAvailable(item, 1)) {
-						Booking booking = provideContainer.book(item, 1, this.needs);
+						Booking<E_Item> booking = provideContainer.book(item, 1, this.needs);
 						CarrierJob carrierJob = getCarrierJob(carrierEntity);
 						carrierJob.setBooking(booking);
 						foundItemCount++;
@@ -75,7 +75,7 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 		}
 	}
 
-	public Container getNeeds() {
+	public Container<E_Item> getNeeds() {
 		return this.needs;
 	}
 

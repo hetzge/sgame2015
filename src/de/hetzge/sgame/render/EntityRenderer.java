@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.booking.Container;
-import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.Util;
 
@@ -88,7 +88,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderItem(Entity entity) {
-		IF_Item item = entity.getItem();
+		E_Item item = entity.getItem();
 		if (item != null) {
 			float renderX = entity.getRenderX();
 			float renderY = entity.getRenderY();

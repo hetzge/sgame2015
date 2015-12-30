@@ -5,6 +5,7 @@ import de.hetzge.sgame.booking.Booking;
 import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.item.GridEntityContainer;
 import de.hetzge.sgame.item.GridEntityContainerWithoutLimit;
 import de.hetzge.sgame.world.GridPosition;
@@ -12,8 +13,8 @@ import de.hetzge.sgame.world.Path;
 
 public class CarrierJob extends EntityJob implements IF_ItemJob {
 
-	private Booking booking;
-	private final Container container;
+	private Booking<E_Item> booking;
+	private final Container<E_Item> container;
 
 	public CarrierJob(Entity entity) {
 		super(entity);

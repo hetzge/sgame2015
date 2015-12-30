@@ -19,21 +19,21 @@ public class Receipt {
 	/**
 	 * @return null if not possible
 	 */
-	public E_Item build(Container container) {
+	public E_Item build(Container<E_Item> container) {
 		if (!possible(container)) {
 			return null;
 		}
-		List<Booking> bookings = book(container);
+		List<Booking<E_Item>> bookings = book(container);
 		if (bookings == null) {
 			return null;
 		}
-		for (Booking booking : bookings) {
+		for (Booking<E_Item> booking : bookings) {
 			booking.transfer();
 		}
 		return this.result;
 	}
 
-	public boolean possible(Container container) {
+	public boolean possible(Container<E_Item> container) {
 		for (Ingredient ingredient : this.ingredients) {
 			if (!ingredient.available(container)) {
 				return false;
@@ -42,11 +42,11 @@ public class Receipt {
 		return true;
 	}
 
-	private List<Booking> book(Container container) {
-		List<Booking> bookings = new ArrayList<>(this.ingredients.size());
+	private List<Booking<E_Item>> book(Container<E_Item> container) {
+		List<Booking<E_Item>> bookings = new ArrayList<>(this.ingredients.size());
 		GridEntityContainerWithoutLimit receiptContainer = new GridEntityContainerWithoutLimit(null);
 		for (Ingredient ingredient : this.ingredients) {
-			Booking booking = container.book(ingredient.item, ingredient.amount, receiptContainer);
+			Booking<E_Item> booking = container.book(ingredient.item, ingredient.amount, receiptContainer);
 			if (booking == null) {
 				// rollback
 				bookings.stream().forEach(Booking::rollback);

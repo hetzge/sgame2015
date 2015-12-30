@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import de.hetzge.sgame.App;
-import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.graphic.IF_GraphicKey;
@@ -209,11 +208,11 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		return this.item != -1;
 	}
 
-	public IF_Item getItem() {
+	public E_Item getItem() {
 		return hasItem() ? E_Item.values[this.item] : null;
 	}
 
-	public void setItem(IF_Item item) {
+	public void setItem(E_Item item) {
 		if (item == null) {
 			this.item = -1;
 		} else {

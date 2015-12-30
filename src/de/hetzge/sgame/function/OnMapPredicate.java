@@ -4,7 +4,6 @@ import java.util.function.Predicate;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.booking.Container;
-import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.Job;
@@ -23,17 +22,17 @@ public interface OnMapPredicate extends Predicate<GridPosition> {
 	 */
 	public static class ProvideItemAvailablePredicate implements OnMapPredicate {
 
-		private final IF_Item item;
+		private final E_Item item;
 		private final EntityPredicate entityPredicate;
 
-		private Container provideContainer;
+		private Container<E_Item> provideContainer;
 
-		public ProvideItemAvailablePredicate(IF_Item item) {
+		public ProvideItemAvailablePredicate(E_Item item) {
 			this.item = item;
 			this.entityPredicate = entity -> true;
 		}
 
-		public ProvideItemAvailablePredicate(IF_Item item, EntityPredicate entityPredicate) {
+		public ProvideItemAvailablePredicate(E_Item item, EntityPredicate entityPredicate) {
 			this.item = item;
 			this.entityPredicate = entityPredicate;
 		}
@@ -46,7 +45,7 @@ public interface OnMapPredicate extends Predicate<GridPosition> {
 					EntityJob job = entity.getJob();
 					if (job instanceof IF_ProviderJob) {
 						IF_ProviderJob if_ProviderJob = (IF_ProviderJob) job;
-						Container container = if_ProviderJob.getProviderJob().getProvides();
+						Container<E_Item> container = if_ProviderJob.getProviderJob().getProvides();
 						if (container.hasAmountAvailable(this.item, 1)) {
 							provideContainer = container;
 							return true;

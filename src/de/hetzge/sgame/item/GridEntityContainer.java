@@ -5,7 +5,7 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.world.IF_GridEntity;
 
-public class GridEntityContainer extends Container {
+public class GridEntityContainer extends Container<E_Item> {
 
 	private final IF_GridEntity gridEntity;
 

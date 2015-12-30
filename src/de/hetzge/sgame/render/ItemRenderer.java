@@ -7,24 +7,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.booking.Container;
-import de.hetzge.sgame.booking.IF_Item;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 
 public class ItemRenderer implements IF_Renderer {
 
-	public void renderContainer(Container container, short gridX, short gridY) {
+	public void renderContainer(Container<E_Item> container, short gridX, short gridY) {
 		float worldX = gridX * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
 		float worldY = gridY * Constant.TILE_SIZE - Constant.TILE_SIZE;
 		renderContainer(container, worldX, worldY);
 	}
 
-	public void renderContainer(Container container, float worldX, float worldY) {
+	public void renderContainer(Container<E_Item> container, float worldX, float worldY) {
 		int orientationsCount = E_Orientation.values.length;
 
 		int i = 0;
-		Set<IF_Item> items = container.getItems();
-		for (IF_Item item : items) {
+		Set<E_Item> items = container.getItems();
+		for (E_Item item : items) {
 			int round = Math.floorDiv(i, orientationsCount) + 1;
 			E_Orientation orientation = E_Orientation.values[i % orientationsCount];
 			E_Orientation nextOrientation = E_Orientation.values[(i + 1) % orientationsCount];
@@ -39,7 +39,7 @@ public class ItemRenderer implements IF_Renderer {
 		}
 	}
 
-	private void renderItems(IF_Item item, int amount, float worldX, float worldY) {
+	private void renderItems(E_Item item, int amount, float worldX, float worldY) {
 		SpriteBatch spriteBatch = getSpriteBatch();
 		int orientationsCount = E_Orientation.values.length;
 		TextureRegion itemTextureRegion = App.ressources.getItemTextureRegion(item);

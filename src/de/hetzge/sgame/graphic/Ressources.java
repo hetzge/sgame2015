@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.IntMap;
 
 import de.hetzge.sgame.App;
-import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.error.InvalidGameStateException;
+import de.hetzge.sgame.item.E_Item;
 
 public class Ressources {
 
@@ -50,7 +50,7 @@ public class Ressources {
 		return graphic;
 	}
 
-	public TextureRegion getItemTextureRegion(IF_Item item) {
+	public TextureRegion getItemTextureRegion(E_Item item) {
 		return this.items[item.ordinal()];
 	}
 

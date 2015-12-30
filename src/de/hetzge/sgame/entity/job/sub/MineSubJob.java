@@ -7,6 +7,7 @@ import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.IF_ItemJob;
 import de.hetzge.sgame.frame.FrameModule;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.item.GridEntityContainer;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
@@ -20,7 +21,7 @@ public class MineSubJob extends EntityJob {
 	public MineSubJob(Entity entity, IF_ItemJob itemJob) {
 		super(entity);
 		this.itemJob = itemJob;
-		Booking booking = itemJob.getBooking();
+		Booking<E_Item> booking = itemJob.getBooking();
 		GridPosition entityGridPosition = entity.getGridPosition();
 		GridPosition mineFromGridPosition = booking.<GridEntityContainer> getFrom().getEntity().getGridPosition();
 		E_Orientation orientationTo = E_Orientation.orientationTo(entityGridPosition, mineFromGridPosition);

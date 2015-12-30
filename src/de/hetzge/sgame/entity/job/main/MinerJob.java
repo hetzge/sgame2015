@@ -18,8 +18,8 @@ import de.hetzge.sgame.world.Path;
 public class MinerJob extends EntityJob implements IF_ItemJob {
 
 	private Entity workstation = null;
-	private Booking booking = null;
-	private final Container container;
+	private Booking<E_Item> booking = null;
+	private final Container<E_Item> container;
 
 	public MinerJob(Entity entity) {
 		super(entity);
@@ -114,12 +114,12 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 			if (job instanceof MineProviderJob) {
 				E_Item item = this.entity.getDefinition().getMineItem();
 				MineProviderJob mineProviderJob = (MineProviderJob) job;
-				Container from = mineProviderJob.getContainer();
+				Container<E_Item> from = mineProviderJob.getContainer();
 				boolean hasItem = from.has(item);
 				if (hasItem) {
 					WorkstationJob workstationJob = getWorkstationJob();
-					Container to = workstationJob.getContainer();
-					Booking booking = from.book(item, 1, to);
+					Container<E_Item> to = workstationJob.getContainer();
+					Booking<E_Item> booking = from.book(item, 1, to);
 					if (booking != null) {
 						this.booking = booking;
 						return true;

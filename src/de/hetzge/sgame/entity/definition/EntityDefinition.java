@@ -107,8 +107,8 @@ public abstract class EntityDefinition {
 		return this.jobSupplier.apply(entity);
 	}
 
-	public Container createDefaultMineProvideContainer(Entity entity) {
-		Container container = new GridEntityContainer(entity);
+	public Container<E_Item> createDefaultMineProvideContainer(Entity entity) {
+		Container<E_Item> container = new GridEntityContainer(entity);
 		for (Entry<E_Item, Integer> entry : this.mineProvides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
@@ -117,8 +117,8 @@ public abstract class EntityDefinition {
 		return container;
 	}
 
-	public Container createDefaultProvideContainer(Entity entity) {
-		Container container = new GridEntityContainer(entity);
+	public Container<E_Item> createDefaultProvideContainer(Entity entity) {
+		Container<E_Item> container = new GridEntityContainer(entity);
 		for (Entry<E_Item, Integer> entry : this.provides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
@@ -131,8 +131,8 @@ public abstract class EntityDefinition {
 		return container;
 	}
 
-	public Container createDefaultNeedContainer(Entity entity) {
-		Container container = new GridEntityContainer(entity);
+	public Container<E_Item> createDefaultNeedContainer(Entity entity) {
+		Container<E_Item> container = new GridEntityContainer(entity);
 		for (Entry<E_Item, Integer> entry : this.needs.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();

@@ -11,7 +11,7 @@ public class Ingredient {
 		this.amount = amount;
 	}
 
-	public boolean available(Container container) {
+	public boolean available(Container<E_Item> container) {
 		return container.hasAmountAvailable(this.item, this.amount);
 	}
 
