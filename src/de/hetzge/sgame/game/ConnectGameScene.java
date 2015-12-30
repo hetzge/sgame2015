@@ -55,11 +55,11 @@ public class ConnectGameScene implements Screen {
 	}
 
 	private boolean isHost() {
-		return NetworkModule.networkSettings.isHost();
+		return NetworkModule.settings.isHost();
 	}
 
 	private boolean isClient() {
-		return NetworkModule.networkSettings.isClient();
+		return NetworkModule.settings.isClient();
 	}
 
 	@Override

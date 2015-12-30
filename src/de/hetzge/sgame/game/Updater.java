@@ -7,14 +7,16 @@ import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.EntityManager;
 import de.hetzge.sgame.frame.FrameModule;
+import de.hetzge.sgame.frame.IF_Update;
 import de.hetzge.sgame.game.event.request.EventRequestGoto;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.world.EntityGrid;
 
-public class Updater {
+public class Updater implements IF_Update {
 
+	@Override
 	public void update() {
 		updateEntities();
 	}

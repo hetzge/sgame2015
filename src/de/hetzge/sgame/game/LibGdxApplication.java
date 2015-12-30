@@ -36,7 +36,7 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 	private static void handleArgs(String[] args) {
 		if (args.length >= 1) {
 			E_NetworkRole networkRole = E_NetworkRole.valueOf(args[0]);
-			NetworkModule.networkSettings.setNetworkRole(networkRole);
+			NetworkModule.settings.setNetworkRole(networkRole);
 		}
 	}
 

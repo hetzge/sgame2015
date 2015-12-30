@@ -2,6 +2,7 @@ package de.hetzge.sgame;
 
 import org.nustaq.serialization.FSTConfiguration;
 
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.function.EntityFunction;
 import de.hetzge.sgame.function.Function;
 import de.hetzge.sgame.function.RessourceFunction;
@@ -26,7 +27,6 @@ public final class App {
 	public static final Settings settings = new Settings();
 	public static final LibGdxApplication libGdxApplication = new LibGdxApplication();
 	public static final Renderer renderer = new Renderer();
-	public static final Updater updater = new Updater();
 
 	public static final Function function = new Function();
 	public static final RessourceFunction ressourceFunction = new RessourceFunction();
@@ -40,11 +40,13 @@ public final class App {
 
 	public static final FSTConfiguration fstConfiguration = FSTConfiguration.getDefaultConfiguration();
 	public static final Dispatcher dispatcher = new Dispatcher();
+	public static final Updater updater = new Updater();
 
 	public static Game game;
 
 	static {
-		NetworkModule.dispatcher = dispatcher;
+		NetworkModule.setup.setDispatcher(dispatcher);
+		FrameModule.setup.setUpdate(updater);
 	}
 
 	private App() {
