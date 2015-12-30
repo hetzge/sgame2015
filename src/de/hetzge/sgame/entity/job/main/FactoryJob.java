@@ -2,15 +2,16 @@ package de.hetzge.sgame.entity.job.main;
 
 import java.util.List;
 
+import de.hetzge.sgame.booking.Booking;
+import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.frame.FrameModule;
-import de.hetzge.sgame.item.Booking;
-import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.item.GridEntityContainer;
 import de.hetzge.sgame.item.Receipt;
 import de.hetzge.sgame.misc.Constant;
 
@@ -43,7 +44,8 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 				E_Item result = receipt.getResult();
 				boolean canAddAmount = provides.canAddAmount(result, 1);
 				if (canAddAmount && receipt.possible(needs)) {
-					this.finishProductFrameId = FrameModule.instance.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
+					this.finishProductFrameId = FrameModule.instance
+							.getNextFrameId(Constant.DEFAULT_PRODUCTION_TIME_IN_FRAMES);
 					this.workingAt = receipt;
 					this.entity.setActivity(E_Activity.WORKING);
 					break;
@@ -54,7 +56,7 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 			E_Item build = this.workingAt.build(needs);
 			boolean buildSuccessful = build != null;
 			if (buildSuccessful) {
-				Container tempContainer = new Container(null);
+				Container tempContainer = new GridEntityContainer(null);
 				tempContainer.set(build, 1, 1);
 				Booking booking = tempContainer.book(build, 1, provides);
 				booking.transfer();

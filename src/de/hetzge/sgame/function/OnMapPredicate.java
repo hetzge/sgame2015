@@ -3,12 +3,13 @@ package de.hetzge.sgame.function;
 import java.util.function.Predicate;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.Job;
 import de.hetzge.sgame.entity.job.main.IF_ProviderJob;
 import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
-import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.world.ContainerGrid;
 import de.hetzge.sgame.world.GridPosition;
@@ -22,17 +23,17 @@ public interface OnMapPredicate extends Predicate<GridPosition> {
 	 */
 	public static class ProvideItemAvailablePredicate implements OnMapPredicate {
 
-		private final E_Item item;
+		private final IF_Item item;
 		private final EntityPredicate entityPredicate;
 
 		private Container provideContainer;
 
-		public ProvideItemAvailablePredicate(E_Item item) {
+		public ProvideItemAvailablePredicate(IF_Item item) {
 			this.item = item;
 			this.entityPredicate = entity -> true;
 		}
 
-		public ProvideItemAvailablePredicate(E_Item item, EntityPredicate entityPredicate) {
+		public ProvideItemAvailablePredicate(IF_Item item, EntityPredicate entityPredicate) {
 			this.item = item;
 			this.entityPredicate = entityPredicate;
 		}

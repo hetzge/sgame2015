@@ -1,6 +1,6 @@
 package de.hetzge.sgame.entity.job;
 
-import de.hetzge.sgame.item.Container;
+import de.hetzge.sgame.booking.Container;
 
 public interface IF_RenderItemsJob {
 

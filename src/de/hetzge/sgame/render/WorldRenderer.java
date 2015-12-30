@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.world.ContainerGrid;
 import de.hetzge.sgame.world.World;

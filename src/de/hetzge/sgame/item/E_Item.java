@@ -1,6 +1,8 @@
 package de.hetzge.sgame.item;
 
-public enum E_Item {
+import de.hetzge.sgame.booking.IF_Item;
+
+public enum E_Item implements IF_Item {
 
 	STONE, WOOD, FISCH, BREAD;
 

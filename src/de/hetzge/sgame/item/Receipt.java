@@ -3,6 +3,9 @@ package de.hetzge.sgame.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hetzge.sgame.booking.Booking;
+import de.hetzge.sgame.booking.Container;
+
 public class Receipt {
 
 	private final List<Ingredient> ingredients;
@@ -41,7 +44,7 @@ public class Receipt {
 
 	private List<Booking> book(Container container) {
 		List<Booking> bookings = new ArrayList<>(this.ingredients.size());
-		ContainerWithoutLimit receiptContainer = new ContainerWithoutLimit(null);
+		GridEntityContainerWithoutLimit receiptContainer = new GridEntityContainerWithoutLimit(null);
 		for (Ingredient ingredient : this.ingredients) {
 			Booking booking = container.book(ingredient.item, ingredient.amount, receiptContainer);
 			if (booking == null) {

@@ -1,18 +1,9 @@
 package de.hetzge.sgame.function;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import org.nustaq.net.TCPObjectSocket;
-import org.pmw.tinylog.Logger;
-
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_EntityType;
-import de.hetzge.sgame.frame.IF_FrameEvent;
 import de.hetzge.sgame.game.Players;
 import de.hetzge.sgame.game.event.EventPlayerHandshake;
-import de.hetzge.sgame.game.event.IF_ConnectionEvent;
-import de.hetzge.sgame.game.event.IF_Event;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.setting.GameSettings;

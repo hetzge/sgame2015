@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
+import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.CarrierJob;
@@ -15,8 +16,8 @@ import de.hetzge.sgame.entity.job.main.FactoryJob;
 import de.hetzge.sgame.entity.job.main.MineProviderJob;
 import de.hetzge.sgame.entity.job.main.MinerJob;
 import de.hetzge.sgame.entity.job.main.WorkstationJob;
-import de.hetzge.sgame.item.Container;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.item.GridEntityContainer;
 import de.hetzge.sgame.item.Ingredient;
 import de.hetzge.sgame.item.Receipt;
 import de.hetzge.sgame.misc.Constant;
@@ -107,7 +108,7 @@ public abstract class EntityDefinition {
 	}
 
 	public Container createDefaultMineProvideContainer(Entity entity) {
-		Container container = new Container(entity);
+		Container container = new GridEntityContainer(entity);
 		for (Entry<E_Item, Integer> entry : this.mineProvides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
@@ -117,7 +118,7 @@ public abstract class EntityDefinition {
 	}
 
 	public Container createDefaultProvideContainer(Entity entity) {
-		Container container = new Container(entity);
+		Container container = new GridEntityContainer(entity);
 		for (Entry<E_Item, Integer> entry : this.provides.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();
@@ -131,7 +132,7 @@ public abstract class EntityDefinition {
 	}
 
 	public Container createDefaultNeedContainer(Entity entity) {
-		Container container = new Container(entity);
+		Container container = new GridEntityContainer(entity);
 		for (Entry<E_Item, Integer> entry : this.needs.entrySet()) {
 			E_Item item = entry.getKey();
 			Integer value = entry.getValue();

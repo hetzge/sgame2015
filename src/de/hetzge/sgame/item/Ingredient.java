@@ -1,5 +1,7 @@
 package de.hetzge.sgame.item;
 
+import de.hetzge.sgame.booking.Container;
+
 public class Ingredient {
 	protected final E_Item item;
 	protected final int amount;

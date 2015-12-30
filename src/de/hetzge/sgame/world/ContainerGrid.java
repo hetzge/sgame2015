@@ -2,9 +2,9 @@ package de.hetzge.sgame.world;
 
 import java.io.Serializable;
 
-import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.ContainerWithoutLimit;
-import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.IF_Item;
+import de.hetzge.sgame.item.GridEntityContainerWithoutLimit;
 
 public class ContainerGrid implements IF_Grid, Serializable {
 
@@ -27,7 +27,7 @@ public class ContainerGrid implements IF_Grid, Serializable {
 	public Container get(short x, short y) {
 		Container container = this.containers[index(x, y)];
 		if (container == null) {
-			this.containers[index(x, y)] = new ContainerWithoutLimit(new GridPosition(x, y));
+			this.containers[index(x, y)] = new GridEntityContainerWithoutLimit(new GridPosition(x, y));
 			container = get(x, y);
 		}
 		return container;
@@ -38,11 +38,11 @@ public class ContainerGrid implements IF_Grid, Serializable {
 		return container != null;
 	}
 
-	public boolean hasItemAvailable(GridPosition gridPosition, E_Item item) {
+	public boolean hasItemAvailable(GridPosition gridPosition, IF_Item item) {
 		return hasItemAvailable(gridPosition.getGridX(), gridPosition.getGridY(), item);
 	}
 
-	public boolean hasItemAvailable(short x, short y, E_Item item) {
+	public boolean hasItemAvailable(short x, short y, IF_Item item) {
 		Container container = this.containers[index(x, y)];
 		if (container != null) {
 			return container.hasAmountAvailable(item, 1);

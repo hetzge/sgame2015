@@ -3,6 +3,9 @@ package de.hetzge.sgame.entity.job.main;
 import java.util.Set;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.Booking;
+import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
@@ -10,9 +13,6 @@ import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.ProvideItemAvailablePredicate;
-import de.hetzge.sgame.item.Booking;
-import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.E_Item;
 
 public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 
@@ -25,10 +25,10 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 
 	@Override
 	protected void work() {
-		Set<E_Item> items = this.needs.getItems();
+		Set<IF_Item> items = this.needs.getItems();
 
 		int foundItemCount = 0;
-		for (E_Item item : items) {
+		for (IF_Item item : items) {
 			int missingAmount = this.needs.getMissingAmount(item);
 			if (missingAmount > 0) {
 				EntityPredicate searchCarrierPredicate = searchEntity -> {

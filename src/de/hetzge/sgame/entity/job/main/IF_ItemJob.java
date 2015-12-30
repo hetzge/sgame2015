@@ -1,11 +1,11 @@
 package de.hetzge.sgame.entity.job.main;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.Booking;
+import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.item.Booking;
-import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.world.GridPosition;
 
 public interface IF_ItemJob {
@@ -37,7 +37,7 @@ public interface IF_ItemJob {
 
 	default void takeItem() {
 		Booking booking = getBooking();
-		E_Item item = booking.getItem();
+		IF_Item item = booking.getItem();
 		Container entityContainer = getContainer();
 		Entity entity = getEntity();
 

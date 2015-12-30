@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.IntMap;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.error.InvalidGameStateException;
-import de.hetzge.sgame.item.E_Item;
 
 public class Ressources {
 
@@ -27,47 +27,47 @@ public class Ressources {
 	private Pixmap cursor;
 
 	public void init() {
-		skin = new Skin(Gdx.files.internal("asset/skin/uiskin.json"));
-		bitmapFont = skin.getFont("default-font");
-		tiles = App.ressourceFunction.loadTiles();
-		graphics = App.ressourceFunction.loadGraphics();
-		items = App.ressourceFunction.loadItems();
+		this.skin = new Skin(Gdx.files.internal("asset/skin/uiskin.json"));
+		this.bitmapFont = this.skin.getFont("default-font");
+		this.tiles = App.ressourceFunction.loadTiles();
+		this.graphics = App.ressourceFunction.loadGraphics();
+		this.items = App.ressourceFunction.loadItems();
 
 		TextureData cursorTextureData = new Texture(Gdx.files.internal("asset/cursor.png")).getTextureData();
 		cursorTextureData.prepare();
-		cursor = cursorTextureData.consumePixmap();
+		this.cursor = cursorTextureData.consumePixmap();
 	}
 
 	public void registerGraphic(IF_GraphicKey graphicKey, Animation animation) {
-		graphics.put(graphicKey.hashGraphicKey(), animation);
+		this.graphics.put(graphicKey.hashGraphicKey(), animation);
 	}
 
 	public Animation getGraphic(IF_GraphicKey graphicKey) {
-		Animation graphic = graphics.get(graphicKey.hashGraphicKey());
+		Animation graphic = this.graphics.get(graphicKey.hashGraphicKey());
 		if (graphic == null) {
 			throw new InvalidGameStateException("Try to access non existing graphic: " + graphicKey.hashGraphicKeyString());
 		}
 		return graphic;
 	}
 
-	public TextureRegion getItemTextureRegion(E_Item item) {
-		return items[item.ordinal()];
+	public TextureRegion getItemTextureRegion(IF_Item item) {
+		return this.items[item.ordinal()];
 	}
 
 	public TextureRegion getTileTextureRegion(short tileId) {
-		return tiles.get(tileId);
+		return this.tiles.get(tileId);
 	}
 
 	public Skin getSkin() {
-		return skin;
+		return this.skin;
 	}
 
 	public Pixmap getCursor() {
-		return cursor;
+		return this.cursor;
 	}
 
 	public BitmapFont getBitmapFont() {
-		return bitmapFont;
+		return this.bitmapFont;
 	}
 
 }

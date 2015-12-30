@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.IF_Item;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
-import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.Util;
 
@@ -88,7 +88,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderItem(Entity entity) {
-		E_Item item = entity.getItem();
+		IF_Item item = entity.getItem();
 		if (item != null) {
 			float renderX = entity.getRenderX();
 			float renderY = entity.getRenderY();
@@ -125,7 +125,8 @@ public class EntityRenderer implements IF_Renderer {
 			float renderX = entity.getRenderX();
 			float renderY = entity.getRenderY();
 			getShapeRenderer().setColor(Color.RED);
-			getShapeRenderer().line(renderX, -renderY, registeredX * Constant.TILE_SIZE, -registeredY * Constant.TILE_SIZE);
+			getShapeRenderer().line(renderX, -renderY, registeredX * Constant.TILE_SIZE,
+					-registeredY * Constant.TILE_SIZE);
 		}
 	}
 
@@ -135,7 +136,8 @@ public class EntityRenderer implements IF_Renderer {
 				short doorX = entity.getDoorX();
 				short doorY = entity.getDoorY();
 				getShapeRenderer().setColor(Color.GREEN);
-				getShapeRenderer().rect(doorX * Constant.TILE_SIZE, -doorY * Constant.TILE_SIZE, Constant.TILE_SIZE, Constant.TILE_SIZE);
+				getShapeRenderer().rect(doorX * Constant.TILE_SIZE, -doorY * Constant.TILE_SIZE, Constant.TILE_SIZE,
+						Constant.TILE_SIZE);
 			}
 		}
 	}

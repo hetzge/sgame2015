@@ -1,8 +1,8 @@
 package de.hetzge.sgame.entity.job.main;
 
+import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
-import de.hetzge.sgame.item.Container;
 
 public class ProviderJob extends EntityJob implements IF_ProviderJob {
 

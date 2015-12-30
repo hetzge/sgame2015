@@ -1,8 +1,8 @@
 package de.hetzge.sgame.entity.job.main;
 
+import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
-import de.hetzge.sgame.item.Container;
 
 public class MineProviderJob extends EntityJob {
 
@@ -10,11 +10,11 @@ public class MineProviderJob extends EntityJob {
 
 	public MineProviderJob(Entity entity) {
 		super(entity);
-		container = entity.getDefinition().createDefaultMineProvideContainer(entity);
+		this.container = entity.getDefinition().createDefaultMineProvideContainer(entity);
 	}
 
 	public Container getContainer() {
-		return container;
+		return this.container;
 	}
 
 	@Override

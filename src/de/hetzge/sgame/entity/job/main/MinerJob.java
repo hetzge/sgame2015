@@ -1,16 +1,17 @@
 package de.hetzge.sgame.entity.job.main;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.booking.Booking;
+import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.sub.MineSubJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
-import de.hetzge.sgame.item.Booking;
-import de.hetzge.sgame.item.Container;
-import de.hetzge.sgame.item.ContainerWithoutLimit;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.item.GridEntityContainer;
+import de.hetzge.sgame.item.GridEntityContainerWithoutLimit;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
@@ -22,7 +23,7 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 
 	public MinerJob(Entity entity) {
 		super(entity);
-		this.container = new ContainerWithoutLimit(entity);
+		this.container = new GridEntityContainerWithoutLimit(entity);
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 						// walk
 						pauseMedium();
 					} else {
-						Entity mineEntity = this.booking.getFrom().getEntity();
+						Entity mineEntity = this.booking.<GridEntityContainer>getFrom().getEntity();
 						if (mineEntity != null) {
 							startWorking(mineEntity);
 						} else {
