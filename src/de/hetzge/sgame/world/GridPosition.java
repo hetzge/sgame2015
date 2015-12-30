@@ -49,7 +49,8 @@ public class GridPosition implements IF_GridPosition, IF_GridEntity, Serializabl
 	}
 
 	public GridPosition getAround(E_Orientation orientation) {
-		return new GridPosition((short) (getGridX() + orientation.getOffsetX()), (short) (getGridY() + orientation.getOffsetY()));
+		return new GridPosition((short) (getGridX() + orientation.getOffsetX()),
+				(short) (getGridY() + orientation.getOffsetY()));
 	}
 
 	public float getCenteredRealX() {
@@ -58,6 +59,12 @@ public class GridPosition implements IF_GridPosition, IF_GridEntity, Serializabl
 
 	public float getCenteredRealY() {
 		return this.y * Constant.TILE_SIZE + Constant.HALF_TILE_SIZE;
+	}
+
+	public float distanceTo(GridPosition other) {
+		float a = Math.abs(this.x - other.x);
+		float b = Math.abs(this.y - other.y);
+		return (float) Math.sqrt(a * a + b * b);
 	}
 
 	@Override

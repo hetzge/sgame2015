@@ -86,17 +86,17 @@ public class CarrierJob extends EntityJob implements IF_ItemJob {
 	}
 
 	@Override
-	public void setBooking(Booking booking) {
+	public void setBooking(Booking<E_Item> booking) {
 		this.booking = booking;
 	}
 
 	@Override
-	public Container getContainer() {
+	public Container<E_Item> getContainer() {
 		return this.container;
 	}
 
 	@Override
-	public Booking getBooking() {
+	public Booking<E_Item> getBooking() {
 		return this.booking;
 	}
 

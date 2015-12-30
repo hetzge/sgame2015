@@ -7,24 +7,24 @@ import de.hetzge.sgame.world.GridPosition;
 
 public enum E_Orientation {
 
-	SOUTH((byte) 0, (byte) 1), WEST((byte) -1, (byte) 0), NORTH((byte) 0, (byte) -1), EAST((byte) 1, (byte) 0);
+	SOUTH((short) 0, (short) 1), WEST((short) -1, (short) 0), NORTH((short) 0, (short) -1), EAST((short) 1, (short) 0);
 
 	public final static E_Orientation[] values = values();
 	public final static List<E_Orientation> orientations = Arrays.asList(values);
 
-	private final byte offsetX;
-	private final byte offsetY;
-
-	private E_Orientation(byte offsetX, byte offsetY) {
+	private final short offsetX;
+	private final short offsetY;
+	
+	private E_Orientation(short offsetX, short offsetY) {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 	}
 
-	public byte getOffsetX() {
+	public short getOffsetX() {
 		return this.offsetX;
 	}
 
-	public byte getOffsetY() {
+	public short getOffsetY() {
 		return this.offsetY;
 	}
 
