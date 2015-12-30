@@ -10,8 +10,8 @@ import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
 import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
 import de.hetzge.sgame.item.E_Item;
-import de.hetzge.sgame.item.GridEntityContainer;
 import de.hetzge.sgame.item.GridEntityContainerWithoutLimit;
+import de.hetzge.sgame.item.IF_GridEntityContainer;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
@@ -66,7 +66,7 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 						// walk
 						pauseMedium();
 					} else {
-						Entity mineEntity = this.booking.<GridEntityContainer>getFrom().getEntity();
+						Entity mineEntity = this.booking.<IF_GridEntityContainer>getFrom().getEntity();
 						if (mineEntity != null) {
 							startWorking(mineEntity);
 						} else {

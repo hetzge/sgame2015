@@ -6,8 +6,8 @@ import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.item.E_Item;
-import de.hetzge.sgame.item.GridEntityContainer;
 import de.hetzge.sgame.item.GridEntityContainerWithoutLimit;
+import de.hetzge.sgame.item.IF_GridEntityContainer;
 import de.hetzge.sgame.world.GridPosition;
 import de.hetzge.sgame.world.Path;
 
@@ -30,7 +30,7 @@ public class CarrierJob extends EntityJob implements IF_ItemJob {
 			} else {
 				GridPosition gridPosition = this.entity.getGridPosition();
 				if (this.entity.hasItem()) {
-					GridPosition toDoorGridPosition = this.booking.<GridEntityContainer> getTo().getObject()
+					GridPosition toDoorGridPosition = this.booking.<IF_GridEntityContainer> getTo().getObject()
 							.getDoorGridPosition();
 					boolean reachedTo = gridPosition.equals(toDoorGridPosition);
 					if (reachedTo) {
@@ -52,7 +52,7 @@ public class CarrierJob extends EntityJob implements IF_ItemJob {
 					}
 				} else {
 					// goto from
-					GridEntityContainer from = this.booking.<GridEntityContainer>getFrom();
+					IF_GridEntityContainer from = this.booking.<IF_GridEntityContainer> getFrom();
 					GridPosition fromDoorGridPosition = from.getObject().getDoorGridPosition();
 					boolean reachedFrom = gridPosition.equals(fromDoorGridPosition);
 					if (reachedFrom) {

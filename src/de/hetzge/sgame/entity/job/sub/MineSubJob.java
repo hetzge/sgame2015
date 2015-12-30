@@ -9,6 +9,7 @@ import de.hetzge.sgame.entity.job.main.IF_ItemJob;
 import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.item.GridEntityContainer;
+import de.hetzge.sgame.item.IF_GridEntityContainer;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.world.GridPosition;
@@ -33,14 +34,14 @@ public class MineSubJob extends EntityJob {
 	@Override
 	protected void work() {
 		if (FrameModule.instance.isCurrentOrPast(this.finishMineFrameId)) {
-			GridEntityContainer fromContainerBefore = this.itemJob.getBooking().<GridEntityContainer> getFrom();
+			IF_GridEntityContainer fromContainerBefore = this.itemJob.getBooking().<IF_GridEntityContainer> getFrom();
 			this.itemJob.takeItem();
 			destroyMineProviderIfEmpty(fromContainerBefore);
 			this.entity.popJob();
 		}
 	}
 
-	private void destroyMineProviderIfEmpty(GridEntityContainer fromContainer) {
+	private void destroyMineProviderIfEmpty(IF_GridEntityContainer fromContainer) {
 		boolean isFromContainerEmpty = fromContainer.isEmpty();
 		if (isFromContainerEmpty) {
 			Entity fromEntity = fromContainer.getEntity();

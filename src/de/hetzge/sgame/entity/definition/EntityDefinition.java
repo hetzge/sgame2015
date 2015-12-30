@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.Ingredient;
+import de.hetzge.sgame.booking.Receipt;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.main.CarrierJob;
@@ -18,8 +20,6 @@ import de.hetzge.sgame.entity.job.main.MinerJob;
 import de.hetzge.sgame.entity.job.main.WorkstationJob;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.item.GridEntityContainer;
-import de.hetzge.sgame.item.Ingredient;
-import de.hetzge.sgame.item.Receipt;
 import de.hetzge.sgame.misc.Constant;
 
 public abstract class EntityDefinition {
@@ -41,7 +41,7 @@ public abstract class EntityDefinition {
 	protected Map<E_Item, Integer> provides = new HashMap<>();
 	protected Map<E_Item, Integer> needs = new HashMap<>();
 	protected Function<Entity, EntityJob> jobSupplier = (entity) -> Constant.NO_JOB;
-	protected List<Receipt> receipts = Collections.emptyList();
+	protected List<Receipt<E_Item>> receipts = Collections.emptyList();
 
 	public boolean isSelectable() {
 		return this.selectable;
@@ -91,7 +91,7 @@ public abstract class EntityDefinition {
 		return this.destroyTimeInFrames;
 	}
 
-	public List<Receipt> getReceipts() {
+	public List<Receipt<E_Item>> getReceipts() {
 		return this.receipts;
 	}
 
@@ -193,7 +193,7 @@ public abstract class EntityDefinition {
 			this.needs = needs;
 			this.provides = provides;
 			this.jobSupplier = entity -> new FactoryJob(entity);
-			this.receipts = Arrays.asList(new Receipt(Arrays.asList(new Ingredient(E_Item.WOOD, 2), new Ingredient(E_Item.STONE, 2)), E_Item.FISCH));
+			this.receipts = Arrays.asList(new Receipt(Arrays.asList(new Ingredient<>(E_Item.WOOD, 2), new Ingredient<>(E_Item.STONE, 2)), E_Item.FISCH));
 		}
 	}
 

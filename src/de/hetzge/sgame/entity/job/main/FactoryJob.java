@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.hetzge.sgame.booking.Booking;
 import de.hetzge.sgame.booking.Container;
+import de.hetzge.sgame.booking.Receipt;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
@@ -11,8 +12,6 @@ import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
 import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.item.E_Item;
-import de.hetzge.sgame.item.GridEntityContainer;
-import de.hetzge.sgame.item.Receipt;
 import de.hetzge.sgame.misc.Constant;
 
 public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_ProviderJob, IF_ConsumerJob {
@@ -20,7 +19,7 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 	private final ProviderJob providerJob;
 	private final ConsumerJob consumerJob;
 
-	private Receipt workingAt = null;
+	private Receipt<E_Item> workingAt = null;
 	private int finishProductFrameId = 0;
 
 	public FactoryJob(Entity entity) {
@@ -34,13 +33,13 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 		this.providerJob.doWork(this.entity);
 		this.consumerJob.doWork(this.entity);
 
-		List<Receipt> receipts = this.entity.getDefinition().getReceipts();
+		List<Receipt<E_Item>> receipts = this.entity.getDefinition().getReceipts();
 
-		Container provides = this.providerJob.getProvides();
-		Container needs = this.consumerJob.getNeeds();
+		Container<E_Item> provides = this.providerJob.getProvides();
+		Container<E_Item> needs = this.consumerJob.getNeeds();
 		if (!isWorkingAt()) {
 			// start
-			for (Receipt receipt : receipts) {
+			for (Receipt<E_Item> receipt : receipts) {
 				E_Item result = receipt.getResult();
 				boolean canAddAmount = provides.canAddAmount(result, 1);
 				if (canAddAmount && receipt.possible(needs)) {
@@ -56,9 +55,9 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 			E_Item build = this.workingAt.build(needs);
 			boolean buildSuccessful = build != null;
 			if (buildSuccessful) {
-				Container tempContainer = new GridEntityContainer(null);
+				Container<E_Item> tempContainer = new Container<>();
 				tempContainer.set(build, 1, 1);
-				Booking booking = tempContainer.book(build, 1, provides);
+				Booking<E_Item> booking = tempContainer.book(build, 1, provides);
 				booking.transfer();
 			} else {
 				throw new InvalidGameStateException();
@@ -80,12 +79,12 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 	}
 
 	@Override
-	public Container getRenderLeftContainer() {
+	public Container<E_Item> getRenderLeftContainer() {
 		return this.consumerJob.getNeeds();
 	}
 
 	@Override
-	public Container getRenderRightContainer() {
+	public Container<E_Item> getRenderRightContainer() {
 		return this.providerJob.getProvides();
 	}
 
