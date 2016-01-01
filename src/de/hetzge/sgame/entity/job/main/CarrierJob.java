@@ -40,7 +40,7 @@ public class CarrierJob extends EntityJob implements IF_ItemJob {
 						unsetBooking();
 					} else {
 						// goto to
-						Path path = App.entityFunction.findPath(this.entity, toDoorGridPosition);
+						Path path = App.searchFunction.findPath(this.entity, toDoorGridPosition);
 						if (path != null) {
 							this.entity.setPath(path);
 						} else {
@@ -60,7 +60,7 @@ public class CarrierJob extends EntityJob implements IF_ItemJob {
 						takeItem();
 					} else {
 						// goto
-						Path path = App.entityFunction.findPath(this.entity, fromDoorGridPosition);
+						Path path = App.searchFunction.findPath(this.entity, fromDoorGridPosition);
 						if (path != null) {
 							this.entity.setPath(path);
 						} else {

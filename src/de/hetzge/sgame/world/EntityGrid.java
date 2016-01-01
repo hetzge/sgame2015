@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.error.InvalidGameStateException;
 
 public class EntityGrid implements IF_Grid, Serializable {
 
@@ -50,7 +49,7 @@ public class EntityGrid implements IF_Grid, Serializable {
 	public void set(short x, short y, Entity entity, boolean unset) {
 		Entity entityOnPosition = get(x, y);
 		if (entityOnPosition != null && !entityOnPosition.equals(entity)) {
-			throw new InvalidGameStateException("Try to move to already used tile.");
+			throw new IllegalStateException("Try to move to already used tile.");
 		}
 		if (unset) {
 			unset(entity);

@@ -9,7 +9,6 @@ import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
 import de.hetzge.sgame.entity.job.IF_RenderItemsJob;
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
@@ -60,7 +59,7 @@ public class FactoryJob extends EntityJob implements IF_RenderItemsJob, IF_Provi
 				Booking<E_Item> booking = tempContainer.book(build, 1, provides);
 				booking.transfer();
 			} else {
-				throw new InvalidGameStateException();
+				throw new IllegalStateException();
 			}
 
 			this.entity.setActivity(E_Activity.IDLE);

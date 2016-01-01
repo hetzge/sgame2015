@@ -15,15 +15,15 @@ import de.hetzge.sgame.world.Path;
 import net.openhft.koloboke.collect.map.hash.HashIntIntMap;
 import net.openhft.koloboke.collect.map.hash.HashIntIntMaps;
 
-public class AStarConnector {
+public class AStar {
 
+	private static final int LIMIT_DEPTH = 10000;
 	private static final int DEFAULT_EXPECTED_RATING_SIZE = 10000;
-
 	private final HashIntIntMap ratingMap = HashIntIntMaps.newMutableMap(DEFAULT_EXPECTED_RATING_SIZE);
 	private final Predicate<GridPosition> collisionPredicate;
 	private final short areaWidth;
 
-	public AStarConnector(Predicate<GridPosition> collisionPredicate, short areaWidth) {
+	public AStar(Predicate<GridPosition> collisionPredicate, short areaWidth) {
 		this.collisionPredicate = collisionPredicate;
 		this.areaWidth = areaWidth;
 	}
@@ -39,6 +39,7 @@ public class AStarConnector {
 		rate(start, Integer.MAX_VALUE);
 		nexts.add(start);
 		GridPosition next;
+		int depth = 0;
 		while ((next = nexts.poll()) != null) {
 			int nextRating = getRating(next) - 1;
 			if (next.equals(goal)) {
@@ -51,6 +52,10 @@ public class AStarConnector {
 					rate(around, nextRating);
 					nexts.add(around);
 				}
+			}
+			depth++;
+			if (depth > LIMIT_DEPTH) {
+				return null;
 			}
 		}
 
@@ -66,22 +71,27 @@ public class AStarConnector {
 		nexts.add(start);
 		GridPosition next;
 		GOAL goalObject;
+		int depth = 0;
 		while ((next = nexts.poll()) != null) {
 			int nextRating = getRating(next) - 1;
-			if ((goalObject = searchFunction.apply(next)) != null) {
-				System.out.println("Step 1: " + (System.currentTimeMillis() - startTime));
-				return Pair.of(goalObject, evaluatePath(start, next));
-			}
 			for (E_Orientation orientation : E_Orientation.values) {
 				GridPosition around = next.getAround(orientation);
+				if ((goalObject = searchFunction.apply(around)) != null) {
+					System.out.println("Step 1: " + (System.currentTimeMillis() - startTime));
+					return Pair.of(goalObject, evaluatePath(start, next));
+				}
 				if (!alreadyRated(around) && !this.collisionPredicate.test(around)) {
 					rate(around, nextRating);
 					nexts.add(around);
 				}
 			}
+			depth++;
+			if (depth > LIMIT_DEPTH) {
+				return Pair.of(null, null);
+			}
 		}
 
-		return null;
+		return Pair.of(null, null);
 	}
 
 	private Path evaluatePath(GridPosition start, GridPosition goal) {
@@ -105,7 +115,9 @@ public class AStarConnector {
 
 		System.out.println("Step 2: " + (System.currentTimeMillis() - startTime) + " " + path.pathSize());
 
-		return path.reverse();
+		path = path.reverse();
+		path.add(goal);
+		return path;
 	}
 
 	private void rate(GridPosition gridPosition, int rating) {
@@ -136,12 +148,15 @@ public class AStarConnector {
 
 		int size = 10000;
 
-		AStarConnector aStarConnector = new AStarConnector(position -> !(position.getGridX() >= 0
-				&& position.getGridY() >= 0 && position.getGridX() < size && position.getGridY() < size), (short) size);
-		Path path = aStarConnector.findPath(new GridPosition((short) 12, (short) 9999),
-				new GridPosition((short) 250, (short) 370), true);
-		AStarConnector aStarConnector2 = new AStarConnector(position -> !(position.getGridX() >= 0
-				&& position.getGridY() >= 0 && position.getGridX() < size && position.getGridY() < size), (short) size);
+		AStar aStarConnector = new AStar(position -> !(position.getGridX() >= 0 && position.getGridY() >= 0
+				&& position.getGridX() < size && position.getGridY() < size), (short) size);
+		Path path = aStarConnector.findPath(new GridPosition((short) 12, (short) 12),
+				new GridPosition((short) 15, (short) 15), true);
+
+		System.out.println(path);
+
+		AStar aStarConnector2 = new AStar(position -> !(position.getGridX() >= 0 && position.getGridY() >= 0
+				&& position.getGridX() < size && position.getGridY() < size), (short) size);
 		Pair<GridPosition, Path> find = aStarConnector2.find(new GridPosition((short) 10, (short) 10), (position) -> {
 			if (position.getGridX() > 100 && position.getGridY() > 100f) {
 				return position;

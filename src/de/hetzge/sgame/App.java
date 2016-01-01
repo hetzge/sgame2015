@@ -6,6 +6,7 @@ import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.function.EntityFunction;
 import de.hetzge.sgame.function.Function;
 import de.hetzge.sgame.function.RessourceFunction;
+import de.hetzge.sgame.function.SearchFunction;
 import de.hetzge.sgame.function.WorldFunction;
 import de.hetzge.sgame.game.Game;
 import de.hetzge.sgame.game.LibGdxApplication;
@@ -32,6 +33,7 @@ public final class App {
 	public static final RessourceFunction ressourceFunction = new RessourceFunction();
 	public static final EntityFunction entityFunction = new EntityFunction();
 	public static final WorldFunction worldFunction = new WorldFunction();
+	public static final SearchFunction searchFunction = new SearchFunction();
 
 	public static final WorldRenderer worldRenderer = new WorldRenderer();
 	public static final EntityRenderer entityRenderer = new EntityRenderer();

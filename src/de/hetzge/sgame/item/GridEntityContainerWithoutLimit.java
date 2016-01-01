@@ -2,7 +2,6 @@ package de.hetzge.sgame.item;
 
 import de.hetzge.sgame.booking.ContainerWithoutLimit;
 import de.hetzge.sgame.entity.Entity;
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.world.IF_GridEntity;
 
 public class GridEntityContainerWithoutLimit extends ContainerWithoutLimit<E_Item> implements IF_GridEntityContainer {
@@ -26,7 +25,7 @@ public class GridEntityContainerWithoutLimit extends ContainerWithoutLimit<E_Ite
 		if (this.gridEntity instanceof Entity) {
 			return (Entity) this.gridEntity;
 		} else {
-			throw new InvalidGameStateException();
+			throw new IllegalStateException();
 		}
 	}
 

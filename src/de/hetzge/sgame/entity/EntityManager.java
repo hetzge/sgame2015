@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 import com.badlogic.gdx.utils.IntMap;
 
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.misc.Constant;
 
 public class EntityManager {
@@ -22,7 +21,7 @@ public class EntityManager {
 	public void register(Entity entity) {
 		int entityId = entity.getId();
 		if (this.entitiesById.containsKey(entityId)) {
-			throw new InvalidGameStateException("Try to register entity with already registered id " + entityId);
+			throw new IllegalStateException("Try to register entity with already registered id " + entityId);
 		}
 		this.entitiesById.put(entity.getId(), entity);
 		this.entities.add(entity);
@@ -44,7 +43,7 @@ public class EntityManager {
 			if (entityId == Constant.NO_ENTITY_ID) {
 				return null;
 			} else {
-				throw new InvalidGameStateException("Try to access non existing entity " + entityId);
+				throw new IllegalStateException("Try to access non existing entity " + entityId);
 			}
 		} else {
 			return entity;

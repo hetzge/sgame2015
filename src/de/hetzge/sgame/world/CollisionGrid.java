@@ -3,7 +3,6 @@ package de.hetzge.sgame.world;
 import java.io.Serializable;
 import java.util.BitSet;
 
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.misc.Util;
 
 public class CollisionGrid implements IF_Grid, Serializable {
@@ -73,7 +72,7 @@ public class CollisionGrid implements IF_Grid, Serializable {
 
 	public void setCollision(short x, short y, short width, short height) {
 		if (is(x, y, width, height)) {
-			throw new InvalidGameStateException("Try to set collision where already is collision.");
+			throw new IllegalStateException("Try to set collision where already is collision.");
 		}
 		eachEntityGridPosition(new GridEntity(x, y, width, height), this::set);
 	}

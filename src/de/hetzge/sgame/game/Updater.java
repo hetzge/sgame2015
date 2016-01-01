@@ -29,8 +29,8 @@ public class Updater implements IF_Update {
 		}
 
 		Iterable<Entity> entities = entityManager.getEntities();
-		for (Entity entity : entities) {
-			if (FrameModule.instance.isXthFrame(Constant.DO_JOB_EVERY_XTH_FRAMES)) {
+		if (FrameModule.instance.isXthFrame(Constant.DO_JOB_EVERY_XTH_FRAMES)) {
+			for (Entity entity : entities) {
 				entity.getJob().doWork(entity);
 			}
 		}

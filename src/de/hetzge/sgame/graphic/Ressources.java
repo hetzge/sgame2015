@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.IntMap;
 
 import de.hetzge.sgame.App;
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.item.E_Item;
 
 public class Ressources {
@@ -45,7 +44,7 @@ public class Ressources {
 	public Animation getGraphic(IF_GraphicKey graphicKey) {
 		Animation graphic = this.graphics.get(graphicKey.hashGraphicKey());
 		if (graphic == null) {
-			throw new InvalidGameStateException("Try to access non existing graphic: " + graphicKey.hashGraphicKeyString());
+			throw new IllegalStateException("Try to access non existing graphic: " + graphicKey.hashGraphicKeyString());
 		}
 		return graphic;
 	}

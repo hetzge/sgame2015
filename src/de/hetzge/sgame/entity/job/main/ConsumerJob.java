@@ -1,6 +1,7 @@
 package de.hetzge.sgame.entity.job.main;
 
 import java.util.Set;
+import java.util.function.Function;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.booking.Booking;
@@ -8,11 +9,9 @@ import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.job.EntityJob;
-import de.hetzge.sgame.error.InvalidGameStateException;
-import de.hetzge.sgame.function.EntityFunction.EntityPredicate;
-import de.hetzge.sgame.function.OnMapPredicate.EntityOnMapPredicate;
-import de.hetzge.sgame.function.OnMapPredicate.ProvideItemAvailablePredicate;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.world.ContainerGrid;
+import de.hetzge.sgame.world.GridPosition;
 
 public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 
@@ -31,28 +30,60 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 		for (E_Item item : items) {
 			int missingAmount = this.needs.getMissingAmount(item);
 			if (missingAmount > 0) {
-				EntityPredicate searchCarrierPredicate = searchEntity -> {
-					if (searchEntity.isEntityType(E_EntityType.CARRIER)) {
-						CarrierJob carrierJob = getCarrierJob(searchEntity);
-						boolean hasNoBooking = !carrierJob.hasBooking();
-						if (hasNoBooking) {
-							return true;
+
+				// ########################
+
+				Function<Entity, Entity> searchCarrierFunction = entityToTest -> {
+					if (entityToTest.isEntityType(E_EntityType.CARRIER)) {
+						CarrierJob carrierJob = getCarrierJob(entityToTest);
+						boolean hasBooking = carrierJob.hasBooking();
+						if (!hasBooking) {
+							return entityToTest;
 						}
 					}
-					return false;
+					return null;
 				};
-				ProvideItemAvailablePredicate provideItemAvailablePredicate = new ProvideItemAvailablePredicate(item);
-				EntityOnMapPredicate entityOnMapPredicate = new EntityOnMapPredicate(searchCarrierPredicate);
 
-				App.entityFunction.iterateMap(this.entity, provideItemAvailablePredicate);
-				App.entityFunction.iterateMap(this.entity, entityOnMapPredicate);
+				// ########################
 
-				Container<E_Item> provideContainer = provideItemAvailablePredicate.getProvideContainer();
-				Entity carrierEntity = entityOnMapPredicate.getEntity();
+				Function<GridPosition, Container<E_Item>> searchProviderContainer = gridPosition -> {
+					boolean isOnGrid = App.game.getWorld().getFixedCollisionGrid().isOnGrid(gridPosition);
+					if (!isOnGrid) {
+						return null;
+					}
 
-				if (provideContainer != null && carrierEntity != null) {
-					if (provideContainer.hasAmountAvailable(item, 1)) {
-						Booking<E_Item> booking = provideContainer.book(item, 1, this.needs);
+					Entity entityToTest = getEntityOnPosition(gridPosition);
+					if (entityToTest == null) {
+						// check providing grid container
+						ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
+						boolean hasItemAvailable = containerGrid.hasItemAvailable(gridPosition, item);
+						if (hasItemAvailable) {
+							return containerGrid.get(gridPosition);
+						} else {
+							return null;
+						}
+					} else {
+						// check providing entities
+						EntityJob job = this.entity.getJob();
+						if (job instanceof IF_ProviderJob) {
+							IF_ProviderJob if_ProviderJob = (IF_ProviderJob) job;
+							Container<E_Item> container = if_ProviderJob.getProviderJob().getProvides();
+							if (container.hasAmountAvailable(item, 1)) {
+								return container;
+							}
+						}
+					}
+					return null;
+				};
+
+				// #######################
+
+				Container<E_Item> providerContainer = App.searchFunction.byGridPosition.find(this.entity,
+						searchProviderContainer);
+				if (providerContainer != null && providerContainer.hasAmountAvailable(item, 1)) {
+					Entity carrierEntity = App.searchFunction.byEntity.find(this.entity, searchCarrierFunction);
+					if (carrierEntity != null) {
+						Booking<E_Item> booking = providerContainer.book(item, 1, this.needs);
 						CarrierJob carrierJob = getCarrierJob(carrierEntity);
 						carrierJob.setBooking(booking);
 						foundItemCount++;
@@ -60,18 +91,22 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 				}
 			}
 		}
+
 		if (foundItemCount == 0) {
 			pauseMedium();
 		}
 	}
 
+	private Entity getEntityOnPosition(GridPosition gridPosition) {
+		return App.game.getEntityGrid().get(gridPosition);
+	}
+
 	private CarrierJob getCarrierJob(Entity carrierEntity) {
 		EntityJob carrierEntityJob = carrierEntity.getJob();
 		if (carrierEntityJob instanceof CarrierJob) {
-			CarrierJob carrierJob = (CarrierJob) carrierEntityJob;
-			return carrierJob;
+			return (CarrierJob) carrierEntityJob;
 		} else {
-			throw new InvalidGameStateException();
+			throw new IllegalStateException();
 		}
 	}
 

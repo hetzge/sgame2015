@@ -1,7 +1,6 @@
 package de.hetzge.sgame.game;
 
 import de.hetzge.sgame.entity.EntityManager;
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.setting.PlayerSettings;
 import de.hetzge.sgame.world.EntityGrid;
 import de.hetzge.sgame.world.World;
@@ -18,7 +17,7 @@ public class Game {
 	private final LocalGameState localGameState = new LocalGameState();
 
 	public World getWorld() {
-		return world;
+		return this.world;
 	}
 
 	public void setWorld(World world) {
@@ -26,7 +25,7 @@ public class Game {
 	}
 
 	public EntityGrid getEntityGrid() {
-		return entityGrid;
+		return this.entityGrid;
 	}
 
 	public void setEntityGrid(EntityGrid entityGrid) {
@@ -34,7 +33,7 @@ public class Game {
 	}
 
 	public long getSeed() {
-		return seed;
+		return this.seed;
 	}
 
 	public void setSeed(long seed) {
@@ -42,7 +41,7 @@ public class Game {
 	}
 
 	public Players getPlayers() {
-		return players;
+		return this.players;
 	}
 
 	public void setPlayers(Players players) {
@@ -50,7 +49,7 @@ public class Game {
 	}
 
 	public PlayerSettings getSelf() {
-		return self;
+		return this.self;
 	}
 
 	public void setSelf(PlayerSettings self) {
@@ -58,22 +57,22 @@ public class Game {
 	}
 
 	public boolean isStarted() {
-		return started;
+		return this.started;
 	}
 
 	public EntityManager getEntityManager() {
-		return entityManager;
+		return this.entityManager;
 	}
 
 	public void start() {
-		started = true;
+		this.started = true;
 		if (!isReadyToStart()) {
-			throw new InvalidGameStateException("Try to start non ready game.");
+			throw new IllegalStateException("Try to start non ready game.");
 		}
 	}
 
 	public boolean isComplete() {
-		return world != null && entityGrid != null && self != null && players != null;
+		return this.world != null && this.entityGrid != null && this.self != null && this.players != null;
 	}
 
 	public boolean isReadyToStart() {
@@ -81,7 +80,7 @@ public class Game {
 	}
 
 	public LocalGameState getLocalGameState() {
-		return localGameState;
+		return this.localGameState;
 	}
 
 }

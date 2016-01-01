@@ -1,6 +1,5 @@
 package graceyard;
 
-import de.hetzge.sgame.error.InvalidGameStateException;
 import de.hetzge.sgame.item.E_Item;
 
 public class ItemContainerFunction {
@@ -60,7 +59,7 @@ public class ItemContainerFunction {
 		boolean add = add(fromContainer, fromContainerType, item);
 		boolean reduce = reduce(toContainer, toContainerType, item);
 		if (!add || !reduce) {
-			throw new InvalidGameStateException("Item transaction not valid");
+			throw new IllegalStateException("Item transaction not valid");
 		}
 		return true;
 	}

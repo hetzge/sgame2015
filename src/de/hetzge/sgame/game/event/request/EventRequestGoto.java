@@ -28,7 +28,7 @@ public class EventRequestGoto implements IF_Event {
 	@Override
 	public void execute() {
 		List<Entity> entities = App.game.getEntityManager().get(this.entityIds);
-		Map<Entity, Path> paths = App.entityFunction.findPath(entities, new GridPosition(this.goalX, this.goalY));
+		Map<Entity, Path> paths = App.searchFunction.findPath(entities, new GridPosition(this.goalX, this.goalY));
 
 		int[] entityIds = new int[paths.size()];
 		short[][] xPaths = new short[paths.size()][];

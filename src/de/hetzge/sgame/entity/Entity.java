@@ -3,9 +3,9 @@ package de.hetzge.sgame.entity;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.definition.EntityDefinition;
 import de.hetzge.sgame.entity.job.EntityJob;
+import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.graphic.IF_GraphicKey;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
@@ -341,7 +341,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	public void move(E_Orientation orientation) {
 		setOrientation(orientation);
 		float speed = getDefinition().getSpeed();
-		float frameDelta = App.gdxTiming.getDelta();
+		float frameDelta = FrameModule.instance.getFrameDelta();
 		this.x += orientation.getOffsetX() * speed * frameDelta;
 		this.y += orientation.getOffsetY() * speed * frameDelta;
 	}
