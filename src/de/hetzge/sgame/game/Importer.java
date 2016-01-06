@@ -49,8 +49,8 @@ public class Importer {
 				String typeString = properties.getString("type");
 				E_EntityType type = E_EntityType.valueOf(typeString);
 				int owner = properties.getInt("owner");
-				int x = object.getInt("x");
-				int y = object.getInt("y");
+				double x = object.getDouble("x");
+				double y = object.getDouble("y");
 				int ix = (int) Math.floor(x / tileSize);
 				int iy = (int) Math.floor(y / tileSize);
 				int index = Util.index(ix, iy, worldWidth);

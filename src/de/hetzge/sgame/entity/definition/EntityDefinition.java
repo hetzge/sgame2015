@@ -36,7 +36,7 @@ public abstract class EntityDefinition {
 	protected short doorOffsetX = 0;
 	protected short doorOffsetY = 1;
 	protected int updateEveryFrames = 100; // TODO
-	protected int destroyTimeInFrames = 250;
+	protected int destroyTimeInFrames = 3;
 	protected Map<E_Item, Integer> mineProvides = new HashMap<>();
 	protected Map<E_Item, Integer> provides = new HashMap<>();
 	protected Map<E_Item, Integer> needs = new HashMap<>();
@@ -173,6 +173,8 @@ public abstract class EntityDefinition {
 			this.jobSupplier = entity -> new WorkstationJob(entity);
 			this.width = 2;
 			this.height = 2;
+			this.doorOffsetX = 0;
+			this.doorOffsetY = 0;
 		}
 	}
 
@@ -193,7 +195,8 @@ public abstract class EntityDefinition {
 			this.needs = needs;
 			this.provides = provides;
 			this.jobSupplier = entity -> new FactoryJob(entity);
-			this.receipts = Arrays.asList(new Receipt(Arrays.asList(new Ingredient<>(E_Item.WOOD, 2), new Ingredient<>(E_Item.STONE, 2)), E_Item.FISCH));
+			this.receipts = Arrays.asList(new Receipt(
+					Arrays.asList(new Ingredient<>(E_Item.WOOD, 2), new Ingredient<>(E_Item.STONE, 2)), E_Item.FISCH));
 		}
 	}
 

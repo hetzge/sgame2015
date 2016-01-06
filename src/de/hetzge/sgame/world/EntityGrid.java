@@ -47,15 +47,27 @@ public class EntityGrid implements IF_Grid, Serializable {
 	}
 
 	public void set(short x, short y, Entity entity, boolean unset) {
-		Entity entityOnPosition = get(x, y);
-		if (entityOnPosition != null && !entityOnPosition.equals(entity)) {
-			throw new IllegalStateException("Try to move to already used tile.");
-		}
+		eachEntityGridPosition(entity, x, y, assertEntityOnGridPosition(entity));
 		if (unset) {
 			unset(entity);
 		}
 		eachEntityGridPosition(entity, x, y, set(entity));
 		entity.setRegisteredGridPosition(x, y);
+	}
+
+	/**
+	 * TODO unschön alles hier ... blub
+	 */
+	private Consumer<GridPosition> assertEntityOnGridPosition(Entity entity) {
+		return (gridPosition) -> {
+			short x = gridPosition.getGridX();
+			short y = gridPosition.getGridY();
+			Entity entityOnPosition = get(x, y);
+			if (entityOnPosition != null && !entityOnPosition.equals(entity)) {
+				throw new IllegalStateException(
+						"Try to move (entity id: " + entity.getId() + ") to already used tile (entity id: "+entityOnPosition.getId()+") (" + x + "|" + y + ").");
+			}
+		};
 	}
 
 	private Consumer<GridPosition> set(Entity entity) {

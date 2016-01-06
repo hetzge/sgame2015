@@ -14,8 +14,8 @@ public class EventSetupEntities implements IF_Event {
 
 	@Override
 	public void execute() {
-		App.game.setEntityGrid(entityGrid);
-		entityGrid.getAllEntities().stream().forEach(App.game.getEntityManager()::register);
+		App.game.setEntityGrid(this.entityGrid);
+		this.entityGrid.getAllEntities().stream().forEach(App.game.getEntityManager()::register);
 	}
 
 }

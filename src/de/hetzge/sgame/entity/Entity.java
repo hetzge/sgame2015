@@ -257,6 +257,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	public void nextWaypoint() {
 		if (this.nextWaypointPointer + 1 < this.pathXs.length) {
 			this.nextWaypointPointer++;
+			updateOrientation();
 		}
 	}
 
@@ -282,6 +283,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		this.pathXs = pathXs;
 		this.pathYs = pathYs;
 		this.nextWaypointPointer = 0;
+		updateOrientation();
 	}
 
 	public E_Orientation getOrientationToNext() {
@@ -291,6 +293,7 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 		int nextWorldY = (int) getNextWorldY();
 		return E_Orientation.orientationTo(worldX, worldY, nextWorldX, nextWorldY);
 	}
+
 	/*
 	 * ##################################################
 	 */
@@ -307,6 +310,11 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	public IF_GraphicKey setOrientation(E_Orientation orientation) {
 		this.orientation = (byte) orientation.ordinal();
 		return this;
+	}
+
+	public void updateOrientation() {
+		E_Orientation orientationToNext = getOrientationToNext();
+		setOrientation(orientationToNext);
 	}
 
 	@Override
@@ -339,7 +347,6 @@ public class Entity implements IF_GraphicKey, IF_GridEntity, Serializable {
 	}
 
 	public void move(E_Orientation orientation) {
-		setOrientation(orientation);
 		float speed = getDefinition().getSpeed();
 		float frameDelta = FrameModule.instance.getFrameDelta();
 		this.x += orientation.getOffsetX() * speed * frameDelta;

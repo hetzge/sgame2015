@@ -50,7 +50,7 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 						GridPosition doorGridPosition = this.workstation.getDoorGridPosition();
 						Path path = App.searchFunction.findPath(this.entity, doorGridPosition);
 						if (path != null) {
-							setPath(path);
+							this.entity.setPath(path);
 						} else {
 							// item fallen lassen
 							unsetWorkstation();
@@ -122,21 +122,7 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 
 	private void findMineEntityAndBookAndGoto() {
 
-		Function<Entity, Entity> searchFunction = entityToTest -> {
-			EntityJob job = entityToTest.getJob();
-			if (job instanceof MineProviderJob) {
-				MineProviderJob mineProviderJob = (MineProviderJob) job;
-				Container<E_Item> from = mineProviderJob.getContainer();
-				E_Item item = this.entity.getDefinition().getMineItem();
-				boolean hasItem = from.has(item);
-				if (hasItem) {
-					return entityToTest;
-				}
-			} 
-			return null;
-		};
-
-		Pair<Entity, Path> searchResult = App.searchFunction.byEntity.findAndPath(this.entity, searchFunction);
+		Pair<Entity, Path> searchResult = findMineEntity();
 		Entity mineEntity = searchResult.getLeft();
 		Path path = searchResult.getRight();
 
@@ -156,7 +142,28 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 			} else {
 				throw new IllegalStateException();
 			}
+		} else {
+			pauseLong();
 		}
+	}
+
+	private Pair<Entity, Path> findMineEntity() {
+		Function<Entity, Entity> searchFunction = entityToTest -> {
+			EntityJob job = entityToTest.getJob();
+			if (job instanceof MineProviderJob) {
+				MineProviderJob mineProviderJob = (MineProviderJob) job;
+				Container<E_Item> from = mineProviderJob.getContainer();
+				E_Item item = this.entity.getDefinition().getMineItem();
+				boolean hasItem = from.has(item);
+				if (hasItem) {
+					return entityToTest;
+				}
+			}
+			return null;
+		};
+
+		Pair<Entity, Path> searchResult = App.searchFunction.byEntity.findAndPath(this.entity, searchFunction);
+		return searchResult;
 	}
 
 	private void startWorking(Entity mineEntity) {
@@ -166,12 +173,6 @@ public class MinerJob extends EntityJob implements IF_ItemJob {
 		} else {
 			throw new IllegalStateException();
 		}
-	}
-
-	private void setPath(Path path) {
-		short[] xPath = path.getXPath();
-		short[] yPath = path.getYPath();
-		this.entity.setPath(xPath, yPath);
 	}
 
 	private boolean isEntityAtWorkstationDoor() {

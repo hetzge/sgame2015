@@ -44,7 +44,7 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	}
 
 	public void set(short x, short y) {
-		set(x, y);
+		set(index(x, y));
 	}
 
 	public void set(GridPosition gridPosition) {
@@ -96,7 +96,7 @@ public class CollisionGrid implements IF_Grid, Serializable {
 
 	public void setCollision(short x, short y, short width, short height) {
 		if (is(x, y, width, height)) {
-			throw new IllegalStateException("Try to set collision where already is collision.");
+			throw new IllegalStateException("Try to set collision where already is collision. " + x + "|" + y);
 		}
 		eachEntityGridPosition(new GridEntity(x, y, width, height), this::set);
 	}

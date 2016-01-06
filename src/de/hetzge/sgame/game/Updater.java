@@ -1,18 +1,16 @@
 package de.hetzge.sgame.game;
 
-import java.util.Arrays;
-
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.entity.EntityManager;
 import de.hetzge.sgame.frame.FrameModule;
 import de.hetzge.sgame.frame.IF_Update;
-import de.hetzge.sgame.game.event.request.EventRequestGoto;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.misc.E_Orientation;
-import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.world.EntityGrid;
+import de.hetzge.sgame.world.GridPosition;
+import de.hetzge.sgame.world.Path;
 
 public class Updater implements IF_Update {
 
@@ -101,12 +99,15 @@ public class Updater implements IF_Update {
 						}
 					} else {
 						// rerequest path
-						int entityId = entity.getId();
 						short pathGoalX = entity.getPathGoalX();
 						short pathGoalY = entity.getPathGoalY();
-						EventRequestGoto eventRequestGoto = new EventRequestGoto(Arrays.asList(entityId), pathGoalX,
-								pathGoalY);
-						NetworkModule.instance.sendOrSelf(eventRequestGoto);
+						Path rerequestedPath = App.searchFunction.findPath(entity,
+								new GridPosition(pathGoalX, pathGoalY));
+						if (rerequestedPath != null) {
+							entity.setPath(rerequestedPath);
+						} else {
+							entity.unsetPath();
+						}
 						return;
 					}
 				}

@@ -29,7 +29,6 @@ public class AStar {
 	}
 
 	public Path findPath(GridPosition start, GridPosition goal, boolean bestFirst) {
-
 		long startTime = System.currentTimeMillis();
 
 		AbstractQueue<GridPosition> nexts = bestFirst ? new PriorityQueue<GridPosition>((a, b) -> {
