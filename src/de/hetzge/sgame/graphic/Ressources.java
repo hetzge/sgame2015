@@ -1,5 +1,7 @@
 package de.hetzge.sgame.graphic;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -14,8 +16,12 @@ import com.badlogic.gdx.utils.IntMap;
 
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.item.E_Item;
+import de.hetzge.sgame.world.TileSet;
 
 public class Ressources {
+
+	private final BasicTileSet basicTileSet = new BasicTileSet();
+	private final List<TileSet> tileSets = Arrays.asList(this.basicTileSet);
 
 	private Skin skin;
 	private List<TextureRegion> tiles;
@@ -28,7 +34,7 @@ public class Ressources {
 	public void init() {
 		this.skin = new Skin(Gdx.files.internal("asset/skin/uiskin.json"));
 		this.bitmapFont = this.skin.getFont("default-font");
-		this.tiles = App.ressourceFunction.loadTiles();
+		this.tiles = App.ressourceFunction.loadTiles(this.tileSets);
 		this.graphics = App.ressourceFunction.loadGraphics();
 		this.items = App.ressourceFunction.loadItems();
 
@@ -67,6 +73,17 @@ public class Ressources {
 
 	public BitmapFont getBitmapFont() {
 		return this.bitmapFont;
+	}
+
+	public static class BasicTileSet extends TileSet {
+		public BasicTileSet() {
+			super(new File("asset/tiles/tiles.png"));
+			this.border = 1;
+			this.space = 1;
+			this.width = 11;
+			this.height = 11;
+			this.tileSize = 16;
+		}
 	}
 
 }

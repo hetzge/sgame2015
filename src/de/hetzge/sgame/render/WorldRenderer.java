@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.MathUtils;
 import de.hetzge.sgame.App;
 import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
+import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.world.ContainerGrid;
 import de.hetzge.sgame.world.World;
@@ -76,7 +77,7 @@ public class WorldRenderer implements IF_Renderer {
 		ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
 		for (short x = minX; x < maxX; x++) {
 			for (short y = minY; y < maxY; y++) {
-				Container container = containerGrid.get(x, y);
+				Container<E_Item> container = containerGrid.get(x, y);
 				if (container != null) {
 					App.itemRenderer.renderContainer(container, x, y);
 				}
@@ -89,14 +90,16 @@ public class WorldRenderer implements IF_Renderer {
 	public void renderTile(World world, short x, short y) {
 		short tileId = world.getTileGrid().get(x, y);
 		TextureRegion tileTextureRegion = App.ressources.getTileTextureRegion(tileId);
-		getSpriteBatch().draw(tileTextureRegion, x * Constant.TILE_SIZE, -(y * Constant.TILE_SIZE));
+		getSpriteBatch().draw(tileTextureRegion, x * Constant.TILE_SIZE, -(y * Constant.TILE_SIZE), Constant.TILE_SIZE,
+				Constant.TILE_SIZE);
 	}
 
 	public void renderCollision(World world, short x, short y) {
 		boolean collision = world.getFixedCollisionGrid().is(x, y);
 		if (collision) {
 			getShapeRenderer().setColor(Color.YELLOW);
-			getShapeRenderer().rect(x * Constant.TILE_SIZE, -y * Constant.TILE_SIZE, Constant.TILE_SIZE, Constant.TILE_SIZE);
+			getShapeRenderer().rect(x * Constant.TILE_SIZE, -y * Constant.TILE_SIZE, Constant.TILE_SIZE,
+					Constant.TILE_SIZE);
 		}
 	}
 

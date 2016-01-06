@@ -45,6 +45,11 @@
 			<version>3.4</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
 			<groupId>de.ruedigermoeller</groupId>
 			<artifactId>fst</artifactId>
 			<version>2.38</version>
@@ -58,6 +63,11 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>koloboke-impl-jdk8</artifactId>
 			<version>0.6.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20151123</version>
 		</dependency>
 	</dependencies>
 </project>

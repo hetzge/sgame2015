@@ -28,6 +28,18 @@ public final class Util {
 		return x + y * width;
 	}
 
+	public static int index(int x, int y, int width) {
+		return x + y * width;
+	}
+
+	public static int unIndexX(int index, int width) {
+		return index % width;
+	}
+
+	public static int unIndexY(int index, int width) {
+		return (int) Math.floor(index / width);
+	}
+
 	public static String toString(short x, short y) {
 		return "(" + x + "|" + y + ")";
 	}

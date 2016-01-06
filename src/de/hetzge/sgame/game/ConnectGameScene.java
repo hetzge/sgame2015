@@ -1,5 +1,7 @@
 package de.hetzge.sgame.game;
 
+import java.io.File;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,9 +18,9 @@ public class ConnectGameScene implements Screen {
 
 	@Override
 	public void show() {
-		connectGameGui = new ConnectGameGui();
-		connectGameGui.show();
-		Gdx.input.setInputProcessor(connectGameGui);
+		this.connectGameGui = new ConnectGameGui();
+		this.connectGameGui.show();
+		Gdx.input.setInputProcessor(this.connectGameGui);
 	}
 
 	@Override
@@ -26,8 +28,8 @@ public class ConnectGameScene implements Screen {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		connectGameGui.act();
-		connectGameGui.draw();
+		this.connectGameGui.act();
+		this.connectGameGui.draw();
 
 		if (!NetworkModule.instance.isConnected()) {
 			newGame();
@@ -35,7 +37,7 @@ public class ConnectGameScene implements Screen {
 		if (App.game.isReadyToStart()) {
 			startGame();
 		} else if (isHost() && App.game.isComplete()) {
-			connectGameGui.showStartButton();
+			this.connectGameGui.showStartButton();
 		}
 	}
 
@@ -46,7 +48,12 @@ public class ConnectGameScene implements Screen {
 	private void newGame() {
 		App.game = new Game();
 		if (isHost()) {
-			App.function.initGame();
+			try {
+				App.function.initGame(App.importer.importGameFormatFromTiled(new File("asset/test.json")));
+			} catch (ImportExportException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		NetworkModule.instance.connect();
 		if (isClient()) {

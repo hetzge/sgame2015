@@ -82,24 +82,6 @@ public class EntityFunction {
 				return;
 			}
 		}
-
-		// Stream<GridPosition> notBlacklistedAroundStream =
-		// aroundStream.filter(gridPosition ->
-		// !blacklist.contains(gridPosition));
-		// Stream<GridPosition> emptyNotBlacklistedAroundStream =
-		// notBlacklistedAroundStream.filter(entityGrid::isNot);
-		// GridPosition goalGridPosition =
-		// emptyNotBlacklistedAroundStream.findFirst().orElse(entityGrid.getAroundStream(gridX,
-		// gridY).filter(gridPosition ->
-		// !blacklist.contains(gridPosition)).findFirst().get());
-		// Entity entityOnGoal = entityGrid.get(goalGridPosition.getGridX(),
-		// goalGridPosition.getGridY());
-		// if (entityOnGoal != null) {
-		// blacklist.add(goalGridPosition);
-		// goAway(entityOnGoal, blacklist);
-		// }
-		// gotoGridPosition(entity, goalGridPosition.getGridX(),
-		// goalGridPosition.getGridY());
 	}
 
 	private boolean isGoAwayable(Entity entity) {

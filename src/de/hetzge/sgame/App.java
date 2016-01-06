@@ -8,7 +8,9 @@ import de.hetzge.sgame.function.Function;
 import de.hetzge.sgame.function.RessourceFunction;
 import de.hetzge.sgame.function.SearchFunction;
 import de.hetzge.sgame.function.WorldFunction;
+import de.hetzge.sgame.game.Exporter;
 import de.hetzge.sgame.game.Game;
+import de.hetzge.sgame.game.Importer;
 import de.hetzge.sgame.game.LibGdxApplication;
 import de.hetzge.sgame.game.Updater;
 import de.hetzge.sgame.graphic.Ressources;
@@ -43,6 +45,9 @@ public final class App {
 	public static final FSTConfiguration fstConfiguration = FSTConfiguration.getDefaultConfiguration();
 	public static final Dispatcher dispatcher = new Dispatcher();
 	public static final Updater updater = new Updater();
+
+	public static final Importer importer = new Importer();
+	public static final Exporter exporter = new Exporter();
 
 	public static Game game;
 

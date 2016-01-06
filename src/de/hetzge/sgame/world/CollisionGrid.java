@@ -27,8 +27,24 @@ public class CollisionGrid implements IF_Grid, Serializable {
 		return this.height;
 	}
 
+	public void set(boolean[] values) {
+		if (values.length != this.width * this.height) {
+			throw new IllegalArgumentException(
+					"parameter values has not expected length: " + values.length + " from " + this.width * this.height);
+		}
+		for (int i = 0; i < values.length; i++) {
+			if (values[i]) {
+				set(i);
+			}
+		}
+	}
+
+	public void set(int index) {
+		this.collision.set(index);
+	}
+
 	public void set(short x, short y) {
-		this.collision.set(index(x, y));
+		set(x, y);
 	}
 
 	public void set(GridPosition gridPosition) {
@@ -40,11 +56,19 @@ public class CollisionGrid implements IF_Grid, Serializable {
 	}
 
 	public void unset(short x, short y) {
-		this.collision.clear(index(x, y));
+		unset(index(x, y));
+	}
+
+	public void unset(int index) {
+		this.collision.clear(index);
+	}
+
+	public boolean is(int index) {
+		return this.collision.get(index);
 	}
 
 	public boolean is(short x, short y) {
-		return this.collision.get(index(x, y));
+		return is(index(x, y));
 	}
 
 	public boolean is(GridPosition gridPosition) {

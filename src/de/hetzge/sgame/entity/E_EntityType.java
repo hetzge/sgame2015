@@ -15,7 +15,7 @@ public enum E_EntityType {
 
 	FACTORY(new EntityDefinition.Factory());
 
-	public final static E_EntityType[] values = values();
+	public static final E_EntityType[] values = values();
 
 	private final EntityDefinition entityDefinition;
 
