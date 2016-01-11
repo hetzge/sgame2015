@@ -1,21 +1,25 @@
 package de.hetzge.sgame.game.event.setup;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.game.event.IF_Event;
-import de.hetzge.sgame.world.EntityGrid;
 
 public class EventSetupEntities implements IF_Event {
 
-	private final EntityGrid entityGrid;
+	private final Entity[] entities;
 
-	public EventSetupEntities(EntityGrid entityGrid) {
-		this.entityGrid = entityGrid;
+	public EventSetupEntities(Entity[] entities) {
+		this.entities = entities;
 	}
 
 	@Override
 	public void execute() {
-		App.game.setEntityGrid(this.entityGrid);
-		this.entityGrid.getAllEntities().stream().forEach(App.game.getEntityManager()::register);
+		App.getGame().getWorld().getEntityGrid().set(this.entities);
+		new HashSet<>(Arrays.asList(this.entities)).stream().filter(entity -> entity != null)
+				.forEach(App.getGame().getEntityManager()::register);
 	}
 
 }

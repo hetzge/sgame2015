@@ -24,8 +24,8 @@ public class WorldFunction {
 	}
 
 	public boolean checkSpaceForEntity(E_EntityType entityType, short x, short y) {
-		World world = App.game.getWorld();
-		EntityGrid entityGrid = App.game.getEntityGrid();
+		World world = App.getGame().getWorld();
+		EntityGrid entityGrid = App.getGame().getWorld().getEntityGrid();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
 
 		EntityDefinition entityDefinition = entityType.getEntityDefinition();
@@ -45,7 +45,8 @@ public class WorldFunction {
 	}
 
 	public boolean checkSpace(short x, short y) {
-		return !App.game.getWorld().getFixedCollisionGrid().is(x, y) && !App.game.getEntityGrid().is(x, y);
+		return !App.getGame().getWorld().getFixedCollisionGrid().is(x, y)
+				&& !App.getGame().getWorld().getEntityGrid().is(x, y);
 	}
 
 	public GridPosition findEmptyGridPositionAround(E_EntityType entityType, short x, short y) {
@@ -55,9 +56,9 @@ public class WorldFunction {
 			throw new IllegalArgumentException("This only works with moveable entities");
 		}
 
-		World world = App.game.getWorld();
+		World world = App.getGame().getWorld();
 		CollisionGrid fixedCollisionGrid = world.getFixedCollisionGrid();
-		EntityGrid entityGrid = App.game.getEntityGrid();
+		EntityGrid entityGrid = App.getGame().getWorld().getEntityGrid();
 
 		Iterator<GridPosition> spiralIterator = world.getSpiralIterator(x, y, (short) 30);
 		while (spiralIterator.hasNext()) {

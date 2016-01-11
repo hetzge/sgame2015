@@ -49,7 +49,7 @@ public final class App {
 	public static final Importer importer = new Importer();
 	public static final Exporter exporter = new Exporter();
 
-	public static Game game;
+	private static Game game;
 
 	static {
 		NetworkModule.setup.setDispatcher(dispatcher);
@@ -57,5 +57,13 @@ public final class App {
 	}
 
 	private App() {
+	}
+
+	public static Game getGame() {
+		return game;
+	}
+
+	public static void setGame(Game game) {
+		App.game = game;
 	}
 }

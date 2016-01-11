@@ -14,7 +14,7 @@ public class EventSetupPlayer implements IF_Event {
 
 	@Override
 	public void execute() {
-		App.game.setSelf(playerSettings);
+		App.getGame().setSelf(this.playerSettings);
 	}
 
 }

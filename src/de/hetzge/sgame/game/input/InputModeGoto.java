@@ -21,7 +21,7 @@ public class InputModeGoto implements IF_InputMode {
 	@Override
 	public void onMouseUp(int button, MouseEventPosition downPosition, MouseEventPosition upPosition) {
 		if (button == Input.Buttons.RIGHT) {
-			LocalGameState localGameState = App.game.getLocalGameState();
+			LocalGameState localGameState = App.getGame().getLocalGameState();
 			boolean hasSelection = localGameState.hasSelection();
 			if (hasSelection) {
 				Set<Entity> selectionEntities = localGameState.getSelection();

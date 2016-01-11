@@ -18,7 +18,7 @@ public class DestroyJob extends EntityJob {
 	@Override
 	protected void work() {
 		if (FrameModule.instance.isCurrentOrPast(this.removeOnFrameId)) {
-			App.game.getEntityManager().registerRemove(this.entity);
+			App.getGame().getEntityManager().registerRemove(this.entity);
 		}
 	}
 

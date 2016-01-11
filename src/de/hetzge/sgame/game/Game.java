@@ -2,7 +2,6 @@ package de.hetzge.sgame.game;
 
 import de.hetzge.sgame.entity.EntityManager;
 import de.hetzge.sgame.setting.PlayerSettings;
-import de.hetzge.sgame.world.EntityGrid;
 import de.hetzge.sgame.world.World;
 
 public class Game {
@@ -10,7 +9,6 @@ public class Game {
 	private boolean started = false;
 	private long seed = 0;
 	private World world = null;
-	private EntityGrid entityGrid = null;
 	private Players players = null;
 	private PlayerSettings self = null;
 	private final EntityManager entityManager = new EntityManager();
@@ -22,14 +20,6 @@ public class Game {
 
 	public void setWorld(World world) {
 		this.world = world;
-	}
-
-	public EntityGrid getEntityGrid() {
-		return this.entityGrid;
-	}
-
-	public void setEntityGrid(EntityGrid entityGrid) {
-		this.entityGrid = entityGrid;
 	}
 
 	public long getSeed() {
@@ -72,7 +62,7 @@ public class Game {
 	}
 
 	public boolean isComplete() {
-		return this.world != null && this.entityGrid != null && this.self != null && this.players != null;
+		return this.world != null && this.world.getEntityGrid() != null && this.self != null && this.players != null;
 	}
 
 	public boolean isReadyToStart() {

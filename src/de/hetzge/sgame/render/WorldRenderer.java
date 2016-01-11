@@ -24,7 +24,7 @@ public class WorldRenderer implements IF_Renderer {
 	private List<Entity> visibleEntities = Collections.emptyList();
 
 	public void render() {
-		render(App.game.getWorld());
+		render(App.getGame().getWorld());
 	}
 
 	public void render(World world) {
@@ -51,14 +51,14 @@ public class WorldRenderer implements IF_Renderer {
 		for (short x = minX; x < maxX; x++) {
 			for (short y = minY; y < maxY; y++) {
 				renderTile(world, x, y);
-				Entity entity = App.game.getEntityGrid().get(x, y);
+				Entity entity = App.getGame().getWorld().getEntityGrid().get(x, y);
 				if (entity != null && duplicates.add(entity)) {
 					entitiesToRender.add(entity);
 				}
 			}
 		}
 
-		if (App.game.getLocalGameState().isShowCollisions()) {
+		if (App.getGame().getLocalGameState().isShowCollisions()) {
 			for (short x = minX; x < maxX; x++) {
 				for (short y = minY; y < maxY; y++) {
 					renderCollision(world, x, y);
@@ -66,7 +66,7 @@ public class WorldRenderer implements IF_Renderer {
 			}
 		}
 
-		if (App.game.getLocalGameState().isShowWorldOwner()) {
+		if (App.getGame().getLocalGameState().isShowWorldOwner()) {
 			for (short x = minX; x < maxX; x++) {
 				for (short y = minY; y < maxY; y++) {
 					renderWorldOwner(world, x, y);
@@ -74,7 +74,7 @@ public class WorldRenderer implements IF_Renderer {
 			}
 		}
 
-		ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
+		ContainerGrid containerGrid = App.getGame().getWorld().getContainerGrid();
 		for (short x = minX; x < maxX; x++) {
 			for (short y = minY; y < maxY; y++) {
 				Container<E_Item> container = containerGrid.get(x, y);

@@ -17,7 +17,6 @@ public class EntityGrid implements IF_Grid, Serializable {
 	public EntityGrid(short width, short height) {
 		this.width = width;
 		this.height = height;
-
 		this.entities = new Entity[width * height];
 	}
 
@@ -42,6 +41,10 @@ public class EntityGrid implements IF_Grid, Serializable {
 		set(registeredAX, registeredAY, entityB, false);
 	}
 
+	public void set(Entity[] entities){
+		System.arraycopy(entities, 0, this.entities, 0, entities.length);
+	}
+	
 	public void set(short x, short y, Entity entity) {
 		set(x, y, entity, true);
 	}
@@ -65,7 +68,8 @@ public class EntityGrid implements IF_Grid, Serializable {
 			Entity entityOnPosition = get(x, y);
 			if (entityOnPosition != null && !entityOnPosition.equals(entity)) {
 				throw new IllegalStateException(
-						"Try to move (entity id: " + entity.getId() + ") to already used tile (entity id: "+entityOnPosition.getId()+") (" + x + "|" + y + ").");
+						"Try to move (entity id: " + entity.getId() + ") to already used tile (entity id: "
+								+ entityOnPosition.getId() + ") (" + x + "|" + y + ").");
 			}
 		};
 	}
@@ -123,6 +127,10 @@ public class EntityGrid implements IF_Grid, Serializable {
 			}
 		}
 		return result;
+	}
+	
+	public Entity[] getEntities() {
+		return this.entities;
 	}
 
 }

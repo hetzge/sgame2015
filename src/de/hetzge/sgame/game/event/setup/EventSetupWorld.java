@@ -14,7 +14,7 @@ public class EventSetupWorld implements IF_Event {
 
 	@Override
 	public void execute() {
-		App.game.setWorld(world);
+		App.getGame().setWorld(this.world);
 	}
 	
 }

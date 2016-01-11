@@ -25,9 +25,9 @@ public class InputRenderer implements IF_Renderer {
 	}
 
 	public void renderBuild() {
-		E_EntityType buildEntityType = App.game.getLocalGameState().getBuildEntityType();
+		E_EntityType buildEntityType = App.getGame().getLocalGameState().getBuildEntityType();
 		if (buildEntityType != null) {
-			World world = App.game.getWorld();
+			World world = App.getGame().getWorld();
 			EntityDefinition entityDefinition = buildEntityType.getEntityDefinition();
 			short width = entityDefinition.getWidth();
 			short height = entityDefinition.getHeight();
@@ -59,7 +59,7 @@ public class InputRenderer implements IF_Renderer {
 	}
 
 	public void renderSelectionRect() {
-		MouseEventPosition mouseDownEventPosition = App.game.getLocalGameState().getMouseDownEventPosition();
+		MouseEventPosition mouseDownEventPosition = App.getGame().getLocalGameState().getMouseDownEventPosition();
 		if (mouseDownEventPosition != null) {
 			Vector2 unproject = App.libGdxApplication.unproject(Gdx.input.getX(), Gdx.input.getY());
 			float x1 = unproject.x;

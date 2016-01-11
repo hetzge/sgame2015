@@ -30,7 +30,7 @@ public class InputModeSelect implements IF_InputMode {
 
 			List<Entity> selection = new LinkedList<>();
 
-			EntityGrid entityGrid = App.game.getEntityGrid();
+			EntityGrid entityGrid = App.getGame().getWorld().getEntityGrid();
 			for (short x = (short) startX; x <= endX; x++) {
 				for (short y = (short) startY; y <= endY; y++) {
 					Entity entity = entityGrid.get(x, y);
@@ -38,7 +38,7 @@ public class InputModeSelect implements IF_InputMode {
 						continue;
 					} else if (!entity.getDefinition().isSelectable()) {
 						continue;
-					} else if (entity.getOwner() != App.game.getSelf().getPlayerId()) {
+					} else if (entity.getOwner() != App.getGame().getSelf().getPlayerId()) {
 						continue;
 					} else {
 						selection.add(entity);
@@ -46,7 +46,7 @@ public class InputModeSelect implements IF_InputMode {
 				}
 			}
 
-			App.game.getLocalGameState().setSelection(selection);
+			App.getGame().getLocalGameState().setSelection(selection);
 		}
 	}
 

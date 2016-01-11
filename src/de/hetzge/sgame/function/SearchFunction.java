@@ -90,17 +90,17 @@ public class SearchFunction {
 	}
 
 	private Entity getEntityOnPosition(GridPosition gridPosition) {
-		return App.game.getEntityGrid().get(gridPosition);
+		return App.getGame().getWorld().getEntityGrid().get(gridPosition);
 	}
 
 	private boolean isOnGrid(GridPosition gridPosition) {
-		return App.game.getWorld().isOnGrid(gridPosition);
+		return App.getGame().getWorld().isOnGrid(gridPosition);
 	}
 
 	private AStar createAStar() {
-		short worldWidth = App.game.getWorld().getWidth();
-		Predicate<GridPosition> onGridPredicate = App.game.getWorld().getFixedCollisionGrid()::isOnGrid;
-		Predicate<GridPosition> collisionPredicate = App.game.getWorld().getFixedCollisionGrid()::is;
+		short worldWidth = App.getGame().getWorld().getWidth();
+		Predicate<GridPosition> onGridPredicate = App.getGame().getWorld().getFixedCollisionGrid()::isOnGrid;
+		Predicate<GridPosition> collisionPredicate = App.getGame().getWorld().getFixedCollisionGrid()::is;
 		return new AStar(onGridPredicate.and(collisionPredicate), worldWidth);
 	}
 

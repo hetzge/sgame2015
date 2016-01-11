@@ -29,10 +29,10 @@ public class EntityFunction {
 
 	public void removeEntity(Entity entity) {
 		Logger.info("remove entity " + entity.getId());
-		App.game.getEntityManager().remove(entity);
-		App.game.getEntityGrid().unset(entity);
+		App.getGame().getEntityManager().remove(entity);
+		App.getGame().getWorld().getEntityGrid().unset(entity);
 		if (!entity.getDefinition().isMoveable()) {
-			App.game.getWorld().getFixedCollisionGrid().unsetCollision(entity);
+			App.getGame().getWorld().getFixedCollisionGrid().unsetCollision(entity);
 		}
 	}
 
@@ -42,12 +42,12 @@ public class EntityFunction {
 		Entity entity = new Entity(entityId, playerId, entityType);
 		entity.setWorldX(x);
 		entity.setWorldY(y);
-		App.game.getEntityManager().register(entity);
-		App.game.getEntityGrid().set(x, y, entity);
+		App.getGame().getEntityManager().register(entity);
+		App.getGame().getWorld().getEntityGrid().set(x, y, entity);
 		if (!moveable) {
 			short width = entity.getWidth();
 			short height = entity.getHeight();
-			App.game.getWorld().getFixedCollisionGrid().setCollision(x, y, width, height);
+			App.getGame().getWorld().getFixedCollisionGrid().setCollision(x, y, width, height);
 		}
 	}
 
@@ -56,8 +56,8 @@ public class EntityFunction {
 	}
 
 	private void goAway(Entity entity, List<GridPosition> blacklist) {
-		EntityGrid entityGrid = App.game.getEntityGrid();
-		World world = App.game.getWorld();
+		World world = App.getGame().getWorld();
+		EntityGrid entityGrid = world.getEntityGrid();
 
 		short gridX = entity.getGridX();
 		short gridY = entity.getGridY();
@@ -89,8 +89,8 @@ public class EntityFunction {
 	}
 
 	private boolean isGoToAble(GridPosition gridPosition) {
-		return !App.game.getEntityGrid().is(gridPosition)
-				&& !App.game.getWorld().getFixedCollisionGrid().is(gridPosition);
+		return !App.getGame().getWorld().getEntityGrid().is(gridPosition)
+				&& !App.getGame().getWorld().getFixedCollisionGrid().is(gridPosition);
 	}
 
 	public void gotoGridPosition(Entity entity, short x, short y) {

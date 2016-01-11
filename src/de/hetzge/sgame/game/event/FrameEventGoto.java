@@ -19,12 +19,12 @@ public class FrameEventGoto extends FrameEvent {
 
 	@Override
 	public void execute() {
-		for (int i = 0; i < entityIds.length; i++) {
-			int entityId = entityIds[i];
-			short[] xPath = xPaths[i];
-			short[] yPath = yPaths[i];
+		for (int i = 0; i < this.entityIds.length; i++) {
+			int entityId = this.entityIds[i];
+			short[] xPath = this.xPaths[i];
+			short[] yPath = this.yPaths[i];
 			if (xPath != null && yPath != null) {
-				Entity entity = App.game.getEntityManager().get(entityId);
+				Entity entity = App.getGame().getEntityManager().get(entityId);
 				entity.setPath(xPath, yPath);
 				System.out.println(entity.getWorldX() + " <-> " + entity.getWorldY());
 			}

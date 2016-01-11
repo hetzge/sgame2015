@@ -34,9 +34,9 @@ public class ConnectGameScene implements Screen {
 		if (!NetworkModule.instance.isConnected()) {
 			newGame();
 		}
-		if (App.game.isReadyToStart()) {
+		if (App.getGame().isReadyToStart()) {
 			startGame();
-		} else if (isHost() && App.game.isComplete()) {
+		} else if (isHost() && App.getGame().isComplete()) {
 			this.connectGameGui.showStartButton();
 		}
 	}
@@ -46,7 +46,7 @@ public class ConnectGameScene implements Screen {
 	}
 
 	private void newGame() {
-		App.game = new Game();
+		App.setGame(new Game());
 		if (isHost()) {
 			try {
 				App.function.initGame(App.importer.importGameFormatFromTiled(new File("asset/test.json")));

@@ -16,12 +16,12 @@ public class ConnectGameGui extends Stage {
 	private Button startButton;
 
 	public void show() {
-		addActor(startButton = new TextButton("Start", App.ressources.getSkin()) {
+		addActor(this.startButton = new TextButton("Start", App.ressources.getSkin()) {
 			{
 				addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						NetworkModule.instance.send(new EventSetupPlayers(App.game.getPlayers()));
+						NetworkModule.instance.send(new EventSetupPlayers(App.getGame().getPlayers()));
 						NetworkModule.instance.sendAndSelf(new EventStartGame());
 					}
 				});
@@ -31,7 +31,7 @@ public class ConnectGameGui extends Stage {
 	}
 
 	public void showStartButton() {
-		startButton.setVisible(true);
+		this.startButton.setVisible(true);
 	}
 
 }

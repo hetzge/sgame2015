@@ -23,7 +23,7 @@ public class IngameInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 
-		LocalGameState localGameState = App.game.getLocalGameState();
+		LocalGameState localGameState = App.getGame().getLocalGameState();
 		switch (keycode) {
 		case Keys.F1:
 			localGameState.toggleShowCollision();
@@ -45,7 +45,7 @@ public class IngameInputProcessor implements InputProcessor {
 			break;
 		case Keys.DEL:
 			// TEMP
-			Entity entity = App.game.getEntityManager().get(0);
+			Entity entity = App.getGame().getEntityManager().get(0);
 			App.entityFunction.destroyEntity(entity);
 
 			break;
@@ -61,7 +61,7 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		LocalGameState localGameState = App.game.getLocalGameState();
+		LocalGameState localGameState = App.getGame().getLocalGameState();
 		MouseEventPosition mouseDownEventPosition = new MouseEventPosition(x, y);
 		localGameState.setMouseDownEventPosition(mouseDownEventPosition);
 		localGameState.getInputMode().onMouseDown(button, mouseDownEventPosition);
@@ -70,7 +70,7 @@ public class IngameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		LocalGameState localGameState = App.game.getLocalGameState();
+		LocalGameState localGameState = App.getGame().getLocalGameState();
 		MouseEventPosition mouseDownEventPosition = localGameState.getMouseDownEventPosition();
 		if (mouseDownEventPosition == null) {
 			Logger.debug("Abort touchUp caused by missing touchDown");
@@ -124,8 +124,8 @@ public class IngameInputProcessor implements InputProcessor {
 			camera.zoom = 1;
 		}
 
-		camera.position.x = MathUtils.clamp(camera.position.x, 0, App.game.getWorld().getPixelWidth());
-		camera.position.y = MathUtils.clamp(camera.position.y, -App.game.getWorld().getPixelHeight(), 0);
+		camera.position.x = MathUtils.clamp(camera.position.x, 0, App.getGame().getWorld().getPixelWidth());
+		camera.position.y = MathUtils.clamp(camera.position.y, -App.getGame().getWorld().getPixelHeight(), 0);
 	}
 
 }

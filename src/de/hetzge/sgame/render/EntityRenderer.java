@@ -25,7 +25,7 @@ public class EntityRenderer implements IF_Renderer {
 			render(entity);
 		}
 
-		Set<Entity> selection = App.game.getLocalGameState().getSelection();
+		Set<Entity> selection = App.getGame().getLocalGameState().getSelection();
 		for (Entity entity : selection) {
 			App.entityRenderer.renderSelected(entity);
 		}
@@ -98,7 +98,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderId(Entity entity) {
-		if (App.game.getLocalGameState().isShowIds()) {
+		if (App.getGame().getLocalGameState().isShowIds()) {
 			float renderX = entity.getRenderX();
 			float renderY = entity.getRenderY();
 			int id = entity.getId();
@@ -108,7 +108,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderPath(Entity entity) {
-		if (App.game.getLocalGameState().isShowPaths() && entity.hasPath()) {
+		if (App.getGame().getLocalGameState().isShowPaths() && entity.hasPath()) {
 			short pathGoalX = entity.getPathGoalX();
 			short pathGoalY = entity.getPathGoalY();
 			float renderX = entity.getRenderX();
@@ -119,7 +119,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderRegistration(Entity entity) {
-		if (App.game.getLocalGameState().isShowRegistrations()) {
+		if (App.getGame().getLocalGameState().isShowRegistrations()) {
 			short registeredX = entity.getRegisteredX();
 			short registeredY = entity.getRegisteredY();
 			float renderX = entity.getRenderX();
@@ -131,7 +131,7 @@ public class EntityRenderer implements IF_Renderer {
 	}
 
 	public void renderDoor(Entity entity) {
-		if (App.game.getLocalGameState().isShowDoors()) {
+		if (App.getGame().getLocalGameState().isShowDoors()) {
 			if (!entity.getDefinition().isMoveable()) {
 				short doorX = entity.getDoorX();
 				short doorY = entity.getDoorY();

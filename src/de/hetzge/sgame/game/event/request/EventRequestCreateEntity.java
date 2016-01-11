@@ -29,9 +29,10 @@ public class EventRequestCreateEntity implements IF_ConnectionEvent {
 	public void execute(TCPObjectSocket tcpObjectSocket) {
 		boolean hasSpace = App.worldFunction.checkSpaceForEntity(this.entityType, this.x, this.y);
 		if (hasSpace) {
-			int nextEntityId = App.game.getEntityManager().getNextId();
+			int nextEntityId = App.getGame().getEntityManager().getNextId();
 			FrameEventCreateEntity frameEventCreateEntity = new FrameEventCreateEntity(
-					FrameModule.instance.getDefaultNextFrameId(), this.entityType, this.x, this.y, nextEntityId, this.playerId);
+					FrameModule.instance.getDefaultNextFrameId(), this.entityType, this.x, this.y, nextEntityId,
+					this.playerId);
 			NetworkModule.instance.sendAndSelf(frameEventCreateEntity);
 		} else {
 			Logger.info("There is no space for " + this.entityType + " at " + Util.toString(this.x, this.y));

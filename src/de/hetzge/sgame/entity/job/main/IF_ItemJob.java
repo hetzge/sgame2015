@@ -24,7 +24,7 @@ public interface IF_ItemJob {
 		if (booking != null) {
 			if (entity.hasItem()) {
 				GridPosition gridPosition = entity.getGridPosition();
-				Container<E_Item> worldContainer = App.game.getWorld().getContainerGrid().get(gridPosition);
+				Container<E_Item> worldContainer = App.getGame().getWorld().getContainerGrid().get(gridPosition);
 				Booking<E_Item> bookingWithOtherTo = booking.createWithOtherTo(worldContainer);
 				bookingWithOtherTo.transfer();
 				setBooking(bookingWithOtherTo);

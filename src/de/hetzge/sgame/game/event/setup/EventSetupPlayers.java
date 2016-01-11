@@ -14,7 +14,7 @@ public class EventSetupPlayers implements IF_Event {
 
 	@Override
 	public void execute() {
-		App.game.setPlayers(players);
+		App.getGame().setPlayers(this.players);
 	}
 
 }

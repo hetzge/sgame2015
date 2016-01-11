@@ -16,11 +16,11 @@ public class DummyJob extends EntityJob {
 
 	@Override
 	protected void work() {
-		World world = App.game.getWorld();
+		World world = App.getGame().getWorld();
 
-		boolean hasPath = entity.hasPath();
-		short pathGoalX = entity.getPathGoalX();
-		short pathGoalY = entity.getPathGoalY();
+		boolean hasPath = this.entity.hasPath();
+		short pathGoalX = this.entity.getPathGoalX();
+		short pathGoalY = this.entity.getPathGoalY();
 
 		if (hasPath) {
 			List<GridPosition> aroundOnMap = world.getAroundOnMap(pathGoalX, pathGoalY);
@@ -30,7 +30,7 @@ public class DummyJob extends EntityJob {
 
 		System.out.println("Ich bin doof!");
 
-		// prüfe ob entity geht
+		// prï¿½fe ob entity geht
 		// zu gesuchtem entity
 		// ansonsten
 		// finde entity
@@ -38,7 +38,7 @@ public class DummyJob extends EntityJob {
 		// wenn da
 		// sammle
 		// wenn voll
-		// prüfe ob nach hause geht
+		// prï¿½fe ob nach hause geht
 		// suche zuhause
 		// gehe nach hause
 		// wenn da

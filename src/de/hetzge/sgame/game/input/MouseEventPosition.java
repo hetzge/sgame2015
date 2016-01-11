@@ -20,7 +20,7 @@ public class MouseEventPosition {
 		this.screenY = y;
 		this.x = worldPosition.x;
 		this.y = worldPosition.y;
-		World world = App.game.getWorld();
+		World world = App.getGame().getWorld();
 		this.gridX = world.toGridX(this.x);
 		this.gridY = world.toGridY(this.y);
 	}

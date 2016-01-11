@@ -7,7 +7,7 @@ public class EventStartGame implements IF_Event {
 
 	@Override
 	public void execute() {
-		App.game.start();
+		App.getGame().start();
 		FrameModule.instance.startFrameTimer();
 	}
 

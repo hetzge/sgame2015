@@ -11,7 +11,6 @@ import de.hetzge.sgame.misc.Util;
 import de.hetzge.sgame.network.NetworkModule;
 import de.hetzge.sgame.setting.PlayerSettings;
 import de.hetzge.sgame.setting.SystemSettings;
-import de.hetzge.sgame.world.EntityGrid;
 import de.hetzge.sgame.world.World;
 
 public class Function {
@@ -32,10 +31,9 @@ public class Function {
 		World world = new World((short) worldWidth, (short) worldHeight);
 		world.getTileGrid().set(tiles);
 		world.getFixedCollisionGrid().set(collision);
-		App.game.setWorld(world);
-		App.game.setEntityGrid(new EntityGrid((short) worldWidth, (short) worldHeight));
-		App.game.setSelf(playerSettings);
-		App.game.setPlayers(players);
+		App.getGame().setWorld(world);
+		App.getGame().setSelf(playerSettings);
+		App.getGame().setPlayers(players);
 
 		// TODO set containers
 
@@ -61,7 +59,7 @@ public class Function {
 					if (containerFormat != null) {
 						E_Item item = containerFormat.getItem();
 						int count = containerFormat.getCount();
-						App.game.getWorld().getContainerGrid().get((short) x, (short) y).set(item, count);
+						App.getGame().getWorld().getContainerGrid().get((short) x, (short) y).set(item, count);
 					}
 				}
 			}

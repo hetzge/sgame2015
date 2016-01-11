@@ -13,6 +13,7 @@ public class World implements IF_Grid, Serializable {
 	private final TileGrid tileGrid;
 	private final ContainerGrid containerGrid;
 	private final OwnerGrid ownerGrid;
+	private final EntityGrid entityGrid;
 
 	public World(short width, short height) {
 		this.width = width;
@@ -22,6 +23,7 @@ public class World implements IF_Grid, Serializable {
 		this.tileGrid = new TileGrid(width, height);
 		this.containerGrid = new ContainerGrid(width, height);
 		this.ownerGrid = new OwnerGrid(width, height);
+		this.entityGrid = new EntityGrid(width, height);
 	}
 
 	@Override
@@ -48,6 +50,10 @@ public class World implements IF_Grid, Serializable {
 
 	public OwnerGrid getOwnerGrid() {
 		return this.ownerGrid;
+	}
+
+	public EntityGrid getEntityGrid() {
+		return this.entityGrid;
 	}
 
 	public int getPixelWidth() {

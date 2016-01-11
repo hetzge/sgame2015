@@ -19,10 +19,11 @@ public class EventPlayerHandshake implements IF_ConnectionEvent {
 
 	@Override
 	public void execute(TCPObjectSocket tcpObjectSocket) {
-		PlayerSettings playerSettings = new PlayerSettings(App.game.getPlayers().nextPlayerId(), playerName);
+		PlayerSettings playerSettings = new PlayerSettings(App.getGame().getPlayers().nextPlayerId(), this.playerName);
 		NetworkModule.function.send(tcpObjectSocket, new EventSetupPlayer(playerSettings));
-		NetworkModule.function.send(tcpObjectSocket, new EventSetupEntities(App.game.getEntityGrid()));
-		NetworkModule.function.send(tcpObjectSocket, new EventSetupWorld(App.game.getWorld()));
+		NetworkModule.function.send(tcpObjectSocket,
+				new EventSetupEntities(App.getGame().getWorld().getEntityGrid().getEntities()));
+		NetworkModule.function.send(tcpObjectSocket, new EventSetupWorld(App.getGame().getWorld()));
 	}
 
 }

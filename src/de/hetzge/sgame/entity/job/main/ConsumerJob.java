@@ -47,7 +47,7 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 				// ########################
 
 				Function<GridPosition, Container<E_Item>> searchProviderContainer = gridPosition -> {
-					boolean isOnGrid = App.game.getWorld().getFixedCollisionGrid().isOnGrid(gridPosition);
+					boolean isOnGrid = App.getGame().getWorld().getFixedCollisionGrid().isOnGrid(gridPosition);
 					if (!isOnGrid) {
 						return null;
 					}
@@ -55,7 +55,7 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 					Entity entityToTest = getEntityOnPosition(gridPosition);
 					if (entityToTest == null) {
 						// check providing grid container
-						ContainerGrid containerGrid = App.game.getWorld().getContainerGrid();
+						ContainerGrid containerGrid = App.getGame().getWorld().getContainerGrid();
 						boolean hasItemAvailable = containerGrid.hasItemAvailable(gridPosition, item);
 						if (hasItemAvailable) {
 							return containerGrid.get(gridPosition);
@@ -98,7 +98,7 @@ public class ConsumerJob extends EntityJob implements IF_ConsumerJob {
 	}
 
 	private Entity getEntityOnPosition(GridPosition gridPosition) {
-		return App.game.getEntityGrid().get(gridPosition);
+		return App.getGame().getWorld().getEntityGrid().get(gridPosition);
 	}
 
 	private CarrierJob getCarrierJob(Entity carrierEntity) {

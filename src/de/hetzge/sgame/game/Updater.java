@@ -20,7 +20,7 @@ public class Updater implements IF_Update {
 	}
 
 	private void updateEntities() {
-		EntityManager entityManager = App.game.getEntityManager();
+		EntityManager entityManager = App.getGame().getEntityManager();
 		Iterable<Entity> removeEntities = entityManager.flushRemoveEntities();
 		for (Entity entity : removeEntities) {
 			App.entityFunction.removeEntity(entity);
@@ -64,7 +64,7 @@ public class Updater implements IF_Update {
 
 	private void updateEntityWalking(Entity entity) {
 		if (entity.hasPath()) {
-			EntityGrid entityGrid = App.game.getEntityGrid();
+			EntityGrid entityGrid = App.getGame().getWorld().getEntityGrid();
 
 			short nextX = entity.getNextX();
 			short nextY = entity.getNextY();
