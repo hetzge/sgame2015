@@ -64,6 +64,23 @@ public class Function {
 				}
 			}
 		}
+		
+		for (int i = 0; i < 40; i++) {
+			for (int j = 0; j < 40; j++) {
+				App.getGame().getWorld().getOwnerGrid().setOwnership(i, j, (byte)1);
+			}
+		}
+		
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++) {
+				App.getGame().getWorld().getOwnerGrid().setOwnership(i, j, (byte)2);
+			}
+		}
+		
+		App.getGame().getWorld().getOwnerGrid().setOwnership(6, 6, (byte)3);
+		App.getGame().getWorld().getOwnerGrid().setOwnership(3, 3, (byte)3);
+		App.getGame().getWorld().getOwnerGrid().setOwnership(3, 3, (byte)3);
+		App.getGame().getWorld().getOwnerGrid().setOwnership(3, 3, (byte)3);
 	}
 
 	public void sendHandshake() {

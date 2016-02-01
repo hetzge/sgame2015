@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -29,7 +30,8 @@ public class LibGdxApplication extends com.badlogic.gdx.Game {
 		configuration.title = "Game";
 		configuration.width = App.settings.getSystemSettings().getResolutionX();
 		configuration.height = App.settings.getSystemSettings().getResolutionY();
-
+		ShaderProgram.pedantic = false;
+		
 		new LwjglApplication(App.libGdxApplication, configuration);
 	}
 

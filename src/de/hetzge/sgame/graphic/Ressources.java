@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.IntMap;
 
@@ -30,6 +31,8 @@ public class Ressources {
 	private BitmapFont bitmapFont;
 
 	private Pixmap cursor;
+	private Texture border;
+	private ShaderProgram replacecolorShader;
 
 	public void init() {
 		this.skin = new Skin(Gdx.files.internal("asset/skin/uiskin.json"));
@@ -41,6 +44,12 @@ public class Ressources {
 		TextureData cursorTextureData = new Texture(Gdx.files.internal("asset/cursor.png")).getTextureData();
 		cursorTextureData.prepare();
 		this.cursor = cursorTextureData.consumePixmap();
+
+		this.border = new Texture(Gdx.files.internal("asset/border.png"));
+
+		String fragmentShaderString = Gdx.files.internal("asset/shader/replace_color_fragment.glsl").readString();
+		String vertexShaderString = Gdx.files.internal("asset/shader/replace_color_vertex.glsl").readString();
+		this.replacecolorShader = new ShaderProgram(vertexShaderString, fragmentShaderString);
 	}
 
 	public void registerGraphic(IF_GraphicKey graphicKey, Animation animation) {
@@ -71,8 +80,16 @@ public class Ressources {
 		return this.cursor;
 	}
 
+	public Texture getBorder() {
+		return this.border;
+	}
+
 	public BitmapFont getBitmapFont() {
 		return this.bitmapFont;
+	}
+	
+	public ShaderProgram getReplaceColorShader() {
+		return this.replacecolorShader;
 	}
 
 	public static class BasicTileSet extends TileSet {

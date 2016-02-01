@@ -30,6 +30,8 @@ public class LocalGameState {
 	private boolean showIds = false;
 	private boolean showWorldOwner = false;
 	private boolean showDoors = false;
+	private boolean showWorldOwnerColor = false;
+	private boolean showWorldOwnerBorder = true;
 
 	public void unsetMouseDownEventPosition() {
 		this.mouseDownEventPosition = null;
@@ -183,6 +185,30 @@ public class LocalGameState {
 
 	public void toggleShowDoors() {
 		this.showDoors = !this.showDoors;
+	}
+
+	public void toggleShowWorldOwnerBorder() {
+		this.showWorldOwnerBorder = !this.showWorldOwnerBorder;
+	}
+
+	public void toggleShowWorldOwnerColor() {
+		this.showWorldOwnerColor = !this.showWorldOwnerColor;
+	}
+
+	public boolean isShowWorldOwnerColor() {
+		return this.showWorldOwnerColor;
+	}
+
+	public void setShowWorldOwnerColor(boolean showWorldOwnerColor) {
+		this.showWorldOwnerColor = showWorldOwnerColor;
+	}
+
+	public boolean isShowWorldOwnerBorder() {
+		return this.showWorldOwnerBorder;
+	}
+
+	public void setShowWorldOwnerBorder(boolean showWorldOwnerBorder) {
+		this.showWorldOwnerBorder = showWorldOwnerBorder;
 	}
 
 	public E_CommandMode getCommandMode() {
