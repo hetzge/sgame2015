@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 
 import de.hetzge.sgame.App;
@@ -18,7 +17,6 @@ import de.hetzge.sgame.booking.Container;
 import de.hetzge.sgame.entity.Entity;
 import de.hetzge.sgame.item.E_Item;
 import de.hetzge.sgame.misc.Constant;
-import de.hetzge.sgame.misc.E_Orientation;
 import de.hetzge.sgame.render.shader.ReplaceColorShader;
 import de.hetzge.sgame.world.ContainerGrid;
 import de.hetzge.sgame.world.GridPosition;

@@ -20,22 +20,10 @@ public class ItemRenderer implements IF_Renderer {
 	}
 
 	public void renderContainer(Container<E_Item> container, float worldX, float worldY) {
-		int orientationsCount = E_Orientation.values.length;
-
-		int i = 0;
 		Set<E_Item> items = container.getItems();
 		for (E_Item item : items) {
-			int round = Math.floorDiv(i, orientationsCount) + 1;
-			E_Orientation orientation = E_Orientation.values[i % orientationsCount];
-			E_Orientation nextOrientation = E_Orientation.values[(i + 1) % orientationsCount];
-
-			float xOffset = round * 6 * (orientation.getOffsetX() + nextOrientation.getOffsetX());
-			float yOffset = round * 6 * (orientation.getOffsetY() + nextOrientation.getOffsetY());
-
 			int amount = container.amountWithoutHidden(item);
-			renderItems(item, amount, worldX + xOffset, worldY + yOffset);
 			renderItems(item, amount, worldX, worldY);
-			i++;
 		}
 	}
 

@@ -1,4 +1,4 @@
-package de.hetzge.sgame.game;
+package de.hetzge.sgame.game.scene;
 
 import java.io.File;
 
@@ -7,6 +7,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.game.ConnectGameGui;
+import de.hetzge.sgame.game.Game;
+import de.hetzge.sgame.game.ImportExportException;
 import de.hetzge.sgame.network.NetworkModule;
 
 public class ConnectGameScene implements Screen {

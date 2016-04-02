@@ -1,7 +1,14 @@
-package de.hetzge.sgame.game;
+package de.hetzge.sgame.game.scene;
 
 import com.badlogic.gdx.Screen;
 
+/**
+ * The game is splited in different scenes which are described with this enum. A
+ * scene is differentiated by the input, the update loop and the rendered
+ * content.
+ * 
+ * @author hetzge
+ */
 public enum E_GameScene {
 
 	LOAD(new LoadGameScene()), CONNECT(new ConnectGameScene()), INGAME(new IngameScene());

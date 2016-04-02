@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.hetzge.sgame.App;
+import de.hetzge.sgame.game.scene.E_GameScene;
 import de.hetzge.sgame.misc.Constant;
 import de.hetzge.sgame.network.E_NetworkRole;
 import de.hetzge.sgame.network.NetworkModule;

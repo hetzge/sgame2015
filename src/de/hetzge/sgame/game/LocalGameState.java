@@ -13,6 +13,14 @@ import de.hetzge.sgame.game.input.IF_InputMode;
 import de.hetzge.sgame.game.input.InputModeCommandUnits;
 import de.hetzge.sgame.game.input.MouseEventPosition;
 
+/**
+ * This class contains information about the current running game which are only
+ * visible for the local client and not shared with the server. The information
+ * here is not relevant for the normal progress of the game. It contains the
+ * state of the user input.
+ * 
+ * @author hetzge
+ */
 public class LocalGameState {
 
 	private MouseEventPosition mouseDownEventPosition;

@@ -4,6 +4,12 @@ import de.hetzge.sgame.entity.E_Activity;
 import de.hetzge.sgame.entity.E_EntityType;
 import de.hetzge.sgame.misc.E_Orientation;
 
+/**
+ * Descripes which graphic should be rendered for a entity. This includes the
+ * orientation, the activity and the entity type.
+ * 
+ * @author hetzge
+ */
 public class GraphicKey implements IF_GraphicKey {
 
 	private byte orientation;

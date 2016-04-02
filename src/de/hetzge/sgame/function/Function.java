@@ -35,8 +35,6 @@ public class Function {
 		App.getGame().setSelf(playerSettings);
 		App.getGame().setPlayers(players);
 
-		// TODO set containers
-
 		int entityId = 0;
 
 		for (int index = 0; index < entityFormats.length; index++) {

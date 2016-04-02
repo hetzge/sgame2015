@@ -1,4 +1,4 @@
-package de.hetzge.sgame.game;
+package de.hetzge.sgame.game.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
